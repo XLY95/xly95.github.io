@@ -16,18 +16,25 @@
                 <div class="flex-group">
                     <button id="connectbutton" type="button" class="primary" onclick="preConnect()">连接</button>
                     <button id="reconnectbutton" type="button" class="secondary" onclick="reConnect()">重连</button>
-					<button type="button" class="secondary" onclick="clearLog()">清空日志</button>
+					<button type="button" class="secondary" onclick="clearLog()">清空</button>
+                </div>
+				 <div class="flex-group right debug">
+                    <input style="display: none;"type="text" id="cmdTXT" value="">
+                    <button  style="display: none;"id="sendcmdbutton" type="button" class="primary" onclick="sendcmd()"></button>
                 </div>
 				<div class="flex-group right ">
 					<label for="epddriver">屏幕：</label>
 					<select id="epddriver">
-						<option value="01" data-color="blackWhiteColor" data-size="4.2_400_300">UC8176/UC8276(黑白)</option>
-						<option value="03" data-color="threeColor" data-size="4.2_400_300">UC8176/UC8276(三色)</option>
-						<option value="04" data-color="blackWhiteColor" data-size="4.2_400_300">SSD1619/SSD1683(黑白)</option>
-						<option value="02" data-color="threeColor" data-size="4.2_400_300">SSD1619/SSD1683(三色)</option>
+						<option value="02" data-color="threeColor" data-size="4.2_400_300">SSD开头芯片(三色)</option>
+						<option value="04" data-color="blackWhiteColor" data-size="4.2_400_300">SSD开头芯片(黑白)</option>
+						
+						<option value="01" data-color="blackWhiteColor" data-size="4.2_400_300">UC开头芯片(黑白)</option>
+						<option value="03" data-color="threeColor" data-size="4.2_400_300">UC开头芯片(三色)</option>
+						
 						
 					</select>
-				
+					</div>
+				<div class="flex-group right ">
 					<label>激活：</label>
 					<input id="epdpins" type="text" value="">
 					<button id="setDriverbutton" type="button" class="primary" onclick="set_EPD_CMD_J_H()">确认</button>

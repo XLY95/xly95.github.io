@@ -231,16 +231,16 @@ async function syncTime(mode) {
     mode
   ]);
   if (await write(EpdCmd.SET_TIME, data)) {
-    addLog("时间已同步！");
-    addLog("屏幕刷新完成前请不要操作。");
+    addLog("已同步时间！");
+  
   }
 }
 
 async function clearScreen() {
-  if (confirm('确认清除屏幕内容?')) {
+  if (1) {
     await write(EpdCmd.CLEAR);
-    addLog("清屏指令已发送！");
-    addLog("屏幕刷新完成前请不要操作。");
+    addLog("已清除屏慕！");
+   
   }
 }
 
@@ -287,9 +287,9 @@ async function sendimg() {
   } else if (ditherMode === 'blackWhiteColor') {
     await writeImage(processedData, 'bw');
   } else {
-    // addLog("当前固件不支持此颜色模式。");
-    // updateButtonStatus();
-    // return;
+    addLog("当前固件不支持此颜色模式。");
+    updateButtonStatus();
+    return;
   }
 
   await write(EpdCmd.REFRESH);
@@ -413,10 +413,10 @@ function handleNotify(value, idx) {
     if (msg.startsWith('mtu=') && msg.length > 4) {
       const mtuSize = parseInt(msg.substring(4));
       document.getElementById('mtusize').value = mtuSize;
-      addLog(`MTU 已更新为: ${mtuSize}`);
+      addLog(`MTU: ${mtuSize}`);
     } else if (msg.startsWith('t=') && msg.length > 2) {
       const t = parseInt(msg.substring(2)) + new Date().getTimezoneOffset() * 60;
-      addLog(`远端时间: ${new Date(t * 1000).toLocaleString()}`);
+      addLog(`设备时间: ${new Date(t * 1000).toLocaleString()}`);
       addLog(`本地时间: ${new Date().toLocaleString()}`);
     }
   }
@@ -450,14 +450,6 @@ async function connect() {
     appVersion = 0x15;
   }
 
-  // if (appVersion < 0x16) {
-  //   const oldURL = "https://tsl0922.github.io/EPD-nRF5/v1.5";
-  //   alert("!!!注意!!!\n当前固件版本过低，可能无法正常使用部分功能，建议升级到最新版本。");
-  //   if (confirm('是否访问旧版本上位机？')) location.href = oldURL;
-  //   setTimeout(() => {
-  //     addLog(`如遇到问题，可访问旧版本上位机: ${oldURL}`);
-  //   }, 500);
-  // }
 
   try {
     await epdCharacteristic.startNotifications();
