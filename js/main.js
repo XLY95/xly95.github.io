@@ -252,19 +252,22 @@ async function sendcmd() {
 }
 
 async function sendimg() {
-
+  // if (isCropMode()) {
+  //   addLog("请先完成图片裁剪！发送已取消。");
+  //   return;
+  // }
 
   const canvasSize = document.getElementById('canvasSize').value;
   const ditherMode = document.getElementById('ditherMode').value;
   const epdDriverSelect = document.getElementById('epddriver');
   const selectedOption = epdDriverSelect.options[epdDriverSelect.selectedIndex];
 
-  if (selectedOption.getAttribute('data-size') !== canvasSize) {
-    if (!confirm("警告：画布尺寸和驱动不匹配，是否继续？")) return;
-  }
-  if (selectedOption.getAttribute('data-color') !== ditherMode) {
-    if (!confirm("警告：颜色模式和驱动不匹配，是否继续？")) return;
-  }
+  // if (selectedOption.getAttribute('data-size') !== canvasSize) {
+  //   if (!confirm("警告：画布尺寸和驱动不匹配，是否继续？")) return;
+  // }
+  // if (selectedOption.getAttribute('data-color') !== ditherMode) {
+  //   if (!confirm("警告：颜色模式和驱动不匹配，是否继续？")) return;
+  // }
 
   startTime = new Date().getTime();
   const status = document.getElementById("status");
@@ -284,9 +287,9 @@ async function sendimg() {
   } else if (ditherMode === 'blackWhiteColor') {
     await writeImage(processedData, 'bw');
   } else {
-    addLog("当前固件不支持此颜色模式。");
-    updateButtonStatus();
-    return;
+    // addLog("当前固件不支持此颜色模式。");
+    // updateButtonStatus();
+    // return;
   }
 
   await write(EpdCmd.REFRESH);
@@ -381,10 +384,8 @@ async function preConnect() {
     } catch (e) {
       console.error(e);
       if (e.message) addLog("requestDevice: " + e.message);
-      addLog("请检查蓝牙是否已开启，且使用的浏览器支持蓝牙！建议使用以下浏览器：");
-      addLog("• 电脑: Chrome/Edge");
-      addLog("• Android: Chrome/Edge");
-      addLog("• iOS: Bluefy 浏览器");
+      addLog("请检查蓝牙，推荐使用Edge浏览器！");
+      
       return;
     }
 
@@ -427,11 +428,11 @@ async function connect() {
   try {
     addLog("正在连接: " + bleDevice.name);
     gattServer = await bleDevice.gatt.connect();
-    addLog('  找到 GATT Server');
+    //addLog('  找到 GATT Server');
     epdService = await gattServer.getPrimaryService('62750001-d828-918d-fb46-b6c11c675aec');
-    addLog('  找到 EPD Service');
+    // addLog('  找到 EPD Service');
     epdCharacteristic = await epdService.getCharacteristic('62750002-d828-918d-fb46-b6c11c675aec');
-    addLog('  找到 Characteristic');
+   // addLog('  找到 Characteristic');
   } catch (e) {
     console.error(e);
     if (e.message) addLog("connect: " + e.message);
@@ -443,20 +444,20 @@ async function connect() {
     const versionCharacteristic = await epdService.getCharacteristic('62750003-d828-918d-fb46-b6c11c675aec');
     const versionData = await versionCharacteristic.readValue();
     appVersion = versionData.getUint8(0);
-    addLog(`固件版本: 0x${appVersion.toString(16)}`);
+   // addLog(`固件版本: 0x${appVersion.toString(16)}`);
   } catch (e) {
     console.error(e);
     appVersion = 0x15;
   }
 
-  if (appVersion < 0x16) {
-    const oldURL = "https://tsl0922.github.io/EPD-nRF5/v1.5";
-    alert("!!!注意!!!\n当前固件版本过低，可能无法正常使用部分功能，建议升级到最新版本。");
-    if (confirm('是否访问旧版本上位机？')) location.href = oldURL;
-    setTimeout(() => {
-      addLog(`如遇到问题，可访问旧版本上位机: ${oldURL}`);
-    }, 500);
-  }
+  // if (appVersion < 0x16) {
+  //   const oldURL = "https://tsl0922.github.io/EPD-nRF5/v1.5";
+  //   alert("!!!注意!!!\n当前固件版本过低，可能无法正常使用部分功能，建议升级到最新版本。");
+  //   if (confirm('是否访问旧版本上位机？')) location.href = oldURL;
+  //   setTimeout(() => {
+  //     addLog(`如遇到问题，可访问旧版本上位机: ${oldURL}`);
+  //   }, 500);
+  // }
 
   try {
     await epdCharacteristic.startNotifications();
@@ -533,7 +534,7 @@ function updateImage() {
       redrawLineSegments();
       convertDithering();
     } else {
-      addLog("图片宽高比例与画布不匹配，已进入裁剪模式。");
+      //addLog("图片宽高比例与画布不匹配，已进入裁剪模式。");
       initializeCrop();
     }
   };
@@ -567,12 +568,12 @@ function rotateCanvas() {
   const currentHeight = canvas.height;
   canvas.width = currentHeight;
   canvas.height = currentWidth;
-  addLog(`画布已旋转: ${currentWidth}x${currentHeight} -> ${canvas.width}x${canvas.height}`);
+  //addLog(`画布已旋转: ${currentWidth}x${currentHeight} -> ${canvas.width}x${canvas.height}`);
   updateImage();
 }
 
 function clearCanvas() {
-  if (confirm('清除画布内容?')) {
+  if (1) {
     fillCanvas('white');
     textElements = []; // Clear stored text positions
     lineSegments = []; // Clear stored line segments
