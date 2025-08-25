@@ -92,7 +92,7 @@ function resetVariables() {
 
 async function write(cmd, data, withResponse = true) {
   if (!epdCharacteristic) {
-    addLog("服务不可用，请检查蓝牙连接");
+    addLog("没有链接蓝牙");
     return false;
   }
   let payload = [cmd];
@@ -101,7 +101,7 @@ async function write(cmd, data, withResponse = true) {
     if (data instanceof Uint8Array) data = Array.from(data);
     payload.push(...data)
   }
-  addLog(bytes2hex(payload), '⇑');
+  //addLog(bytes2hex(payload), '⇑');
   try {
     if (withResponse)
       await epdCharacteristic.writeValueWithResponse(Uint8Array.from(payload));
@@ -124,7 +124,7 @@ async function writeImage(data, step = 'bw') {
 
   for (let i = 0; i < data.length; i += chunkSize) {
     let currentTime = (new Date().getTime() - startTime) / 1000.0;
-    setStatus(`${step == 'bw' ? '黑白' : '颜色'}块: ${chunkIdx + 1}/${count + 1}, 总用时: ${currentTime}s`);
+    setStatus(`${step == 'bw' ? '黑白' : '红色'}块: ${chunkIdx + 1}/${count + 1}, 总用时: ${currentTime}s`);
     const payload = [
       (step == 'bw' ? 0x0F : 0x00) | (i == 0 ? 0x00 : 0xF0),
       ...data.slice(i, i + chunkSize),
