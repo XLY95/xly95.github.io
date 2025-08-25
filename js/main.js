@@ -252,10 +252,7 @@ async function sendcmd() {
 }
 
 async function sendimg() {
-  if (isCropMode()) {
-    addLog("请先完成图片裁剪！发送已取消。");
-    return;
-  }
+
 
   const canvasSize = document.getElementById('canvasSize').value;
   const ditherMode = document.getElementById('ditherMode').value;
