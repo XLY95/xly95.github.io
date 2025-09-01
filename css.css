@@ -97,19 +97,35 @@
             margin: 0;
         }
 
-        /* 按钮样式优化 */
-        button {
-            padding: 0.6rem 1.2rem;
-            border: none;
-            border-radius: var(--border-radius);
-            margin-bottom: 0.5rem;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: var(--transition);
-        }
+       
+/* 修改按钮样式，添加右边距 */
+button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: var(--border-radius);
+    margin-right: 0.5rem; /* 添加右边距 */
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
 
+/* 工具栏中的按钮不需要右边距，因为它们使用gap属性 */
+.toolbar .tool-button {
+    margin-right: 0;
+}
+
+/* 最后一个按钮不需要右边距 */
+button:last-child {
+    margin-right: 0;
+}
+
+/* 卡片标题区域中的按钮间距调整 */
+.card-header button {
+    margin-bottom: 0;
+}
         button:disabled {
             opacity: 0.65;
             cursor: not-allowed;
