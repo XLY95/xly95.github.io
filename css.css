@@ -5,13 +5,7 @@
             overflow: hidden;
             position: relative;
         }
-        
-        /* 画布样式 - 固定显示尺寸 */
-        #previewCanvas, #floatPreviewCanvas {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+     
      /* 浮动画布容器 */
         #floatingCanvasContainer {
             width: 400px;
