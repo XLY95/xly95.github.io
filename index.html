@@ -1,1 +1,1523 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>墨水屏蓝牙图片工具</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="css.css"><head><body class="bg-gray-100 min-h-screen text-gray-800"><header class="bg-dark text-white shadow-md"><div class="container mx-auto px-3 py-2"><h1 class="text-base font-bold flex items-center"><i class="fa fa-bluetooth-b text-primary mr-2"></i>                墨水屏蓝牙图片工具</h1></div></header><main class="container mx-auto px-3 py-2"><div class="mb-3"><div class="control-panel"><div class="flex justify-between items-center mb-1"><h2 class="panel-title"><i class="fa fa-eye text-primary mr-2"></i>处理后画布</h2><div class="flex space-x-1"><button id="toggleCanvasFloat" class="btn-action bg-gray-200 text-gray-700 text-xs px-2"><i class="fa fa-arrows-alt mr-1"></i>浮动画布</button><button id="toggleDrawingMode" class="btn-action bg-primary text-white text-xs px-2"><i class="fa fa-pencil mr-1"></i>开始绘画</button></div></div><div class="bg-gray-100 p-1.5 rounded-lg flex justify-center items-center min-h-[180px] border-2 border-gray-200 canvas-container"><canvas id="previewCanvas" class="border border-gray-300 cursor-crosshair hidden" style="cursor: crosshair; transition: transform 0.2s;"></canvas><div id="noImagePlaceholder" class="text-center text-gray-500 text-xs"><i class="fa fa-image text-2xl mb-1"></i><p>上传图片或直接在画布上绘画</p></div></div><div class="mt-1 grid grid-cols-1 gap-1 text-xs"><div><span class="font-medium text-gray-700">处理后画布:</span><span id="processedImageInfo" class="text-gray-500">296 × 128 像素 (黑白红)</span></div><div id="drawingStatus" class="text-gray-600 hidden"><i class="fa fa-info-circle mr-1"></i><span>当前工具:<span id="currentTool">画笔</span> (粗细:<span id="currentSize">3</span>)<span id="drawingModeIndicator" class="hidden bg-amber-100 text-amber-800 px-1 rounded">(绘画模式 - 图片已锁定)</span></span></div></div></div></div><div class="lg:col-span-1 space-y-2"><div class="control-panel"><h2 class="panel-title"><i class="fa fa-bluetooth text-primary mr-2"></i>蓝牙连接</h2><div class="flex space-x-1 mb-1.5"><button id="connectbutton" class="btn-action bg-primary text-white flex-1" onclick="preConnect()"><i class="fa fa-plug mr-1"></i>连接</button><button id="reconnectbutton" class="btn-action bg-secondary text-white flex-1" onclick="reConnect()" disabled=""style="display:none"><i class="fa fa-refresh mr-1"style="display:none"></i>重连</button></div></div><div class="control-panel"><h2 class="panel-title"><i class="fa fa-cogs text-primary mr-2"></i>设备设置</h2><div class="space-y-1 text-xs"><div><label class="block text-gray-600 mb-0.5">墨水屏驱动</label><select id="epddriver" class="input-control" onchange="updateDitcherOptions()"><option value="uc_blackWhite" data-size="4.2_400_300" data-color="blackWhiteColor">UC开头芯片 黑白</option><option value="uc_threeColor" data-size="7.5_800_480" data-color="threeColor">UC开头芯片 三色</option><option value="ssd_blackWhite" data-size="2.13_122_250" data-color="blackWhiteColor">SSD开头芯片 黑白</option><option value="ssd_threeColor" data-size="7.5_800_480" data-color="threeColor">SSD开头芯片 三色</option></select></div><div><label class="block text-gray-600 mb-0.5">画布尺寸</label><select id="canvasSize" class="input-control" onchange="updateCanvasSize(true)"><option value="2.13_122_250">2.13 (122x250)</option><option value="4.2_400_300" selected="">4.2 (400x300)</option><option value="7.5_800_480">7.5 (800x480)</option></select></div><div class="control-panel"><h2 class="panel-title"><i class="fa fa-upload text-primary mr-2"></i>图片上传</h2><label class="block border-2 border-dashed border-gray-300 rounded-lg p-1.5 text-center hover:bg-gray-50 transition-colors cursor-pointer text-xs"><p class="text-gray-600">点击此处</p><input type="file" id="imageFile" accept="image/*" class="hidden" onchange="handleImageUpload(event)"></label><div id="fileInfo" class="hidden text-xs text-gray-600 mt-1"></div><div class="mt-1.5 text-xs"><label class="block text-gray-600 mb-0.5">图片缩放</label><div class="flex items-center space-x-1"><button class="btn-action bg-gray-200 text-gray-700 px-1.5" onclick="changeImageScale(-50)"><i class="fa fa-search-minus"></i></button><input type="range" id="imageScale" min="0" max="1000" value="100" class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer" oninput="updateImageScale()"><button class="btn-action bg-gray-200 text-gray-700 px-1.5" onclick="changeImageScale(50)"><i class="fa fa-search-plus"></i></button></div><div class="flex justify-between text-xs text-gray-500 mt-0.5"><span>0%</span><span id="imageScaleValue">100%</span><span>1000%</span></div><div class="grid grid-cols-2 gap-1 mt-1"><button class="btn-action bg-primary text-white text-xs" onclick="fitImageToCanvas()"><i class="fa fa-expand mr-1"></i>适应画布</button><button class="btn-action bg-purple-600 text-white text-xs" onclick="fillCanvas()"><i class="fa fa-clone mr-1"></i>铺满画布</button><button class="btn-action bg-secondary text-white text-xs" onclick="centerImageOnCanvas()"><i class="fa fa-compress mr-1"></i>居中图片</button><button class="btn-action bg-yellow-600 text-white text-xs" onclick="rotateImage(90)"><i class="fa fa-rotate-right mr-1"></i>旋转图片</button></div><div class="grid grid-cols-2 gap-1 mt-1"><button class="btn-action bg-gray-600 text-white text-xs" onclick="resizeImage(-10, -10)"><i class="fa fa-compress mr-1"></i>缩小尺寸</button><button class="btn-action bg-gray-600 text-white text-xs" onclick="resizeImage(10, 10)"><i class="fa fa-expand mr-1"></i>放大尺寸</button></div><p class="text-gray-500 mt-1 text-xs">提示：按住Shift键拖动图片</p></div></div><div class="pt-1 border-t border-gray-100"><label class="block text-gray-600 mb-0.5">自定义图像尺寸</label><div class="grid grid-cols-2 gap-1"><div><label class="block text-gray-500 text-xs mb-0.5">宽度 (像素)</label><input type="number" id="imageWidth" min="50" max="2000" value="400" class="input-control text-xs"></div><div><label class="block text-gray-500 text-xs mb-0.5">高度 (像素)</label><input type="number" id="imageHeight" min="50" max="2000" value="300" class="input-control text-xs"></div></div><button class="btn-action bg-green-600 text-white text-xs w-full mt-1" onclick="applyImageDimensions()"><i class="fa fa-check mr-1"></i>应用尺寸</button></div></div></div></div><hr><div class="lg:col-span-1 space-y-2"><div class="control-panel"><h2 class="panel-title"><i class="fa fa-pencil text-primary mr-2"></i>绘画工具</h2><div class="flex justify-between mb-1.5"><button class="drawing-tool active" id="toolPen" title="画笔" onclick="setDrawingTool('pen')">🖍<i class="fa fa-pencil"></i></button><button class="drawing-tool" id="toolEraser" title="橡皮擦" onclick="setDrawingTool('eraser')">💄<i class="fa fa-eraser"></i></button><button class="drawing-tool" id="toolText" title="文字" onclick="setDrawingTool('text')">📄<i class="fa fa-font"></i></button><button class="drawing-tool" id="toolClear" title="清除画布" onclick="clearCanvas()">🗑<i class="fa fa-trash"></i></button></div><div class="space-y-1 text-xs"><div><label class="block text-gray-600 mb-0.5">画笔颜色</label><div class="flex space-x-1"><button class="w-5 h-5 rounded-full bg-black border-2 border-gray-300" onclick="setBrushColor('#000000')"></button><button class="w-5 h-5 rounded-full bg-white border-2 border-gray-300" onclick="setBrushColor('#FFFFFF')"></button><button class="w-5 h-5 rounded-full bg-red-600 border-2 border-gray-300" onclick="setBrushColor('#EF4444')"></button><input type="color" id="customColor" value="#000000" class="w-5 h-5 p-0 border-0" oninput="setBrushColor(this.value)"></div></div><div><label class="block text-gray-600 mb-0.5">画笔粗细</label><input type="range" id="brushSize" min="1" max="20" value="3" class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"></div><div><label class="block text-gray-600 mb-0.5">字体选择</label><select id="fontFamily" class="input-control text-xs"><option value="Arial, sans-serif, SimHei, Microsoft YaHei">Arial / 黑体</option><option value="'Times New Roman', serif, SimSun">Times New Roman / 宋体</option><option value="'Courier New', monospace, SimSun">Courier New / 宋体</option><option value="Georgia, serif, KaiTi, STKaiti">Georgia / 楷体</option></select></div><div><label class="block text-gray-600 mb-0.5">字体大小</label><input type="number" id="fontSize" value="24" min="8" max="72" class="input-control text-xs"></div><div><label class="block text-gray-600 mb-0.5">输入文字</label><div class="flex space-x-1"><input type="text" id="textInput" placeholder="输入要添加的文字" class="flex-1 input-control text-xs"><button id="addTextBtn" class="btn-action bg-primary text-white px-1.5" onclick="addTextManually()"><i class="fa fa-plus"></i></button></div></div></div></div><div class="control-panel"><h2 class="panel-title"><i class="fa fa-paint-brush text-primary mr-2"></i>图像设置</h2><div class="grid grid-cols-2 gap-1 mb-1"><button id="btnBlackWhite" class="btn-action bg-primary text-white" onclick="setDitherMode('blackWhiteColor')"><i class="fa fa-square-o mr-1"></i>黑白</button><button id="btnBlackWhiteRed" class="btn-action bg-secondary text-white" onclick="setDitherMode('threeColor')"><i class="fa fa-square text-accent mr-1"></i>黑白红</button></div><div class="space-y-1 text-xs"><div><label class="block text-gray-600 mb-0.5">颜色模式</label><select id="ditherMode" class="input-control"><option value="blackWhiteColor">黑白模式</option><option value="threeColor">黑白红三色</option></select></div><div><label class="block text-gray-600 mb-0.5">抖动算法</label><select id="ditherAlg" class="input-control" onchange="onDitherAlgChange(event)"><option value="WU-u">不采用算法</option><option value="floydSteinberg">Floyd-Steinberg</option><option value="atkinson">Atkinson</option><option value="bayer">Bayer</option><option value="stucki">Stucki</option><option value="jarvis">Jarvis-Judice-Ninke</option></select></div></div></div><div class="control-panel"><h2 class="panel-title"><i class="fa fa-sliders text-primary mr-2"></i>参数调节</h2><div class="space-y-1 text-xs"><div><div class="flex justify-between mb-0.5"><label for="brightness" class="text-gray-700">亮度(推荐100)</label><span id="brightnessValue" class="text-gray-500">100</span></div><input type="range" id="brightness" min="50" max="150" value="100"step="1" class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"></div><div><div class="flex justify-between mb-0.5"><label for="contrast" class="text-gray-700">对比度(推荐1)</label><span id="contrastValue" class="text-gray-500">1</span></div><input type="range" id="contrast" min="0.5" max="20.0" value="1.0" step="0.1"class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"></div><div><div class="flex justify-between mb-0.5"><label for="saturation" class="text-gray-700">饱和度(推荐1)</label><span id="saturationValue" class="text-gray-500">1</span></div><input type="range" id="saturation" min="0" max="20.0" value="1.0" step="0.1"class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"></div><div><div class="flex justify-between mb-0.5"><label for="diffusion" class="text-gray-700">扩散强度(推荐7)</label><span id="diffusionValue" class="text-gray-500">7</span></div><input type="range" id="diffusion" min="0.1" max="20" value="7" step="0.1" class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"></div></div></div><div class="control-panel"><div class="flex flex-wrap gap-1.5"><button id="btnProcess" class="btn-action bg-secondary text-white flex-1 sm:flex-auto"><i class="fa fa-magic mr-1"></i>处理图片</button><div class="grid grid-cols-2 gap-1 text-xs"><div><label class="block text-gray-600 mb-0.5"style="display:none">交织计数</label><input type="number" id="interleavedcount" value="3" min="1" max="10" class="input-control text-xs"style="display:none"></div></div>                     包:<input type="number" id="mtusize" value="50" min="20" max="180" class="btn-action bg-accent text-white flex-1 sm:flex-auto"><button id="btnSend" class="btn-action bg-primary text-white flex-1 sm:flex-auto opacity-50 cursor-not-allowed" disabled=""><i class="fa fa-wifi mr-1"></i>发送图片到墨水屏</button><button id="btnDownload" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto"><i class="fa fa-download mr-1"></i>下载图像文件</button><button id="btnReset" class="btn-action bg-accent text-white flex-1 sm:flex-auto"><i class="fa fa-refresh mr-1"></i>图像回退一步(只一次)</button><button id="btnClearLog" class="btn-action bg-gray-500 text-white flex-1 sm:flex-auto"><i class="fa fa-eraser mr-1"></i>清除日志</button></div><div class="flex flex-wrap gap-1.5 mt-1.5"><button id="btnSetTime" class="btn-action bg-indigo-600 text-white flex-1 sm:flex-auto opacity-50 cursor-not-allowed" disabled=""style="display:none"><i class="fa fa-clock-o mr-1"style="display:none"></i>设置时间</button><button id="calendarmodebutton" type="button" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto" onclick="send_time(1)">日历模式</button><button id="clockmodebutton" type="button" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto"onclick="send_time(2)">时钟模式</button>					<button id="clockmodebutton" type="button" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto" onclick="send_time(4)">数码管时钟</button>										<button id="clearscreenbutton" type="button" class="btn-action bg-gray-700 text-white flex-1 sm:flex-auto" onclick="clear_screen()">清除屏幕</button>           	</div>            						 	</div> 	</div> 	<hr><hr><hr><hr><hr><hr><hr><div class="control-panel"><div class="flex flex-wrap gap-1.5"><legend class="fa fa-cogs text-primary mr-2">显示设置</legend></div><div class="flex flex-wrap gap-1.5">				<div class="fa fa-cogs text-primary mr-2">					<label for="fanxian"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是否反显:</label>					<select id="fanxian"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>								<label for="xuanzhuan"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">旋转屏幕:</label>					<select id="xuanzhuan"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>													<label for="qiangzhi_shuaxing" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">强制刷新:</label>					<select id="qiangzhi_shuaxing" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>															<label  class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">黑色局刷时长:<label>					<input type="range" min="1" max="6" step="1" value="1" id="jushua_time"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">									</div>				<button id="setDriverbutton" style="width: 100% ;"type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto"onclick="set_EPD_CMD_MY()">确认</button></div></div><hr><hr><hr><hr><hr><hr><hr><div class="control-panel"><div class="flex flex-wrap gap-1.5"><legend class="fa fa-cogs text-primary mr-2">时钟颜色设置</legend></div><div class="flex flex-wrap gap-1.5">				<div class="flex-group right ">					<label for="color_1"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">显示红色:</label>					<select id="color_1"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>												<label for="time_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">时钟红否:</label>					<select id="time_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>						<label for="wendu_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">温度红否:</label>					<select id="wendu_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>												<label for="gongli_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">公历红否:</label>					<select id="gongli_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>																	<label for="shichen_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">时辰红否:</label>					<select id="shichen_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>													<label for="jieqi_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">节气红否:</label>					<select id="jieqi_color"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">是</option>											</select>												<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">红色局刷时长:<label>					<input type="range" min="2" max="50" step="2" value="2" id="r_jushua_time"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">									</div>				<button id="setDriverbutton"style="width: 100%;" type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_COLOR()">确认</button></div></div></div><hr><hr><hr><hr><hr><hr><hr><div class="control-panel"><div class="flex flex-wrap gap-1.5"><legend class="fa fa-cogs text-primary mr-2">四连设置</legend></div><div class="flex flex-wrap gap-1.5">			<fieldset>								<button id="setDriverbutton" type="button"style="width: 24%;" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_4_ZF(0)">设置为主机零</button>			<button id="setDriverbutton" type="button" style="width: 24%;"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_4_ZF(1)">设置为副机一</button>			<button id="setDriverbutton" type="button" style="width: 24%;"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_4_ZF(2)">设置为副机二</button>			<button id="setDriverbutton" type="button" style="width: 24%;"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_4_ZF(3)">设置为副机三</button>			</fieldset>				<div class="fa fa-cogs text-primary mr-2">					<label for="fanxian1"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">是否反显:</label>					<select id="fanxian1"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">												<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">否</option>						<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">是</option>											</select>								<label for="xuanzhuan1"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">旋转屏幕:</label>					<select id="xuanzhuan1"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">是</option>											</select>					<label for="silian_ziti"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">字体:</label>					<select id="silian_ziti"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">数码</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">衬线</option>											</select>														<label for="xianshi_peizhi"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">电量&MAC:</label>					<select id="xianshi_peizhi"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">是</option>											</select>									<label for="moshi_id"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">模式选择:</label>					<select id="moshi_id"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">						<option value="02"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">时钟模式</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">日历模式</option>												<option value="03"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">温度模式</option>											</select>												<label for="color_11"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">显示红色:</label>					<select id="color_11"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">												<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">否</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto">是</option>											</select>												<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto" >局刷时长:<label>					<input type="range" min="2" max="50" step="2" value="2" id="jushua_time1">									</div>				<button id="setDriverbutton"style="width: 100%;" type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_4_MS()">确认</button>				</div></div><hr><hr><hr><hr><hr><hr><hr><div class="control-panel"><div class="flex flex-wrap gap-1.5"><legend class="fa fa-cogs text-primary mr-2">LED设置</legend></div><div class="flex flex-wrap gap-1.5">				<div class="lg:col-span-2 space-y-2">					<label for="color_led"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">选择颜色:</label>					<select id="color_led"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">						<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">红色</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">绿色</option>						<option value="02"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">红色</option>						<option value="03"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">白色</option>						<option value="04"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">黄色</option>						<option value="05"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">紫色</option>						<option value="06"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">天蓝</option>											</select>								<div class="lg:col-span-2 space-y-2">					<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto "  >频率时长:<label>					<input type="range" min="0" max="80" step="1" value="0" id="liang_time" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">					</div>												<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">闪烁频率</label>										<input type="number" id="liang_add" value="0" min="0" max="10" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">																							<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">LED明暗:</label>					<input type="number" id="liangdu" value="1" min="1" max="10" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">												<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto "  >长亮时长:<label><input type="range" id="liang_s" value="1" min="1" max="250" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">											</div>				<button id="setDriverbutton"style="width: 100%;" type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_LED()">确认</button>				<button id="setDriverbutton" style="width: 100%;"type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_LED1()">四联全部确认</button>				</div>   	</div><hr><hr><hr><hr><hr><hr><hr><div class="control-panel"><div class="flex flex-wrap gap-1.5"><legend class="fa fa-cogs text-primary mr-2">闹钟设置</legend>      				</div><div class="control-panel"><div class="flex flex-wrap gap-1.5">			<div class="lg:col-span-2 space-y-2">					<label for="N_Z_start"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >闹钟:</label>					<select id="N_Z_start"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >						<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >关闭</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >开启</option>													</select>									<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >小时:</label>					<input type="number" id="N_Z_hour" value="0" min="0" max="23"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >					<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >分钟:</label>					<input type="number" id="N_Z_min" value="0" min="0" max="59"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >					<button id="setDriverbutton" type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_N_Z()">确认</button></div>				<div class="lg:col-span-2 space-y-2">					<label for="D_S_start"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >定时:</label>					<select id="D_S_start"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >						<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >关闭</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >开启</option>													</select>									<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >小时:</label>					<input type="number" id="D_S_hour" value="0" min="0" max="23"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >					<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >分钟:</label>					<input type="number" id="D_S_min" value="0" min="0" max="59"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >					<button id="setDriverbutton" type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_D_S()">确认</button>			</div><div class="lg:col-span-2 space-y-2">					<label for="J_S_start"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >计时:</label>					<select id="J_S_start"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >						<option value="00"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >关闭</option>						<option value="01"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >开启</option>													</select>									<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >小时:</label>					<input type="number" id="J_S_hour" value="0" min="0" max="23"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >					<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >分钟:</label>					<input type="number" id="J_S_min" value="0" min="0" max="59"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >					<button id="setDriverbutton" type="button" class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_J_S()">确认</button>				</div>			</div></div></div><hr><hr><hr><hr><hr><hr><hr><div class="control-panel"><h2 class="panel-title"><i class="fa fa-history text-primary mr-2"></i>传输状态与日志</h2><div id="statusContainer" class="hidden mb-1 p-1 rounded-md bg-blue-50 border border-blue-200 text-xs"><div class="flex items-center"><i class="fa fa-circle-o-notch fa-spin text-primary mr-1"></i><span id="status" class="text-blue-800">准备传输...</span></div></div><div class="log-container text-xs max-h-[140px] overflow-y-auto p-1.5 bg-gray-50 rounded" id="logContainer"><div class="text-gray-500 italic">操作日志将显示在这里...</div></div></div></div></div></div>        激活码：<input id="epdpins" type="text"style="width: 60%;" value=""class="btn-action bg-gray-700 text-white flex-1 sm:flex-auto">		<button id="setDriverbutton" type="button" style="width:15%;"class="btn-action bg-blue-700 text-white flex-1 sm:flex-auto" onclick="set_EPD_CMD_J_H()">确认激活</button></main><div id="floatingCanvasContainer" class="hidden fixed bg-white rounded-lg shadow-xl z-50 border border-gray-200 w-[500px] h-[400px] left-[20%] top-[20%]"><div class="bg-dark text-white p-1.5 cursor-move flex items-center justify-between text-sm"><span>处理后画布</span><div class="flex space-x-1"><button id="floatToggleDrawingMode" class="hover:text-primary text-xs px-2 py-0.5"><i class="fa fa-pencil mr-1"></i>开始绘画</button><button id="closeCanvas" class="hover:text-primary"><i class="fa fa-times"></i></button></div></div><div class="relative p-2 h-[calc(100%-40px)] overflow-auto bg-gray-50 flex justify-center items-center canvas-container"><canvas id="floatPreviewCanvas" class="border border-gray-300 cursor-crosshair" style="transition: transform 0.2s;"></canvas></div><div class="absolute w-4 h-4 bg-gray-300 right-0 bottom-0 cursor-se-resize" id="canvasResizeHandle"></div></div><div id="timeDialog" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3"><div class="bg-white rounded-lg shadow-lg w-full max-w-xs"><div class="bg-dark text-white p-2 rounded-t-lg flex justify-between items-center"><h3 class="font-bold">设置时间</h3><button id="closeTimeDialog" class="text-white hover:text-primary"><i class="fa fa-times"></i></button></div><div class="p-3"><div class="mb-2"><input type="datetime-local" id="datetimeInput" class="w-full p-2 border border-gray-300 rounded"></div><div class="flex justify-end"><button id="confirmTimeBtn" class="btn-action bg-primary text-white"><i class="fa fa-check mr-1"></i>确认</button></div></div></div></div><footer class="bg-dark text-white mt-3 py-2 text-center text-xs"><div class="container mx-auto px-3">            墨水屏蓝牙图片工具</div></footer><script type="text/javascript" src="js.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>电子价签-新42</title>
+	<style>
+/* 基础样式重置 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+  padding: 10px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* 按钮样式优化 */
+button {
+  background-color: #4a6ee0;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  margin: 5px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 44px; /* 触摸友好 */
+  flex: 1 1 auto;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+button:hover {
+  background-color: #3a5ecf;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* 按钮组布局 */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  gap: 8px;
+}
+
+.button-group button {
+  flex: 1 1 calc(50% - 10px);
+  min-width: 120px;
+}
+
+.button-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+/* 表单元素优化 */
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+  min-height: 44px; /* 触摸友好 */
+}
+
+input[type="number"] {
+  width: auto;
+  min-width: 70px;
+}
+
+/* 日期选择器区域 */
+.date-picker-section {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 主内容区域 */
+
+
+.input-section, .preview-section {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slider-container input[type="range"] {
+  flex: 1;
+}
+
+.slider-value {
+  min-width: 50px;
+  text-align: center;
+}
+
+/* 画布区域优化 */
+#canvas-box {
+  position: relative;
+  width: 100%;
+  margin: 15px 0;
+}
+
+#canvas {
+  width: 90%;
+  max-width: 800px;
+  height: auto;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  touch-action: manipulation;
+  display: block;
+  margin: 0 auto; /* 这是关键 - 水平居中 */
+}
+
+#tool-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+#tool-box select, #tool-box input, #tool-box button {
+  flex: 1 1 auto;
+  min-width: 100px;
+  margin: 0;
+}
+
+
+    .log-box {
+            margin-top: 15px;
+        }
+        
+#log {
+            height: 200px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+
+/* 预览区域 */
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#previewCanvas {
+  border: 1px solid #ddd;
+  background-color: white;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 响应式设计 */
+@media (min-width: 768px) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .input-section {
+    flex: 1;
+  }
+  
+  .preview-section {
+    flex: 1;
+  }
+  
+  .button-group button {
+    flex: 1 1 calc(33.333% - 10px);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 5px;
+  }
+  
+  button {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  .button-group button {
+    flex: 1 1 100%;
+  }
+  
+  #tool-box {
+    flex-direction: column;
+  }
+  
+  #tool-box select, #tool-box input, #tool-box button {
+    width: 100%;
+  }
+}
+
+/* 特殊按钮样式 */
+#generateBtn {
+  
+  background-color: #28a745;
+}
+
+#generateBtn:hover {
+  background-color: #218838;
+}
+
+.copy-btn {
+  background-color: #6c757d;
+}
+
+.copy-btn:hover {
+  background-color: #5a6268;
+}
+
+/* 选项区域 */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option-item input[type="checkbox"] {
+  width: auto;
+  transform: scale(1.2);
+}
+</style>
+	<script type="application/javascript" src="js/dithering.js"></script>
+	<script type="application/javascript" src="js/utils.js"></script>
+</head>
+
+<body>
+	<script>
+
+    
+	const bwrPalette = [
+  [0, 0, 0, 255],
+  [255, 255, 255, 255],
+  [255, 0, 0, 255]
+]
+
+const bwPalette = [
+  [0, 0, 0, 255],
+  [255, 255, 255, 255],
+]
+
+function dithering(ctx, width, height, threshold, type) {
+  const bayerThresholdMap = [
+    [  15, 135,  45, 165 ],
+    [ 195,  75, 225, 105 ],
+    [  60, 180,  30, 150 ],
+    [ 240, 120, 210,  90 ]
+  ];
+
+  const lumR = [];
+  const lumG = [];
+  const lumB = [];
+  for (let i=0; i<256; i++) {
+    lumR[i] = i*0.299;
+    lumG[i] = i*0.587;
+    lumB[i] = i*0.114;
+  }
+  const imageData = ctx.getImageData(0, 0, width, height);
+
+  const imageDataLength = imageData.data.length;
+
+  // Greyscale luminance (sets r pixels to luminance of rgb)
+  for (let i = 0; i <= imageDataLength; i += 4) {
+    imageData.data[i] = Math.floor(lumR[imageData.data[i]] + lumG[imageData.data[i+1]] + lumB[imageData.data[i+2]]);
+  }
+
+  const w = imageData.width;
+  let newPixel, err;
+
+  for (let currentPixel = 0; currentPixel <= imageDataLength; currentPixel+=4) {
+
+    if (type ==="none") {
+      // No dithering
+      imageData.data[currentPixel] = imageData.data[currentPixel] < threshold ? 0 : 255;
+    } else if (type ==="bayer") {
+      // 4x4 Bayer ordered dithering algorithm
+      var x = currentPixel/4 % w;
+      var y = Math.floor(currentPixel/4 / w);
+      var map = Math.floor( (imageData.data[currentPixel] + bayerThresholdMap[x%4][y%4]) / 2 );
+      imageData.data[currentPixel] = (map < threshold) ? 0 : 255;
+    } else if (type ==="floydsteinberg") {
+      // Floyda€"Steinberg dithering algorithm
+      newPixel = imageData.data[currentPixel] < 129 ? 0 : 255;
+      err = Math.floor((imageData.data[currentPixel] - newPixel) / 16);
+      imageData.data[currentPixel] = newPixel;
+
+      imageData.data[currentPixel       + 4 ] += err*7;
+      imageData.data[currentPixel + 4*w - 4 ] += err*3;
+      imageData.data[currentPixel + 4*w     ] += err*5;
+      imageData.data[currentPixel + 4*w + 4 ] += err*1;
+    } else {
+      // Bill Atkinson's dithering algorithm
+      newPixel = imageData.data[currentPixel] < threshold ? 0 : 255;
+      err = Math.floor((imageData.data[currentPixel] - newPixel) / 8);
+      imageData.data[currentPixel] = newPixel;
+
+      imageData.data[currentPixel       + 4 ] += err;
+      imageData.data[currentPixel       + 8 ] += err;
+      imageData.data[currentPixel + 4*w - 4 ] += err;
+      imageData.data[currentPixel + 4*w     ] += err;
+      imageData.data[currentPixel + 4*w + 4 ] += err;
+      imageData.data[currentPixel + 8*w     ] += err;
+    }
+
+    // Set g and b pixels equal to r
+    imageData.data[currentPixel + 1] = imageData.data[currentPixel + 2] = imageData.data[currentPixel];
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function canvas2bytes(canvas, type='bw') {
+  const ctx = canvas.getContext("2d");
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  const arr = [];
+  let buffer = [];
+for (let y = 0; y < canvas.height; y++) {
+  for (let x =0;x<canvas.width ; x++) {
+    
+      const index = (canvas.width * 4 * y) + x * 4;
+      if (type !== 'bwr') {
+        buffer.push(imageData.data[index] > 0 && imageData.data[index+1] > 0 && imageData.data[index+2] > 0 ? 1 : 0);
+      } else {
+        buffer.push(imageData.data[index] > 0 && imageData.data[index+1] === 0 && imageData.data[index+2] === 0 ? 1 : 0);
+      }
+
+      if (buffer.length === 8) {
+        arr.push(parseInt(buffer.join(''), 2));
+        buffer = [];
+      }
+    }
+  }
+  return arr;
+}
+
+function getColorDistance(rgba1, rgba2) {
+  const [r1, b1, g1] = rgba1;
+  const [r2, b2, g2] = rgba2;
+
+  const rm = (r1 + r2 ) / 2;
+
+  const r = r1 - r2;
+  const g = g1 - g2;
+  const b = b1 - b2;
+
+  return Math.sqrt((2 + rm / 256) * r * r + 4 * g * g + (2 + (255 - rm) / 256) * b * b);
+}
+
+function getNearColor(pixel, palette) {
+  let minDistance = 255 * 255 * 3 + 1;
+  let paletteIndex = 0;
+
+  for (let i = 0; i < palette.length; i++) {
+    const targetColor = palette[i];
+    const distance = getColorDistance(pixel, targetColor);
+    if (distance < minDistance) {
+      minDistance = distance;
+      paletteIndex = i;
+    }
+  }
+
+  return palette[paletteIndex];
+}
+
+
+function getNearColorV2(color, palette) {
+  let minDistanceSquared = 255*255 + 255*255 + 255*255 + 1;
+
+  let bestIndex = 0;
+  for (let i = 0; i < palette.length; i++) {
+      let rdiff = (color[0] & 0xff) - (palette[i][0] & 0xff);
+      let gdiff = (color[1] & 0xff) - (palette[i][1] & 0xff);
+      let bdiff = (color[2] & 0xff) - (palette[i][2] & 0xff);
+      let distanceSquared = rdiff*rdiff + gdiff*gdiff + bdiff*bdiff;
+      if (distanceSquared < minDistanceSquared) {
+          minDistanceSquared = distanceSquared;
+          bestIndex = i;
+      }
+  }
+  return palette[bestIndex];
+
+}
+
+
+function updatePixel(imageData, index, color) {
+  imageData[index] = color[0];
+  imageData[index+1] = color[1];
+  imageData[index+2] = color[2];
+  imageData[index+3] = color[3];
+}
+
+function getColorErr(color1, color2, rate) {
+  const res = [];
+  for (let i = 0; i < 3; i++) {
+    res.push(Math.floor((color1[i] - color2[i]) / rate));
+  }
+  return res;
+}
+
+function updatePixelErr(imageData, index, err, rate) {
+  imageData[index] += err[0] * rate;
+  imageData[index+1] += err[1] * rate;
+  imageData[index+2] += err[2] * rate;
+}
+
+function ditheringCanvasByPalette(canvas, palette, type) {
+  palette = palette || bwrPalette;
+
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const w = imageData.width;
+
+  for (let currentPixel = 0; currentPixel <= imageData.data.length; currentPixel+=4) {
+    const newColor = getNearColorV2(imageData.data.slice(currentPixel, currentPixel+4), palette);
+
+    if (type === "bwr_floydsteinberg") {
+      const err = getColorErr(imageData.data.slice(currentPixel, currentPixel+4), newColor, 16);
+
+      updatePixel(imageData.data, currentPixel, newColor);
+      updatePixelErr(imageData.data, currentPixel +4, err, 7);
+      updatePixelErr(imageData.data, currentPixel + 4*w - 4, err, 3);
+      updatePixelErr(imageData.data, currentPixel + 4*w, err, 5);
+      updatePixelErr(imageData.data, currentPixel + 4*w + 4, err, 1);
+    } else {
+      const err = getColorErr(imageData.data.slice(currentPixel, currentPixel+4), newColor, 8);
+
+      updatePixel(imageData.data, currentPixel, newColor);
+      updatePixelErr(imageData.data, currentPixel +4, err, 1);
+      updatePixelErr(imageData.data, currentPixel +8, err, 1);
+      updatePixelErr(imageData.data, currentPixel +4 * w - 4, err, 1);
+      updatePixelErr(imageData.data, currentPixel +4 * w, err, 1);
+      updatePixelErr(imageData.data, currentPixel +4 * w + 4, err, 1);
+      updatePixelErr(imageData.data, currentPixel +8 * w, err, 1);
+    }
+  }
+  ctx.putImageData(imageData, 0, 0);
+}</script>
+
+<script>
+function hexToBytes(hex) {
+  for (var bytes = [], c = 0; c < hex.length; c += 2)
+    bytes.push(parseInt(hex.substr(c, 2), 16));
+  return new Uint8Array(bytes);
+}
+
+function bytesToHex(data) {
+  return new Uint8Array(data).reduce(
+    function (memo, i) {
+      return memo + ("0" + i.toString(16)).slice(-2);
+    }, "");
+}
+
+function intToHex(intIn, bytes=4) {
+    return intIn.toString(16).padStart(bytes * 2, '0');
+}
+
+</script>
+	<script>
+		let bleDevice;
+		let gattServer;
+		let epdService;
+		let rxtxService;
+		let epdCharacteristic;
+		let rxtxCharacteristic;
+		let reconnectTrys = 0;
+		const my_step = 900;
+
+		function delay(delayInMs) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInMs);
+  });
+}
+
+		function resetVariables() {
+			gattServer = null;
+			epdService = null;
+			epdCharacteristic = null;
+			rxtxCharacteristic = null;
+			rxtxService = null;
+			document.getElementById("log").value = '';
+		}
+
+		async function handleError(error) {
+			console.log(error);
+			resetVariables();
+			if (bleDevice == null)
+				return;
+			if (reconnectTrys <= 5) {
+				reconnectTrys++;
+				await connect();
+			}
+			else {
+				addLog("Was not able to connect, aborting");
+				reconnectTrys = 0;
+			}
+		}
+	
+		async function sendCommand(cmd) {
+			if (epdCharacteristic) {
+				await epdCharacteristic.writeValueWithResponse(cmd)
+			} else {
+				addLog('服务不可用。蓝牙链接上了吗？')
+			}
+		}
+
+		async function clearScreen(cmd) {
+			addLog('刷屏')
+			await triggerEpdCmd(`00${cmd}`);
+			await triggerEpdCmd('01')
+		}
+
+		async function rxTxSendCommand(cmd) {
+		  if (rxtxCharacteristic) {
+			await rxtxCharacteristic.writeValueWithResponse(cmd);
+		  } else {
+			  addLog('服务不可用。蓝牙链接上了吗？')
+		  }
+		}
+
+		async function SendCommand(cmd) {
+			let code;
+			for(let i;i<cmd.length;i+=2){
+				code=''+cmd[i]+cmd[i+1];
+				triggerRxTxCmd(code);
+				await delay(1000);
+			}
+		 	
+		}
+
+		async function rxTxSendCommand2(cmd) {
+		  if (rxtxCharacteristic) {
+			await rxtxCharacteristic.writeValueWith(cmd);
+		  } else {
+			  addLog('服务不可用。蓝牙链接上了吗？')
+		  }
+		}
+		
+		async function sendBufferData(value, type) {
+			addLog(`开始发送图片模式:${type}, 大小 ${value.length}byte`);
+			let code = 'ff';
+			if (type === 'bwr') {
+				code = '00';
+			}
+
+      let cod = '03';
+      if (value.length==7000) { cod = '04';}
+			const step = my_step;
+			let partIndex = 0;
+			for (let i = 0; i < value.length; i += step) {
+				addLog(`正在发送第${partIndex+1}块. 块大小: ${step/2+4}byte. 起始位置: ${i/2}`);
+				await sendCommand(hexToBytes(cod + code + intToHex(i / 2, 2) + value.substring(i, i + step)));
+				partIndex += 1;
+			}
+		}
+	function updateCanvasSize() {
+			const sizeSelect = document.getElementById('screen-size');
+			const canvas = document.getElementById('canvas');
+			const ctx = canvas.getContext("2d");
+		
+			let width, height;
+			if (sizeSelect.value == "4.2传图") {
+				width = 400;
+				height = 300;
+			}
+      //  else if (sizeSelect.value === "2.9传图"){
+			// 	width = 296;
+			// 	height = 128;
+			// }
+      else {
+
+        width	=  280;
+				height =100;
+      }
+			
+			canvas.width = width;
+			canvas.height = height ;
+			
+			// 清空并重置背景为白色
+			ctx.fillStyle = 'white';
+			ctx.fillRect(0, 0, width, height);
+			update_image () ;
+			addLog(`画布尺寸已更新为: ${width}x${height}`);
+		}
+		async function upload_image() {
+			const canvas = document.getElementById('canvas');
+
+
+			const startTime = new Date().getTime();
+
+
+			// await sendCommand(hexToBytes("0000"));
+
+			// await sendCommand(hexToBytes("020000"));
+
+			await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
+			await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
+
+       if (canvas.width ==280) { await sendCommand(hexToBytes("AA"))}
+          else  { await sendCommand(hexToBytes("01"))}
+			
+
+			addLog(`上传完成，耗时${(new Date().getTime() - startTime)/1000}s`);
+		}
+
+
+
+		async function setTime() {
+			const { unixNow, localeTimeString, year, month, day, week } = getUnixTime();
+
+		  	addLog("时间设置为: " + localeTimeString + " : dd" + intToHex(unixNow, 4));
+		  	await rxTxSendCommand(hexToBytes('dd' +
+					[intToHex(unixNow, 4), intToHex(year, 2), intToHex(month, 1), intToHex(day, 1), intToHex(week, 1)].join('')));
+
+			await rxTxSendCommand(hexToBytes('e2'))
+		}
+
+    async function setri(cmd) {
+			await rxTxSendCommand(hexToBytes(cmd));
+      await delay(300);
+			await rxTxSendCommand(hexToBytes('e2'))
+		}
+
+		async function triggerRxTxCmd(cmd) {
+			addLog(`发送指令: ${cmd}`)
+			await rxTxSendCommand(hexToBytes(cmd));
+		}
+		async function triggerRxTxCmd2(cmd) {
+			addLog(`发送指令: ${cmd}`)
+			await rxTxSendCommand2(hexToBytes(cmd));
+		}
+		async function triggerEpdCmd(cmd) {
+			addLog(`发送指令: ${cmd}`)
+			await sendCommand(hexToBytes(cmd));
+		}
+	async function triggerEpdRed_lut(cmd) {
+			addLog(`开始红色校准: ${cmd}`)
+      cmd='E6'+cmd;
+			await rxTxSendCommand(hexToBytes(cmd));
+      
+		}
+    async function triggerEpdJH(cmd) {
+			addLog(`激活指令: ${cmd}`)
+      cmd='EF'+cmd;
+			await rxTxSendCommand(hexToBytes(cmd));
+      await delay(300);
+			await rxTxSendCommand(hexToBytes('e2'))
+		}
+
+		function disconnect() {
+			resetVariables();
+			addLog('链接已断开.');
+			document.getElementById("connectbutton").innerHTML = '链接';
+		}
+
+		async function preConnect() {
+			if (gattServer != null && gattServer.connected) {
+				if (bleDevice != null && bleDevice.gatt.connected)
+					bleDevice.gatt.disconnect();
+			}
+			else {
+				reconnectTrys = 0;
+				bleDevice = await navigator.bluetooth.requestDevice({ filters: [
+                { namePrefix: 'NRF-' }
+            ],optionalServices: ['0000221f-0000-1000-8000-00805f9b34fb', '00001f10-0000-1000-8000-00805f9b34fb', '13187b10-eba9-a3ba-044e-83d3217d9a38'] });
+				await bleDevice.addEventListener('gattserverdisconnected', disconnect);
+				try {
+					await connect();
+				} catch (e) {
+					await handleError(e);
+				}
+			}
+		}
+
+		async function connectRXTX() {
+			rxtxService = await gattServer.getPrimaryService('00001f10-0000-1000-8000-00805f9b34fb');
+			addLog('> rxtxService 找到串口服务');
+
+			rxtxCharacteristic = await rxtxService.getCharacteristic('00001f1f-0000-1000-8000-00805f9b34fb');
+			addLog('> rxtxCharacteristic 串口服务已链接');
+		}
+
+		async function reConnect() {
+			connectTrys = 0;
+			if (bleDevice != null && bleDevice.gatt.connected)
+				bleDevice.gatt.disconnect();
+			resetVariables();
+			addLog("重新链接");
+			setTimeout(async function () { await connect(); }, 300);
+		}
+
+		async function connect() {
+			if (epdCharacteristic == null) {
+				addLog("正在链接: " + bleDevice.name);
+
+				gattServer = await bleDevice.gatt.connect();
+				addLog('> 找到GATT服务器');
+
+				epdService = await gattServer.getPrimaryService('13187b10-eba9-a3ba-044e-83d3217d9a38');
+				addLog('>  epdService 找到可用服务');
+
+				epdCharacteristic = await epdService.getCharacteristic('4b646063-6264-f3a7-8941-e65356ea82fe');
+				addLog('> epdCharacteristic 服务已连接');
+
+				await epdCharacteristic.startNotifications();
+
+				epdCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+					console.log('epd ret', bytesToHex(event.target.value.buffer))
+					const count = parseInt('0x'+ bytesToHex(event.target.value.buffer));
+					
+					addLog(`> [来自屏幕]: 收到${count} byte数据`);
+					
+					
+				});
+
+				document.getElementById("connectbutton").innerHTML = '断开';
+				await connectRXTX();
+			}
+		}
+
+		function setStatus(statusText) {
+			document.getElementById("status").innerHTML = statusText;
+		}
+
+		function addLog(logTXT) {
+			const today = new Date();
+			const time = ("0" + today.getHours()).slice(-2) + ":" + ("0" + today.getMinutes()).slice(-2) + ":" + ("0" + today.getSeconds()).slice(-2) + " : ";
+
+			const dom = document.getElementById("log");
+
+			dom.innerHTML += time + logTXT + '<br>';
+			dom.scrollTop = dom.scrollHeight;
+		}
+
+		function getUnixTime() {
+			const hourOffset = document.getElementById('hour-offset').value;
+		  	const unixNow = Math.round(Date.now() / 1000)+(60*60*hourOffset)  - new Date().getTimezoneOffset() * 60;
+
+			const date = new Date((unixNow + new Date().getTimezoneOffset() * 60)*1000);
+		  	const localeTimeString = date.toLocaleTimeString();
+
+			return {unixNow, localeTimeString, year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), week: date.getDay() || 7}
+		}
+
+		async function update_image () {
+			const image_file = document.getElementById('image_file');
+			if (image_file.files.length > 0) {
+				const file = image_file.files[0];
+
+				const canvas = document.getElementById("canvas");
+				const ctx = canvas.getContext("2d");
+
+				const image = new Image();
+				image.src = URL.createObjectURL(file);
+				image.onload = function(event) {
+					URL.revokeObjectURL(this.src);
+					ctx.drawImage(image, 0, 0,  image.width,image.height, 0, 0, canvas.width, canvas.height);
+					convert_dithering()
+				}
+			}
+		}
+
+		function get_position(canvas, x, y){
+			let rect = canvas.getBoundingClientRect()
+			return {
+				x: x - rect.left * (canvas.width/rect.width),
+				y: y - rect.top * (canvas.height/rect.height)
+			}
+		}
+
+		function clear_canvas() {
+			if(confirm('确认清除屏幕?')) {
+				const canvas = document.getElementById('canvas');
+				const ctx = canvas.getContext("2d");
+				ctx.fillStyle = 'white';
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+			}
+		}
+
+		function convert_dithering() {
+			const canvas = document.getElementById('canvas');
+			const ctx = canvas.getContext("2d");
+			const mode = document.getElementById('dithering').value;
+			if (mode.startsWith('bwr')) {
+				ditheringCanvasByPalette(canvas, bwrPalette, mode);
+			} else {
+				dithering(ctx, canvas.width, canvas.height, parseInt(document.getElementById('threshold').value), mode);
+			}
+		}
+
+		document.body.onload = () => {
+			setInterval(() => {
+				const { localeTimeString, year, month, day, week } = getUnixTime();
+				document.getElementById('time-setter').innerText = `设置时间为：${year}-${month}-${day} ${localeTimeString} 星期${week}`;
+			}, 1000);
+
+			const canvas = document.getElementById('canvas');
+			const ctx = canvas.getContext("2d");
+      // 初始化画布尺寸为300x400
+			updateCanvasSize();
+			ctx.fillStyle = 'white';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			let is_allow_drawing = false;
+			let is_allow_move_editor = false;
+			const image_mode = document.getElementById('canvas-mode');
+			const paint_size = document.getElementById('paint-size');
+			const paint_color = document.getElementById('paint-color');
+			const editor = document.getElementById('edit-font');
+			const font = document.getElementById('font');
+			document.getElementById('dithering').value = 'bwr_Atkinson';
+			image_mode.value = 'paint';
+			paint_color.value = 'black';
+			font.value = '黑体';
+
+			editor.onmousemove = function (e) {
+				editor.style.fontSize = `${paint_size.value * 10}px`;
+				editor.style.color = paint_color.value;
+				editor.style.fontFamily = font.value;
+				editor.style.fontWeight = 'bold';
+
+				if (is_allow_move_editor) {
+					const {x, y} = get_position(canvas, e.clientX, e.clientY);
+					if (x < 0 || y < 0 || x > canvas.width || y > canvas.height) {
+						return;
+					}
+
+					editor.style.left = `${e.clientX-20}px`;
+					editor.style.top = `${e.clientY-20}px`;
+
+				}
+			}
+
+			editor.onmousedown = function (e) {
+				is_allow_move_editor = true;
+			}
+
+			editor.onmouseup = function (e) {
+				is_allow_move_editor = false;
+			}
+
+			document.getElementById('update-text').onclick = function () {
+				if (!editor.value.length) {
+					alert('请先输入文字');
+					return;
+				}
+				editor.style.display = 'none';
+				ctx.beginPath();
+				ctx.font = `bold ${paint_size.value * 10}px ${font.value}`;
+				ctx.fillStyle = paint_color.value;
+				const {x, y} = get_position(canvas, parseInt(editor.style.left), parseInt(editor.style.top) + paint_size.value * 10);
+
+				ctx.fillText(editor.value, x, y);
+			}
+
+			image_mode.onchange = function (e) {
+				if (image_mode.value === 'font') {
+					document.getElementById('update-text').style.display = 'inline-block';
+					document.getElementById('font').style.display = 'inline-block';
+
+					editor.style.display='block';
+					editor.style.left = `${e.clientX}px`;
+					editor.style.top = `${e.clientY}px`;
+					return;
+				}
+				document.getElementById('update-text').style.display = 'none';
+				document.getElementById('font').style.display = 'none';
+				editor.style.display='none';
+			}
+
+			paint_size.onchange = function () {
+				if (image_mode.value === 'font') {
+					editor.style.fontSize =  `${paint_size.value * 10}px`;
+				}
+			}
+
+			paint_color.onchange = function () {
+				if (image_mode.value === 'font') {
+					editor.style.color = paint_color.value;
+				}
+			}
+
+			font.onchange = function () {
+				if (image_mode.value === 'font') {
+					editor.style.fontFamily = font.value;
+				}
+			}
+
+			canvas.onmousedown = function(e) {
+				let ele = get_position(canvas, e.clientX, e.clientY)
+				let { x, y } = ele
+
+				switch (image_mode.value) {
+					case 'paint':
+						is_allow_drawing = true;
+						ctx.beginPath();
+						ctx.moveTo(x, y);
+						break;
+					case 'font':
+						editor.style.display='block';
+						editor.style.left = `${e.clientX}px`;
+						editor.style.top = `${e.clientY}px`;
+						editor.style.fontSize = `${paint_size.value * 10}px`;
+						editor.style.color = paint_color.value;
+						editor.style.fontFamily = font.value;
+						editor.style.fontWeight = 'bold';
+
+						break
+					default:
+						break;
+				}
+			};
+
+			canvas.onmousemove = (e) => {
+				let ele = get_position(canvas, e.clientX, e.clientY)
+				let { x, y } = ele;
+				switch (image_mode.value) {
+					case 'paint':
+						if (is_allow_drawing) {
+							ctx.lineWidth = paint_size.value;
+							ctx.strokeStyle=paint_color.value;
+							ctx.lineTo(x, y);
+							ctx.stroke();
+						}
+						break;
+					case 'font':
+						break;
+
+					default:
+						break;
+				}
+			}
+
+			canvas.onmouseup = function() {
+				switch (image_mode.value) {
+					case 'paint':
+						is_allow_drawing = false;
+						break;
+
+					case 'font':
+						editor.focus();
+						is_allow_move_editor = false;
+						break;
+
+					default:
+						break;
+				}
+			}
+
+			canvas.onmouseleave = function () {
+				if (image_mode.value === 'paint') {
+					is_allow_drawing = false;
+				}
+			}
+		}
+	</script>
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            const fontFamily = document.getElementById('fontFamily');
+            const invertColors = document.getElementById('invertColors');
+            const showGrid = document.getElementById('showGrid');
+            const generateBtn = document.getElementById('generateBtn');
+            const previewCanvas = document.getElementById('previewCanvas');
+            const codeOutput = document.getElementById('codeOutput');
+            const copyBtn = document.getElementById('copyBtn');
+            const gridInfoText = document.getElementById('gridInfoText');
+            const fontSizeSlider = document.getElementById('fontSizeSlider');
+            const fontSizeValue = document.getElementById('fontSizeValue');
+
+           // const datePicker = document.getElementById('datePicker');
+
+          const gridSizeSelect = document.getElementById('gridSizeSelect');
+            const currentGridSize = document.getElementById('currentGridSize');
+            const sizeHint = document.getElementById('sizeHint');
+
+            const ctx = previewCanvas.getContext('2d');
+           // const gridSize = 16; // 单个字符的点阵尺寸（16×16）
+            const previewScale = 8; // 预览缩放比例（1点阵=10像素）
+            let fontSizeRatio = 0.85; // 字体大小比例，默认85%
+            
+            // 初始化预览
+            updateGridSize();
+            drawPreview();
+             
+            // 生成字模
+            generateBtn.addEventListener('click', function() {
+                drawPreview();
+                generateCode();
+            });
+            
+            // 复制代码
+            copyBtn.addEventListener('click', function() {
+                sendcode();
+            });
+            
+            // 字体大小调节
+            fontSizeSlider.addEventListener('input', function() {
+                const value = this.value;
+                fontSizeValue.textContent = `${value}%`;
+                fontSizeRatio = value / 100;
+                drawPreview();
+            });
+            
+            // 点阵尺寸切换
+            gridSizeSelect.addEventListener('change', function() {
+                updateGridSize();
+                drawPreview();
+            });
+            // 获取当前选择的点阵尺寸
+            function getCurrentGridSize() {
+                return parseInt(gridSizeSelect.value);
+            }
+            
+            // 更新点阵尺寸相关显示
+            function updateGridSize() {
+                const gridSize = getCurrentGridSize();
+              
+                currentGridSize.textContent = ``;
+               //sizeHint.textContent = `调节字体在${gridSize}×${gridSize}点阵内的显示比例，过大可能导致字符截断`;
+            }
+            
+            
+             // 格式化日期显示
+            function formatDate(date) {
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                return `${year}年${month}月${day}日`;
+            }
+            // 绘制预览（适配动态点阵尺寸）
+            function drawPreview() {
+                const text = textInput.value || 'ABCDEFGH';
+                const charCount = text.length;
+                const font = fontFamily.value;
+                const invert = invertColors.checked;
+                const grid = showGrid.checked;
+                const gridSize = getCurrentGridSize();
+                
+                // 动态设置画布尺寸
+                previewCanvas.width = charCount * gridSize * previewScale;
+                previewCanvas.height = gridSize * previewScale;
+                //gridInfoText.textContent = `${charCount}字符 × ${gridSize}×${gridSize} 点阵（总尺寸：${previewCanvas.width}×${previewCanvas.height}像素）`;
+               
+                // 清空画布
+                ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+                
+                // 绘制背景
+                ctx.fillStyle = invert ? '#000000' : '#ffffff';
+                ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+                
+                // 逐个字符绘制
+                const charWidth = gridSize * previewScale;
+                ctx.font = `bold ${gridSize * fontSizeRatio * previewScale}px ${font}`;
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = invert ? '#ffffff' : '#000000';
+                
+                for (let i = 0; i < charCount; i++) {
+                    const currentChar = text[i];
+                    const charX = i * charWidth + charWidth / 2;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(currentChar, charX, previewCanvas.height / 2);
+                }
+                
+                // 绘制自适应网格
+                if (grid) {
+                    ctx.strokeStyle = invert ? '#333333' : '#dddddd';
+                    
+                    // 绘制垂直线
+                    for (let x = 0; x <= charCount * gridSize; x++) {
+                        const lineX = x * previewScale;
+                        ctx.beginPath();
+                        ctx.moveTo(lineX, 0);
+                        ctx.lineTo(lineX, previewCanvas.height);
+                        ctx.lineWidth = x % gridSize === 0 ? 2 : 1;
+                        ctx.stroke();
+                    }
+                    
+                    // 绘制水平线
+                    for (let y = 0; y <= gridSize; y++) {
+                        const lineY = y * previewScale;
+                        ctx.beginPath();
+                        ctx.moveTo(0, lineY);
+                        ctx.lineTo(previewCanvas.width, lineY);
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+           // 生成代码（按画布取模：提取整个预览画布的点阵数据）
+// const charCount;
+async  function sendcode(){
+
+triggerRxTxCmd('FA');
+	await delay(1000);
+triggerRxTxCmd('E2');
+}
+async  function generateCode() {
+            const text = textInput.value || 'ABCDEFGH';
+                const charCount = text.length;
+                const font = fontFamily.value;
+                const invert = invertColors.checked;
+                const gridSize = getCurrentGridSize();
+                
+                // 总点阵尺寸：宽度=字符数×gridSize，高度=gridSize
+                const totalGridWidth = charCount * gridSize;
+                const totalGridHeight = gridSize;
+                
+                // 创建与总点阵尺寸一致的临时画布
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = totalGridWidth;
+                tempCanvas.height = totalGridHeight;
+                const tempCtx = tempCanvas.getContext('2d');
+                
+                // 绘制完整画布内容
+                tempCtx.fillStyle = invert ? '#000000' : '#ffffff';
+                tempCtx.fillRect(0, 0, totalGridWidth, totalGridHeight);
+                tempCtx.font = `bold ${totalGridHeight * fontSizeRatio}px ${font}`;
+                tempCtx.textAlign = 'center';
+                tempCtx.textBaseline = 'middle';
+                tempCtx.fillStyle = invert ? '#ffffff' : '#000000';
+                tempCtx.fillText(text, totalGridWidth / 2, totalGridHeight / 2);
+                
+                // 解析整个画布的像素数据
+                const imageData = tempCtx.getImageData(0, 0, totalGridWidth, totalGridHeight);
+                const data = imageData.data;
+                const allBytes = [];
+                
+                // 按行解析像素（根据点阵尺寸自动计算每行字节数）
+                for (let y = 0; y < totalGridHeight; y++) {
+                    const bytesPerLine = totalGridWidth / 8; // 每行字节数=总宽度/8
+                    const lineBytes = new Array(bytesPerLine).fill(0);
+                    
+                    for (let x = 0; x < totalGridWidth; x++) {
+                        const pixelIndex = (y * totalGridWidth + x) * 4;
+                        const brightness = (data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2]) / 3;
+                        const bitValue = invert ? (brightness > 128 ? 0 : 1) : (brightness > 128 ? 1 : 0);
+                        
+                        const byteIndex = Math.floor(x / 8); // 计算当前点属于第几个字节
+                        const bitPosition = 7 - (x % 8); // 计算字节内的位位置
+                        lineBytes[byteIndex] |= (bitValue << bitPosition);
+                    }
+                    allBytes.push(...lineBytes);
+                }
+                
+
+		
+                if(gridSize==16){
+
+                if(charCount>4){
+
+
+                  let code='0'+4;
+                  // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
+                  for (let i = 0; i < allBytes.length-1-(charCount-4)*32; i++) {
+                      // 补零为2位十六进制（如1→01，15→0f）
+                      code += `${allBytes[i].toString(16).padStart(2, '0')}`;
+
+                  }
+                
+                triggerRxTxCmd(code);
+                await delay(1000);
+
+                  
+
+                let code1='0'+charCount;
+                  
+                    for (let i = 128; i < allBytes.length-1; i++) {
+                    // 补零为2位十六进制（如1→01，15→0f）
+                    code1 += `${allBytes[i].toString(16).padStart(2, '0')}`;
+                    
+                    }
+                  triggerRxTxCmd(code1);
+                }else{
+
+                      let code='0'+(charCount);
+                  // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
+                  for (let i = 0; i < allBytes.length-1; i++) {
+                      // 补零为2位十六进制（如1→01，15→0f）
+                      code += `${allBytes[i].toString(16).padStart(2, '0')}`;
+                      
+                  }
+                triggerRxTxCmd(code);
+                
+                }
+      }else if(gridSize==24) 
+      {
+
+        if(charCount>4) return;
+
+          for(let j=0;j<charCount;j++){
+            let code='990'+j;
+
+            // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
+                  for (let i = 0; i <72; i++) {
+                      // 补零为2位十六进制（如1→01，15→0f）
+                      code += `${allBytes[i+j*72].toString(16).padStart(2, '0')}`;
+
+                  }
+                
+                triggerRxTxCmd(code);
+              
+                await delay(1000);
+
+
+          }
+          
+                
+                
+                }
+
+			// 监听日期选择变化
+          
+                // 设置日期选择器默认值为今天
+            // const today = new Date();
+            // datePicker.valueAsDate = today;
+            // selectedDateDisplay.textContent = formatDate(today);
+       		 	const selectedDate = new Date(datePicker.value);
+                //selectedDateDisplay.textContent = formatDate(selectedDate);
+				        let year = selectedDate.getFullYear();
+                let month = selectedDate.getMonth() + 1;
+                let day =selectedDate.getDate();
+				await delay(1000);
+				
+		
+					if(month<10) month='0'+month;
+					if(day<10) day='0'+day;
+           if(gridSize==24) {
+            let code2='ffff'+year+month+day;
+                if(year>2000) {
+                  triggerRxTxCmd(code2);};
+
+           }else{
+            let code2='ff00'+year+month+day;
+            	if(year>2000) {
+					triggerRxTxCmd(code2);};
+
+          }
+			//  let code2='ffff'+year+month+day;
+      //           if(year>2000) {
+      //             triggerRxTxCmd(code2);}
+			
+
+			await delay(600);
+				triggerRxTxCmd('E2');
+}
+            
+            // 监听输入变化，实时更新预览
+            textInput.addEventListener('input', drawPreview);
+            fontFamily.addEventListener('change', drawPreview);
+            invertColors.addEventListener('change', drawPreview);
+            showGrid.addEventListener('change', drawPreview);
+        });
+    </script>
+
+	 <h2>电子价签蓝牙控制器-黑白
+	 <!-- <a href="ATC_TLSR_Paper BLE control.html">蓝牙OTA升级</a> -->
+	</h2>
+<!-- 在连接按钮部分 -->
+<div class="button-group">
+  <button id="connectbutton" type="button" onclick="preConnect();">链接</button>
+  <button type="button" onclick="reConnect();">重新链接</button>
+  <button type="button" onclick="document.getElementById('log').innerHTML = '';">清空日志</button>
+</div>
+
+<!-- 在指令控制部分 -->
+<div class="button-group">
+ <button id="time-setter" onclick="setTime()">设置时间为: </button>	<br>
+	<input type="number" max="24" min="0" id="hour-offset" value="0" style="width: 40px;" >
+  <!-- <h3>指令控制设置时间</h3>
+	<button id="time-setter" onclick="setTime()">设置时间为: </button>	<br>
+	偏移+<input type="number" max="24" min="0" id="hour-offset" value="0" style="width: 40px;">小时 -->
+  <!-- <input type="text" id="cmdTXT" placeholder="输入命令" value="0155">
+	<button onclick="triggerEpdCmd(document.getElementById('cmdTXT').value)">发送命令</button> -->
+ 
+</div>
+
+<div class="button-group">
+  <button type="button" onclick="triggerRxTxCmd('e100')" title="点击该按钮，然后上传图片。图片将永久显示到屏幕上">设置为图片模式</button>
+  <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">设置为时钟模式</button>
+  <button type="button" onclick="setri('e101')" title="点击该按钮, 切换为时钟模式">设置为日历模式</button>
+</div>
+
+<div class="button-group">
+  <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">设置为反色模式</button>
+  <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">设置为翻转模式</button>
+  <input type="text" id="cmdlut_red" placeholder="16进制输入00到0f。默认为0a，老化屏建议0c" value="">
+	<button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
+  <button type="button" onclick="triggerRxTxCmd('E2')" title="点击该按钮, 切换为时钟模式">(没反应就点下)刷新</button>
+</div>
+	<br><br>
+	 <section class="date-picker-section">
+            <h2>倒计时日期选择器，选择才生效</h2>
+            <div class="date-picker-container">
+                <label for="datePicker">选择一个日期:</label>
+                <input type="date" id="datePicker">
+                
+            </div>
+        </section>
+
+<div class="main-content">
+            <div class="input-section">
+                <div class="section-title">
+                    <i>📝</i> 输入设置
+                </div>
+                
+                <div class="input-group">
+                    <label for="textInput">输入文字 (时钟计时8个字符以内，日历计时4个字符以内)</label>
+                    <input type="text" id="textInput" maxlength="8" value="距离成为首富还有" placeholder="请输入1-8个字符">
+                </div>
+                <div class="input-group">
+                    <label for="gridSizeSelect">倒计时界面选择</label>
+                    <select id="gridSizeSelect">
+                        <option value="16">时钟计时界面</option>
+                        <option value="24">日历计时界面</option>
+                    </select>
+                     <div><span id="currentGridSize"></span></div>
+                </div>
+                <div class="input-group" >
+                    <label for="fontFamily">字体选择（电脑端生效）</label>
+                    <select id="fontFamily">
+                        <option value="Arial">Arial</option>
+                        <option value="SimSun" selected="">宋体</option>
+                        <option value="Microsoft YaHei">微软雅黑</option>
+                        <option value="SimHei">黑体</option>
+                        <option value="KaiTi">楷体</option>
+                    </select>
+                </div>
+                
+                <div class="input-group" >
+                    <label for="fontSizeSlider">字体大小 (50%-150%)</label>
+                    <div class="slider-container">
+                        <input type="range" id="fontSizeSlider" min="50" max="150" value="100">
+                        <span class="slider-value" id="fontSizeValue">100%</span>
+                    </div>
+                    <small style="color: #7f8c8d;">调节字体的显示比例，过大可能导致字符截断</small>
+                </div>
+                
+                <div class="options"  style="display:none">
+                    <div class="option-item">
+                        <input type="checkbox" id="invertColors" checked="">
+                        <label for="invertColors">反色显示</label>
+                    </div>
+                    <div class="option-item" style="display:none">
+                        <input type="checkbox" id="showGrid" checked="">
+                        <label for="showGrid">显示网格</label>
+                    </div>
+                </div>
+                
+               
+            </div>
+            
+            <div class="preview-section"  >
+                <div class="section-title">
+                    <i>👁️</i> 
+                </div>
+                
+                <div class="preview-container">
+                    <canvas id="previewCanvas" width="30" height="30" ></canvas>
+                	 <div class="grid-info" id="gridInfoText" ></div>
+                </div>
+                
+                <!-- <div class="section-title" style="margin-top: 20px;"width="10px" >
+                    <i>💻</i> 多字符组合字模代码
+                </div>
+                
+                <div class="code-container" id="codeOutput" >// 字符组合: ABCD (SimSun) - 顺序：A → B → C → D</div> -->
+                
+                
+            </div>
+            
+             <button id="generateBtn">启动倒计时日期</button>
+             
+				<button class="copy-btn" id="copyBtn">关闭倒计时日期</button>
+        </div>
+    </div>
+
+
+</div>
+	
+
+	
+	<br><br>
+
+<h3>上传图片到屏幕</h3>
+   屏幕尺寸：
+	<select id="screen-size" onchange="updateCanvasSize()">
+		<option value="4.2传图">全屏传图</option>
+    <!-- <option value="2.9传图">2.9传图</option> -->
+		<option value="日历小图">日历小图</option>
+	</select>
+	<input type="file" id="image_file" onchange="update_image()" accept=".png,.jpg,.bmp,.webp,.jpeg">
+	抖动算法：
+	<select id="dithering" title="抖动算法">
+	
+		<optgroup label="黑白红多色">
+			<option value="bwr_floydsteinberg">黑白红floydsteinberg</option>
+			<option value="bwr_Atkinson">黑白红Atkinson</option>
+		</optgroup>
+	</select>
+	阈值:
+	<input type="number" max="255" min="0" value="125" id="threshold">
+	<button onclick="update_image()">重新加载</button>
+	<br>
+
+	<!-- <div id="canvas-box">
+		<div id="tool-box">
+			模式：
+			<select id="canvas-mode">
+				<option value="paint">画笔</option>
+				<option value="font" title="输入完成后 点击：保存文本框">输入文字</option>
+			</select>
+			画笔/文字大小：
+			<input type="number" max="13" min="1" step="1" value="3" id="paint-size">
+			画笔颜色：
+			<select id="paint-color">
+				<option value="red">红色</option>
+				<option value="white">白色</option>
+				<option value="black">黑色</option>
+			</select>
+
+			<select id="font" title="字体" style="display: none;">
+				<option value="微软雅黑">微软雅黑</option>
+				<option value="黑体">黑体</option>
+				<option value="仿宋">仿宋</option>
+				<option value="宋体">宋体</option>
+				<option value="楷体_GB2312">楷体_GB2312</option>
+				<option value="华文行楷">华文行楷</option>
+			</select>
+			<button id="update-text" style="display: none">保存文本框</button>
+			<button onclick="clear_canvas()">清屏</button>
+		</div> -->
+		<input id="edit-font" style="max-width: 300px; position: absolute; border: black solid 1px;background-color: rgba(0,0,0,0);display: none;overflow: auto" />
+	<!-- <canvas id="canvas" width="300" height="400" style="border: black solid 1px;"></canvas> -->
+ 
+  <canvas id="canvas" style="border: black solid 1px;"></canvas>
+		<br>
+		<button onclick="upload_image()" style="font-weight: bold">立即上传到屏幕</button>
+		<br>
+	</div>
+
+
+  
+
+	<div id="log-box" >
+		日志：
+		<br>
+		<div id="log" >
+ 
+		</div>
+	</div>
+
+  激活<input type="text" id="cmdJH" placeholder="输入激活码" value="">
+			<button onclick="triggerEpdJH(document.getElementById('cmdJH').value)">开始激活</button>
+</body>
+
+</html>
