@@ -34,7 +34,7 @@ button {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  min-height: 44px; /* 触摸友好 */
+  min-height: 66px; /* 触摸友好 */
   flex: 1 1 auto;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -1307,7 +1307,7 @@ async  function generateCode() {
       //             triggerRxTxCmd(code2);}
 			
 
-			await delay(600);
+			await delay(1000);
 				triggerRxTxCmd('E2');
 }
             
@@ -1319,7 +1319,7 @@ async  function generateCode() {
         });
     </script>
 
-	 <h2>电子价签蓝牙控制器-黑白
+	 <h2>墨水屏价签蓝牙控制器
 	 <!-- <a href="ATC_TLSR_Paper BLE control.html">蓝牙OTA升级</a> -->
 	</h2>
 <!-- 在连接按钮部分 -->
@@ -1343,13 +1343,14 @@ async  function generateCode() {
 
 <div class="button-group">
   <button type="button" onclick="triggerRxTxCmd('e100')" title="点击该按钮，然后上传图片。图片将永久显示到屏幕上">设置为图片模式</button>
-  <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">设置为时钟模式</button>
-  <button type="button" onclick="setri('e101')" title="点击该按钮, 切换为时钟模式">设置为日历模式</button>
+  <button type="button" onclick="setri('e101')" title="点击该按钮, 切换为时钟模式">切换日历模式</button>
+  <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">切换时钟模式</button>
+  
 </div>
 
 <div class="button-group">
-  <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">设置为反色模式</button>
-  <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">设置为翻转模式</button>
+  <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">切换反色模式</button>
+  <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">切换为翻转模式</button>
   <input type="text" id="cmdlut_red" placeholder="16进制输入00到0f。默认为0a，老化屏建议0c" value="">
 	<button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
   <button type="button" onclick="triggerRxTxCmd('E2')" title="点击该按钮, 切换为时钟模式">(没反应就点下)刷新</button>
@@ -1377,8 +1378,9 @@ async  function generateCode() {
                 <div class="input-group">
                     <label for="gridSizeSelect">倒计时界面选择</label>
                     <select id="gridSizeSelect">
-                        <option value="16">时钟计时界面</option>
+                      
                         <option value="24">日历计时界面</option>
+                        <option value="16">时钟计时界面</option>
                     </select>
                      <div><span id="currentGridSize"></span></div>
                 </div>
