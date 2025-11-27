@@ -625,18 +625,34 @@ function intToHex(intIn, bytes=4) {
 			const ctx = canvas.getContext("2d");
 		
 			let width, height;
+
+
+    
+    // <option value="7.5传图">2.9传图</option> -->
+    // <option value="2.9传图">2.9传图</option> -->
+    //   <option value="2.13传图">2.9传图</
 			if (sizeSelect.value == "4.2传图") {
 				width = 400;
 				height = 300;
 			}
-      //  else if (sizeSelect.value === "2.9传图"){
-			// 	width = 296;
-			// 	height = 128;
-			// }
-      else {
+       else if (sizeSelect.value === "2.9传图"){
+				width = 296;
+				height = 128;
+			}
+       else if (sizeSelect.value === "日历小图"){
 
         width	=  280;
 				height =100;
+      }
+       else if (sizeSelect.value === "7.5传图"){
+
+        width	=  800;
+				height =480;
+      }
+       else if (sizeSelect.value === "2.13传图"){
+
+        width	=  212;
+				height =104;
       }
 			
 			canvas.width = width;
@@ -1454,8 +1470,11 @@ async  function generateCode() {
    屏幕尺寸：
 	<select id="screen-size" onchange="updateCanvasSize()">
 		<option value="4.2传图">全屏传图</option>
-    <!-- <option value="2.9传图">2.9传图</option> -->
+    
 		<option value="日历小图">日历小图</option>
+    <option value="7.5传图">2.9传图</option> -->
+    <option value="2.9传图">2.9传图</option> -->
+      <option value="2.13传图">2.9传图</option>
 	</select>
 	<input type="file" id="image_file" onchange="update_image()" accept=".png,.jpg,.bmp,.webp,.jpeg">
 	抖动算法：
