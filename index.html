@@ -1365,6 +1365,7 @@ async  function generateCode() {
   <button type="button" onclick="triggerRxTxCmd('e100')" title="点击该按钮，然后上传图片。图片将永久显示到屏幕上">设置为图片模式</button>
   <button type="button" onclick="setri('e101')" title="点击该按钮, 切换为时钟模式">切换日历模式</button>
   <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">切换时钟模式</button>
+   <button type="button" onclick="setri('e4')" title="点击该按钮, 切换为时钟模式">切换时钟颜色</button>
   
 </div>
 
@@ -1373,7 +1374,7 @@ async  function generateCode() {
   <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">切换为翻转模式</button>
   <input type="text" id="cmdlut_red" placeholder="16进制输入00到0f。默认为0a，老化屏建议0c" value="">
 	<button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
-  <button type="button" onclick="triggerRxTxCmd('E2')" title="点击该按钮, 切换为时钟模式">(没反应就点下)刷新</button>
+  <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
 </div>
 	<br><br>
 	 <section class="date-picker-section">
