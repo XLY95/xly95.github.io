@@ -610,7 +610,7 @@ function intToHex(intIn, bytes=4) {
 			}
 
       let cod = '03';
-      if (value.length==7000) { cod = '04';}
+      if (value.length==7000 || value.length==18000) { cod = '04';}
 			const step = my_step;
 			let partIndex = 0;
 			for (let i = 0; i < value.length; i += step) {
@@ -649,6 +649,10 @@ function intToHex(intIn, bytes=4) {
         width	=  800;
 				height =480;
       }
+      else if (sizeSelect.value === "7.5日历小图"){
+           width	=  400;
+				  height =180;
+      }
        else if (sizeSelect.value === "2.13传图"){
 
         width	=  212;
@@ -678,7 +682,7 @@ function intToHex(intIn, bytes=4) {
 			await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
 			await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
 
-       if (canvas.width ==280) { await sendCommand(hexToBytes("AA"))}
+       if (canvas.width ==280 || canvas.height ==180) { await sendCommand(hexToBytes("AA"))}
           else  { await sendCommand(hexToBytes("01"))}
 			
 
@@ -1471,8 +1475,9 @@ async  function generateCode() {
 	<select id="screen-size" onchange="updateCanvasSize()">
 		<option value="4.2传图">4.2传图</option>
     
-		<option value="日历小图">日历小图</option>
+		<option value="日历小图">4.2日历小图</option>
     <option value="7.5传图">7.5传图</option> -->
+    <option value="7.5日历小图">7.5日历小图</option>
     <option value="2.9传图">2.9传图</option> -->
       <option value="2.13传图">2.13传图</option>
 	</select>
