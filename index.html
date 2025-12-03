@@ -1487,12 +1487,19 @@ async  function generateCode() {
 	<select id="dithering" title="抖动算法">
 	
 		<optgroup label="黑白红多色">
+      <option value="bwr_Atkinson">黑白红Atkinson</option>
 			<option value="bwr_floydsteinberg">黑白红floydsteinberg</option>
-			<option value="bwr_Atkinson">黑白红Atkinson</option>
+			
+		</optgroup>
+    <optgroup label="黑白">
+			<option value="none">二值化</option>
+			<option value="bayer">bayer</option>
+			<option value="floydsteinberg">floydsteinberg</option>
+			<option value="Atkinson">Atkinson</option>
 		</optgroup>
 	</select>
 	阈值:
-	<input type="number" max="255" min="0" value="125" id="threshold">
+	<input type="range" max="255" min="10" value="125" id="threshold">
 	<button onclick="update_image()">重新加载</button>
 	<br>
 
