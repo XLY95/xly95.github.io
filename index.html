@@ -1397,7 +1397,7 @@ async  function generateCode() {
 	<button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
   <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
 </div>
-<div>输入号码:<input type="text" id="CP" placeholder="号码：" value=""> 
+<div class="button-group">输入号码:<input type="text" id="CP" placeholder="号码：" value=""> 
 			<button onclick="triggerEpdCHEPAI(document.getElementById('CP').value)">设置号码显示</button></div>
 	<br><br>
 	 <section class="date-picker-section">
@@ -1522,8 +1522,8 @@ async  function generateCode() {
 		</optgroup>
 	</select>
 	阈值:
-	<input type="range" max="255" min="10" value="125" id="threshold">
-	<button onclick="update_image()">重新加载</button>
+	<div  class="button-group"><input type="range" max="255" min="10" value="125" id="threshold">
+	<button onclick="update_image()">重新加载</button></div>
 	<br>
 
 	<!-- <div id="canvas-box">
@@ -1558,7 +1558,7 @@ async  function generateCode() {
  
   <canvas id="canvas" style="border: black solid 1px;"></canvas>
 		<br>
-		<button onclick="upload_image()" style="font-weight: bold">立即上传到屏幕</button>
+		<div  class="button-group"><button onclick="upload_image()" style="font-weight: bold">立即上传到屏幕</button></div>
 		<br>
 	</div>
 
@@ -1573,8 +1573,8 @@ async  function generateCode() {
 		</div>
 	</div>
 
-  激活<input type="text" id="cmdJH" placeholder="输入激活码" value="">
-			<button onclick="triggerEpdJH(document.getElementById('cmdJH').value)">开始激活</button>
+  <div class="button-group">激活<input type="text" id="cmdJH" placeholder="输入激活码" value="">
+			<button onclick="triggerEpdJH(document.getElementById('cmdJH').value)">开始激活</button></div>
 </body>
 
 </html>
