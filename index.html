@@ -682,6 +682,8 @@ function intToHex(intIn, bytes=4) {
 			await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
 			await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
 
+      await delay(300);
+      
        if (canvas.width ==280 || canvas.height ==180) { await sendCommand(hexToBytes("AA"))}
           else  { await sendCommand(hexToBytes("01"))}
 			
@@ -702,8 +704,10 @@ function intToHex(intIn, bytes=4) {
 		}
 
     async function setri(cmd) {
+      addLog(`指令: ${cmd}`)
 			await rxTxSendCommand(hexToBytes(cmd));
       await delay(300);
+      addLog(`指令: e2`)
 			await rxTxSendCommand(hexToBytes('e2'))
 		}
 
@@ -729,9 +733,26 @@ function intToHex(intIn, bytes=4) {
 			addLog(`激活指令: ${cmd}`)
       cmd='EF'+cmd;
 			await rxTxSendCommand(hexToBytes(cmd));
-      await delay(300);
+      await delay(500);
+      
 			await rxTxSendCommand(hexToBytes('e2'))
 		}
+
+    async function triggerEpdCHEPAI(cmd) {
+			addLog(`号码: ${cmd}`)
+      let cp='';
+      for (let index = 0; index < cmd.length; index++) {
+        cp= cp+cmd[index]+cmd[index];
+        
+      }
+      cp='EF'+cp;
+      //addLog(`号码: ${cp}`)
+			await rxTxSendCommand(hexToBytes(cp));
+      await delay(500);
+      
+			await rxTxSendCommand(hexToBytes('e2'))
+		}
+
 
 		function disconnect() {
 			resetVariables();
@@ -1376,6 +1397,8 @@ async  function generateCode() {
 	<button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
   <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
 </div>
+<div>输入号码:<input type="text" id="CP" placeholder="号码：" value=""> 
+			<button onclick="triggerEpdCHEPAI(document.getElementById('CP').value)">设置号码显示</button></div>
 	<br><br>
 	 <section class="date-picker-section">
             <h2>倒计时日期选择器，选择才生效</h2>
