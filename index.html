@@ -862,9 +862,10 @@ function intToHex(intIn, bytes=4) {
 		}
 let currentRotation = 0;
 let currentImage = null;
-
+let degrees1=0;
 function rotateImage(degrees) {
     currentRotation = (currentRotation + degrees) % 360;
+    degrees1=degrees;
     if (currentImage) {
         drawImageWithRotation(currentImage);
         update_image();
@@ -879,9 +880,19 @@ function stretchToCanvas() {
     const canvas = document.getElementById("canvas");
     
     // 分别计算X轴和Y轴的缩放比例，使图片完全填满画布
-    currentScaleX = canvas.width / currentImage.width;
+    if(degrees1==90 || degrees1==270 ){
+    currentScaleY = canvas.width / currentImage.width;
+    currentScaleX = canvas.height / currentImage.height;
+
+    }else{
+       currentScaleX = canvas.width / currentImage.width;
     currentScaleY = canvas.height / currentImage.height;
+
+    }
+   
     
+
+
     updateScaleDisplay();
     drawImageWithRotation(currentImage);
         update_image();
@@ -1647,8 +1658,10 @@ async  function generateCode() {
 <div class="button-group">
   <button onclick="update_image()">重新加载</button>
   <button onclick="stretchToCanvas()">适应尺寸</button>
+  <button onclick="updateScale('100')">缩放到100%</button>
 <button onclick="rotateImage(90)">顺时针旋转90°</button>
 <button onclick="rotateImage(-90)">逆时针旋转90°</button>
+<button onclick="rotateImage(0)">旋转到0°</button>
 </div>
 	<br>
 
