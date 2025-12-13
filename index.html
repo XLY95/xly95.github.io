@@ -753,7 +753,19 @@ function intToHex(intIn, bytes=4) {
 			await rxTxSendCommand(hexToBytes('e2'))
 		}
 
+	async function triggerRxTxCmd_LED(cmd) {
+			let color = document.getElementById('led_color').value;
+      let D_S_hour=document.getElementById('D_S_hour').value;
+      let D_S_min=document.getElementById('D_S_min').value;
 
+       D_S_hour = D_S_hour > 9 ? D_S_hour: '0'+D_S_hour;
+       D_S_min = D_S_min > 9 ? D_S_min: '0'+D_S_min;
+
+      let note = color != '07' ? '01':'00';
+      cmd =cmd+note+color+D_S_hour+D_S_min;
+    addLog(`LED: ${cmd}`)
+			await rxTxSendCommand(hexToBytes(cmd));
+		}
 		function disconnect() {
 			resetVariables();
 			addLog('链接已断开.');
@@ -848,24 +860,110 @@ function intToHex(intIn, bytes=4) {
 
 			return {unixNow, localeTimeString, year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), week: date.getDay() || 7}
 		}
+let currentRotation = 0;
+let currentImage = null;
 
-		async function update_image () {
-			const image_file = document.getElementById('image_file');
-			if (image_file.files.length > 0) {
-				const file = image_file.files[0];
+function rotateImage(degrees) {
+    currentRotation = (currentRotation + degrees) % 360;
+    if (currentImage) {
+        drawImageWithRotation(currentImage);
+        update_image();
+    }
+}
+let currentScaleX = 1.0;  // X轴缩放比例
+let currentScaleY = 1.0;  // Y轴缩放比例
+// 拉伸铺满画布（不保持宽高比）
+function stretchToCanvas() {
+    if (!currentImage) return;
+    
+    const canvas = document.getElementById("canvas");
+    
+    // 分别计算X轴和Y轴的缩放比例，使图片完全填满画布
+    currentScaleX = canvas.width / currentImage.width;
+    currentScaleY = canvas.height / currentImage.height;
+    
+    updateScaleDisplay();
+    drawImageWithRotation(currentImage);
+        update_image();
+}
 
-				const canvas = document.getElementById("canvas");
-				const ctx = canvas.getContext("2d");
+// 通过滑块更新缩放
+function updateScale(value) {
+    currentScale = value / 100;
+    updateScaleDisplay();
+    if (currentImage) {
+        drawImageWithRotation(currentImage);
+        update_image();
+    }
+}
 
-				const image = new Image();
-				image.src = URL.createObjectURL(file);
-				image.onload = function(event) {
-					URL.revokeObjectURL(this.src);
-					ctx.drawImage(image, 0, 0,  image.width,image.height, 0, 0, canvas.width, canvas.height);
-					convert_dithering()
-				}
-			}
-		}
+let currentScale = 1.0;  // 缩放比例
+
+
+// 更新缩放显示
+function updateScaleDisplay() {
+    document.getElementById('scaleValue').textContent = `${Math.round(currentScale * 100)}%`;
+    document.getElementById('scaleSlider').value = currentScale * 100;
+}
+async function update_image() {
+    const image_file = document.getElementById('image_file');
+    if (image_file.files.length > 0) {
+        const file = image_file.files[0];
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        const image = new Image();
+        image.src = URL.createObjectURL(file);
+        image.onload = function(event) {
+            URL.revokeObjectURL(this.src);
+            currentImage = image;
+            drawImageWithRotation(image);
+            convert_dithering();
+        }
+    }
+}
+function updateRotation(value) {
+    currentRotation = parseInt(value);
+    document.getElementById('rotationValue').textContent = value + '°';
+    if (currentImage) {
+        drawImageWithRotation(currentImage);
+         update_image();
+    }
+}
+function drawImageWithRotation(image) {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    
+    // 清空画布
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // 保存当前画布状态
+    ctx.save();
+    
+    // 移动到画布中心
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    
+    // 旋转画布
+    ctx.rotate(currentRotation * Math.PI / 180);
+     // 应用缩放
+    ctx.scale(currentScale, currentScale);
+// 应用缩放（分别应用X和Y轴的缩放）
+    ctx.scale(currentScaleX, currentScaleY);
+    
+    // 计算图像尺寸
+    const width = image.width;
+    const height = image.height;
+    
+    // 绘制图片
+    ctx.drawImage(
+        image, 
+        -width / 2, -height / 2, 
+        width, height
+    );
+    
+    // 恢复画布状态
+    ctx.restore();
+}
 
 		function get_position(canvas, x, y){
 			let rect = canvas.getBoundingClientRect()
@@ -1389,7 +1487,7 @@ async  function generateCode() {
    <button type="button" onclick="setri('e4')" title="点击该按钮, 切换为时钟模式">切换时钟颜色</button>
   
 </div>
-
+	
 <div class="button-group">
   <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">切换反色模式</button>
   <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">切换为翻转模式</button>
@@ -1397,6 +1495,25 @@ async  function generateCode() {
 	<button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
   <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
 </div>
+    <div class="button-group">
+设置LED颜色<select id="led_color" title="设置LED颜色" >
+				<option value='01'>红色</option>
+				<option value='02'>蓝色</option>
+				<option value='03'>绿色</option>
+				<option value='04'>紫色</option>
+				<option value='05'>黄色</option>
+				<option value='06'>粉色</option>
+        <option value='07'>循环</option>
+			</select>
+ 
+      	<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >小时:</label>
+					<input type="number" id="D_S_hour" value="0" min="0" max="23"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >
+					<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >分钟:</label>
+					<input type="number" id="D_S_min" value="0" min="0" max="59"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >
+         <button type="button" onclick="triggerRxTxCmd_LED('e701')" title="点击该按钮，打开闹钟">打开闹钟</button>
+      <button type="button" onclick="triggerRxTxCmd_LED('e700')" title="点击该按钮，关闭闹钟">关闭闹钟</button>
+      </div>
+
 <div class="button-group">输入号码:<input type="text" id="CP" placeholder="号码：" value=""> 
 			<button onclick="triggerEpdCHEPAI(document.getElementById('CP').value)">设置号码显示</button></div>
 	<br><br>
@@ -1521,9 +1638,18 @@ async  function generateCode() {
 			<option value="Atkinson">Atkinson</option>
 		</optgroup>
 	</select>
-	阈值:
-	<div  class="button-group"><input type="range" max="255" min="10" value="125" id="threshold">
-	<button onclick="update_image()">重新加载</button></div>
+	
+	阈值(黑白模式生效):<div  class="button-group"><input type="range" max="255" min="10" value="125" id="threshold">
+	
+旋转角度:<span id="rotationValue">0°</span><input type="range" id="rotationSlider" min="0" max="360" value="0" oninput="updateRotation(this.value)">
+ <label>缩放比例: <span id="scaleValue">100%</span></label>
+    <input type="range" id="scaleSlider" min="10" max="500" value="100" oninput="updateScale(this.value)">
+<div class="button-group">
+  <button onclick="update_image()">重新加载</button>
+  <button onclick="stretchToCanvas()">适应尺寸</button>
+<button onclick="rotateImage(90)">顺时针旋转90°</button>
+<button onclick="rotateImage(-90)">逆时针旋转90°</button>
+</div>
 	<br>
 
 	<!-- <div id="canvas-box">
