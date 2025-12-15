@@ -1,184 +1,182 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title>电子价签-新42</title>
-	<style>
-/* 基础样式重置 */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>电子价签-新42</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #f5f5f5;
-  padding: 10px;
-  max-width: 100%;
-  overflow-x: hidden;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 10px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
 
-/* 按钮样式优化 */
-button {
-  background-color: #4a6ee0;
-  color: white;
-  border: none;
-  padding: 12px 16px;
-  margin: 5px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 66px; /* 触摸友好 */
-  flex: 1 1 auto;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+        /* 按钮样式优化 */
+        button {
+            background-color: #4a6ee0;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            margin: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 66px; /* 触摸友好 */
+            flex: 1 1 auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-button:hover {
-  background-color: #3a5ecf;
-  transform: translateY(-2px);
-}
+        button:hover {
+            background-color: #3a5ecf;
+            transform: translateY(-2px);
+        }
 
-button:active {
-  transform: translateY(0);
-}
+        button:active {
+            transform: translateY(0);
+        }
 
-/* 按钮组布局 */
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 10px 0;
-  gap: 8px;
-}
+        /* 按钮组布局 */
+        .button-group {max-width: 100%;
+            min-width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 10px 0;
+            gap: 8px;
+        }
 
-.button-group button {
-  flex: 1 1 calc(50% - 10px);
-  min-width: 120px;
-}
+        .button-group button {
+            flex: 1 1 calc(50% - 10px);
+            min-width: 120px;
+        }
 
-.button-group-vertical {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 10px 0;
-}
+        .button-group-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 10px 0;
+        }
 
-/* 表单元素优化 */
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: white;
-  min-height: 44px; /* 触摸友好 */
-}
+        /* 表单元素优化 */
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+            min-height: 44px; /* 触摸友好 */
+        }
 
-input[type="number"] {
-  width: auto;
-  min-width: 70px;
-}
+        input[type="number"] {
+            width: auto;
+            min-width: 70px;
+        }
 
-/* 日期选择器区域 */
-.date-picker-section {
-  background-color: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin: 10px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+        /* 日期选择器区域 */
+        .date-picker-section {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
-/* 主内容区域 */
+        /* 主内容区域 */
+        .input-section, .preview-section {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-.input-section, .preview-section {
-  background-color: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+        .input-group {
+            margin-bottom: 15px;
+        }
 
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
 
-.input-group {
-  margin-bottom: 15px;
-}
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 500;
-}
+        .slider-container input[type="range"] {
+            flex: 1;
+        }
 
-.slider-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+        .slider-value {
+            min-width: 50px;
+            text-align: center;
+        }
 
-.slider-container input[type="range"] {
-  flex: 1;
-}
+        /* 画布区域优化 */
+        #canvas-box {
+            position: relative;
+            width: 100%;
+            margin: 15px 0;
+        }
 
-.slider-value {
-  min-width: 50px;
-  text-align: center;
-}
+        #canvas {
+            width: 90%;
+            max-width: 800px;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            touch-action: manipulation;
+            display: block;
+            margin: 0 auto; /* 这是关键 - 水平居中 */
+        }
 
-/* 画布区域优化 */
-#canvas-box {
-  position: relative;
-  width: 100%;
-  margin: 15px 0;
-}
+        #tool-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+        }
 
-#canvas {
-  width: 90%;
-  max-width: 800px;
-  height: auto;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  background-color: white;
-  touch-action: manipulation;
-  display: block;
-  margin: 0 auto; /* 这是关键 - 水平居中 */
-}
+        #tool-box select, #tool-box input, #tool-box button {
+            flex: 1 1 auto;
+            min-width: 100px;
+            margin: 0;
+        }
 
-#tool-box {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-}
-
-#tool-box select, #tool-box input, #tool-box button {
-  flex: 1 1 auto;
-  min-width: 100px;
-  margin: 0;
-}
-
-
-    .log-box {
+        .log-box {
             margin-top: 15px;
         }
         
-#log {
+        #log {
             height: 200px;
             overflow-y: auto;
             background-color: #f9f9f9;
@@ -188,990 +186,1611 @@ input[type="number"] {
             font-family: monospace;
             font-size: 12px;
         }
-        
 
-/* 预览区域 */
-.preview-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
+        /* 图片调整控制区域 */
+        .image-adjustments {
+           max-width: 100%;
+            min-width: 100%;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
-#previewCanvas {
-  border: 1px solid #ddd;
-  background-color: white;
-  max-width: 100%;
-  height: auto;
-}
+        .adjustment-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
 
-/* 响应式设计 */
-@media (min-width: 768px) {
-  .main-content {
-    flex-direction: row;
-  }
-  
-  .input-section {
-    flex: 1;
-  }
-  
-  .preview-section {
-    flex: 1;
-  }
-  
-  .button-group button {
-    flex: 1 1 calc(33.333% - 10px);
-  }
-}
+        .adjustment-row label {
+            min-width: 100px;
+            font-weight: 500;
+        }
 
-@media (max-width: 480px) {
-  body {
-    padding: 5px;
-  }
-  
-  button {
-    padding: 10px 12px;
-    font-size: 14px;
-  }
-  
-  .button-group button {
-    flex: 1 1 100%;
-  }
-  
-  #tool-box {
-    flex-direction: column;
-  }
-  
-  #tool-box select, #tool-box input, #tool-box button {
-    width: 100%;
-  }
-}
+        .adjustment-row input[type="range"] {
+            flex: 1;
+        }
 
-/* 特殊按钮样式 */
-#generateBtn {
-  
-  background-color: #28a745;
-}
+        .adjustment-value {
+            min-width: 60px;
+            text-align: center;
+        }
 
-#generateBtn:hover {
-  background-color: #218838;
-}
+        /* 预览区域 */
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
 
-.copy-btn {
-  background-color: #6c757d;
-}
+        #previewCanvas {
+            border: 1px solid #ddd;
+            background-color: white;
+            max-width: 100%;
+            height: auto;
+        }
 
-.copy-btn:hover {
-  background-color: #5a6268;
-}
+        /* 响应式设计 */
+        @media (min-width: 768px) {
+            .main-content {
+                flex-direction: row;
+            }
+            
+            .input-section {
+                flex: 1;
+            }
+            
+            .preview-section {
+                flex: 1;
+            }
+            
+            .button-group button {
+                flex: 1 1 calc(33.333% - 10px);
+            }
+        }
 
-/* 选项区域 */
-.options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 15px;
-}
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            button {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            
+            .button-group button {
+                flex: 1 1 100%;
+            }
+            
+            #tool-box {
+                flex-direction: column;
+            }
+            
+            #tool-box select, #tool-box input, #tool-box button {
+                width: 100%;
+            }
+        }
 
-.option-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+        /* 特殊按钮样式 */
+        #generateBtn {
+            background-color: #28a745;
+        }
 
-.option-item input[type="checkbox"] {
-  width: auto;
-  transform: scale(1.2);
-}
-</style>
-	<script type="application/javascript" src="js/dithering.js"></script>
-	<script type="application/javascript" src="js/utils.js"></script>
+        #generateBtn:hover {
+            background-color: #218838;
+        }
+
+        .copy-btn {
+            background-color: #6c757d;
+        }
+
+        .copy-btn:hover {
+            background-color: #5a6268;
+        }
+
+        /* 选项区域 */
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-item input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+    </style>
+    <script type="application/javascript" src="js/dithering.js"></script>
+    <script type="application/javascript" src="js/utils.js"></script>
 </head>
 
 <body>
-	<script>
-
-    
-	const bwrPalette = [
-  [0, 0, 0, 255],
-  [255, 255, 255, 255],
-  [255, 0, 0, 255]
-]
-
-const bwPalette = [
-  [0, 0, 0, 255],
-  [255, 255, 255, 255],
-]
-
-function dithering(ctx, width, height, threshold, type) {
-  const bayerThresholdMap = [
-    [  15, 135,  45, 165 ],
-    [ 195,  75, 225, 105 ],
-    [  60, 180,  30, 150 ],
-    [ 240, 120, 210,  90 ]
-  ];
-
-  const lumR = [];
-  const lumG = [];
-  const lumB = [];
-  for (let i=0; i<256; i++) {
-    lumR[i] = i*0.299;
-    lumG[i] = i*0.587;
-    lumB[i] = i*0.114;
-  }
-  const imageData = ctx.getImageData(0, 0, width, height);
-
-  const imageDataLength = imageData.data.length;
-
-  // Greyscale luminance (sets r pixels to luminance of rgb)
-  for (let i = 0; i <= imageDataLength; i += 4) {
-    imageData.data[i] = Math.floor(lumR[imageData.data[i]] + lumG[imageData.data[i+1]] + lumB[imageData.data[i+2]]);
-  }
-
-  const w = imageData.width;
-  let newPixel, err;
-
-  for (let currentPixel = 0; currentPixel <= imageDataLength; currentPixel+=4) {
-
-    if (type ==="none") {
-      // No dithering
-      imageData.data[currentPixel] = imageData.data[currentPixel] < threshold ? 0 : 255;
-    } else if (type ==="bayer") {
-      // 4x4 Bayer ordered dithering algorithm
-      var x = currentPixel/4 % w;
-      var y = Math.floor(currentPixel/4 / w);
-      var map = Math.floor( (imageData.data[currentPixel] + bayerThresholdMap[x%4][y%4]) / 2 );
-      imageData.data[currentPixel] = (map < threshold) ? 0 : 255;
-    } else if (type ==="floydsteinberg") {
-      // Floyda€"Steinberg dithering algorithm
-      newPixel = imageData.data[currentPixel] < 129 ? 0 : 255;
-      err = Math.floor((imageData.data[currentPixel] - newPixel) / 16);
-      imageData.data[currentPixel] = newPixel;
-
-      imageData.data[currentPixel       + 4 ] += err*7;
-      imageData.data[currentPixel + 4*w - 4 ] += err*3;
-      imageData.data[currentPixel + 4*w     ] += err*5;
-      imageData.data[currentPixel + 4*w + 4 ] += err*1;
-    } else {
-      // Bill Atkinson's dithering algorithm
-      newPixel = imageData.data[currentPixel] < threshold ? 0 : 255;
-      err = Math.floor((imageData.data[currentPixel] - newPixel) / 8);
-      imageData.data[currentPixel] = newPixel;
-
-      imageData.data[currentPixel       + 4 ] += err;
-      imageData.data[currentPixel       + 8 ] += err;
-      imageData.data[currentPixel + 4*w - 4 ] += err;
-      imageData.data[currentPixel + 4*w     ] += err;
-      imageData.data[currentPixel + 4*w + 4 ] += err;
-      imageData.data[currentPixel + 8*w     ] += err;
-    }
-
-    // Set g and b pixels equal to r
-    imageData.data[currentPixel + 1] = imageData.data[currentPixel + 2] = imageData.data[currentPixel];
-  }
-
-  ctx.putImageData(imageData, 0, 0);
-}
-
-function canvas2bytes(canvas, type='bw') {
-  const ctx = canvas.getContext("2d");
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  const arr = [];
-  let buffer = [];
-for (let y = 0; y < canvas.height; y++) {
-  for (let x =0;x<canvas.width ; x++) {
-    
-      const index = (canvas.width * 4 * y) + x * 4;
-      if (type !== 'bwr') {
-        buffer.push(imageData.data[index] > 0 && imageData.data[index+1] > 0 && imageData.data[index+2] > 0 ? 1 : 0);
-      } else {
-        buffer.push(imageData.data[index] > 0 && imageData.data[index+1] === 0 && imageData.data[index+2] === 0 ? 1 : 0);
-      }
-
-      if (buffer.length === 8) {
-        arr.push(parseInt(buffer.join(''), 2));
-        buffer = [];
-      }
-    }
-  }
-  return arr;
-}
-
-function getColorDistance(rgba1, rgba2) {
-  const [r1, b1, g1] = rgba1;
-  const [r2, b2, g2] = rgba2;
-
-  const rm = (r1 + r2 ) / 2;
-
-  const r = r1 - r2;
-  const g = g1 - g2;
-  const b = b1 - b2;
-
-  return Math.sqrt((2 + rm / 256) * r * r + 4 * g * g + (2 + (255 - rm) / 256) * b * b);
-}
-
-function getNearColor(pixel, palette) {
-  let minDistance = 255 * 255 * 3 + 1;
-  let paletteIndex = 0;
-
-  for (let i = 0; i < palette.length; i++) {
-    const targetColor = palette[i];
-    const distance = getColorDistance(pixel, targetColor);
-    if (distance < minDistance) {
-      minDistance = distance;
-      paletteIndex = i;
-    }
-  }
-
-  return palette[paletteIndex];
-}
-
-
-function getNearColorV2(color, palette) {
-  let minDistanceSquared = 255*255 + 255*255 + 255*255 + 1;
-
-  let bestIndex = 0;
-  for (let i = 0; i < palette.length; i++) {
-      let rdiff = (color[0] & 0xff) - (palette[i][0] & 0xff);
-      let gdiff = (color[1] & 0xff) - (palette[i][1] & 0xff);
-      let bdiff = (color[2] & 0xff) - (palette[i][2] & 0xff);
-      let distanceSquared = rdiff*rdiff + gdiff*gdiff + bdiff*bdiff;
-      if (distanceSquared < minDistanceSquared) {
-          minDistanceSquared = distanceSquared;
-          bestIndex = i;
-      }
-  }
-  return palette[bestIndex];
-
-}
-
-
-function updatePixel(imageData, index, color) {
-  imageData[index] = color[0];
-  imageData[index+1] = color[1];
-  imageData[index+2] = color[2];
-  imageData[index+3] = color[3];
-}
-
-function getColorErr(color1, color2, rate) {
-  const res = [];
-  for (let i = 0; i < 3; i++) {
-    res.push(Math.floor((color1[i] - color2[i]) / rate));
-  }
-  return res;
-}
-
-function updatePixelErr(imageData, index, err, rate) {
-  imageData[index] += err[0] * rate;
-  imageData[index+1] += err[1] * rate;
-  imageData[index+2] += err[2] * rate;
-}
-
-function ditheringCanvasByPalette(canvas, palette, type) {
-  palette = palette || bwrPalette;
-
-  const ctx = canvas.getContext('2d');
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const w = imageData.width;
-
-  for (let currentPixel = 0; currentPixel <= imageData.data.length; currentPixel+=4) {
-    const newColor = getNearColorV2(imageData.data.slice(currentPixel, currentPixel+4), palette);
-
-    if (type === "bwr_floydsteinberg") {
-      const err = getColorErr(imageData.data.slice(currentPixel, currentPixel+4), newColor, 16);
-
-      updatePixel(imageData.data, currentPixel, newColor);
-      updatePixelErr(imageData.data, currentPixel +4, err, 7);
-      updatePixelErr(imageData.data, currentPixel + 4*w - 4, err, 3);
-      updatePixelErr(imageData.data, currentPixel + 4*w, err, 5);
-      updatePixelErr(imageData.data, currentPixel + 4*w + 4, err, 1);
-    } else {
-      const err = getColorErr(imageData.data.slice(currentPixel, currentPixel+4), newColor, 8);
-
-      updatePixel(imageData.data, currentPixel, newColor);
-      updatePixelErr(imageData.data, currentPixel +4, err, 1);
-      updatePixelErr(imageData.data, currentPixel +8, err, 1);
-      updatePixelErr(imageData.data, currentPixel +4 * w - 4, err, 1);
-      updatePixelErr(imageData.data, currentPixel +4 * w, err, 1);
-      updatePixelErr(imageData.data, currentPixel +4 * w + 4, err, 1);
-      updatePixelErr(imageData.data, currentPixel +8 * w, err, 1);
-    }
-  }
-  ctx.putImageData(imageData, 0, 0);
-}</script>
-
-<script>
-function hexToBytes(hex) {
-  for (var bytes = [], c = 0; c < hex.length; c += 2)
-    bytes.push(parseInt(hex.substr(c, 2), 16));
-  return new Uint8Array(bytes);
-}
-
-function bytesToHex(data) {
-  return new Uint8Array(data).reduce(
-    function (memo, i) {
-      return memo + ("0" + i.toString(16)).slice(-2);
-    }, "");
-}
-
-function intToHex(intIn, bytes=4) {
-    return intIn.toString(16).padStart(bytes * 2, '0');
-}
-
-</script>
-	<script>
-		let bleDevice;
-		let gattServer;
-		let epdService;
-		let rxtxService;
-		let epdCharacteristic;
-		let rxtxCharacteristic;
-		let reconnectTrys = 0;
-		const my_step = 900;
-
-		function delay(delayInMs) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(2);
-    }, delayInMs);
-  });
-}
-
-		function resetVariables() {
-			gattServer = null;
-			epdService = null;
-			epdCharacteristic = null;
-			rxtxCharacteristic = null;
-			rxtxService = null;
-			document.getElementById("log").value = '';
-		}
-
-		async function handleError(error) {
-			console.log(error);
-			resetVariables();
-			if (bleDevice == null)
-				return;
-			if (reconnectTrys <= 5) {
-				reconnectTrys++;
-				await connect();
-			}
-			else {
-				addLog("Was not able to connect, aborting");
-				reconnectTrys = 0;
-			}
-		}
-	
-		async function sendCommand(cmd) {
-			if (epdCharacteristic) {
-				await epdCharacteristic.writeValueWithResponse(cmd)
-			} else {
-				addLog('服务不可用。蓝牙链接上了吗？')
-			}
-		}
-
-		async function clearScreen(cmd) {
-			addLog('刷屏')
-			await triggerEpdCmd(`00${cmd}`);
-			await triggerEpdCmd('01')
-		}
-
-		async function rxTxSendCommand(cmd) {
-		  if (rxtxCharacteristic) {
-			await rxtxCharacteristic.writeValueWithResponse(cmd);
-		  } else {
-			  addLog('服务不可用。蓝牙链接上了吗？')
-		  }
-		}
-
-		async function SendCommand(cmd) {
-			let code;
-			for(let i;i<cmd.length;i+=2){
-				code=''+cmd[i]+cmd[i+1];
-				triggerRxTxCmd(code);
-				await delay(1000);
-			}
-		 	
-		}
-
-		async function rxTxSendCommand2(cmd) {
-		  if (rxtxCharacteristic) {
-			await rxtxCharacteristic.writeValueWith(cmd);
-		  } else {
-			  addLog('服务不可用。蓝牙链接上了吗？')
-		  }
-		}
-		
-		async function sendBufferData(value, type) {
-			addLog(`开始发送图片模式:${type}, 大小 ${value.length}byte`);
-			let code = 'ff';
-			if (type === 'bwr') {
-				code = '00';
-			}
-
-      let cod = '03';
-      if (value.length==7000 || value.length==18000) { cod = '04';}
-			const step = my_step;
-			let partIndex = 0;
-			for (let i = 0; i < value.length; i += step) {
-				addLog(`正在发送第${partIndex+1}块. 块大小: ${step/2+4}byte. 起始位置: ${i/2}`);
-				await sendCommand(hexToBytes(cod + code + intToHex(i / 2, 2) + value.substring(i, i + step)));
-				partIndex += 1;
-			}
-		}
-	function updateCanvasSize() {
-			const sizeSelect = document.getElementById('screen-size');
-			const canvas = document.getElementById('canvas');
-			const ctx = canvas.getContext("2d");
-		
-			let width, height;
-
-
-    
-    // <option value="7.5传图">2.9传图</option> -->
-    // <option value="2.9传图">2.9传图</option> -->
-    //   <option value="2.13传图">2.9传图</
-			if (sizeSelect.value == "4.2传图") {
-				width = 400;
-				height = 300;
-			}
-       else if (sizeSelect.value === "2.9传图"){
-				width = 296;
-				height = 128;
-			}
-       else if (sizeSelect.value === "日历小图"){
-
-        width	=  280;
-				height =100;
-      }
-       else if (sizeSelect.value === "7.5传图"){
-
-        width	=  800;
-				height =480;
-      }
-      else if (sizeSelect.value === "7.5日历小图"){
-           width	=  400;
-				  height =180;
-      }
-       else if (sizeSelect.value === "2.13传图"){
-
-        width	=  212;
-				height =104;
-      }
-			
-			canvas.width = width;
-			canvas.height = height ;
-			
-			// 清空并重置背景为白色
-			ctx.fillStyle = 'white';
-			ctx.fillRect(0, 0, width, height);
-			update_image () ;
-			addLog(`画布尺寸已更新为: ${width}x${height}`);
-		}
-		async function upload_image() {
-			const canvas = document.getElementById('canvas');
-
-
-			const startTime = new Date().getTime();
-
-
-			// await sendCommand(hexToBytes("0000"));
-
-			// await sendCommand(hexToBytes("020000"));
-
-			await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
-			await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
-
-      await delay(300);
-      
-       if (canvas.width ==280 || canvas.height ==180) { await sendCommand(hexToBytes("AA"))}
-          else  { await sendCommand(hexToBytes("01"))}
-			
-
-			addLog(`上传完成，耗时${(new Date().getTime() - startTime)/1000}s`);
-		}
-
-
-
-		async function setTime() {
-			const { unixNow, localeTimeString, year, month, day, week } = getUnixTime();
-
-		  	addLog("时间设置为: " + localeTimeString + " : dd" + intToHex(unixNow, 4));
-		  	await rxTxSendCommand(hexToBytes('dd' +
-					[intToHex(unixNow, 4), intToHex(year, 2), intToHex(month, 1), intToHex(day, 1), intToHex(week, 1)].join('')));
-
-			await rxTxSendCommand(hexToBytes('e2'))
-		}
-
-    async function setri(cmd) {
-      addLog(`指令: ${cmd}`)
-			await rxTxSendCommand(hexToBytes(cmd));
-      await delay(300);
-      addLog(`指令: e2`)
-			await rxTxSendCommand(hexToBytes('e2'))
-		}
-
-		async function triggerRxTxCmd(cmd) {
-			addLog(`发送指令: ${cmd}`)
-			await rxTxSendCommand(hexToBytes(cmd));
-		}
-		async function triggerRxTxCmd2(cmd) {
-			addLog(`发送指令: ${cmd}`)
-			await rxTxSendCommand2(hexToBytes(cmd));
-		}
-		async function triggerEpdCmd(cmd) {
-			addLog(`发送指令: ${cmd}`)
-			await sendCommand(hexToBytes(cmd));
-		}
-	async function triggerEpdRed_lut(cmd) {
-			addLog(`开始红色校准: ${cmd}`)
-      cmd='E6'+cmd;
-			await rxTxSendCommand(hexToBytes(cmd));
-      
-		}
-    async function triggerEpdJH(cmd) {
-			addLog(`激活指令: ${cmd}`)
-      cmd='EF'+cmd;
-			await rxTxSendCommand(hexToBytes(cmd));
-      await delay(500);
-      
-			await rxTxSendCommand(hexToBytes('e2'))
-		}
-
-    async function triggerEpdCHEPAI(cmd) {
-			addLog(`号码: ${cmd}`)
-      let cp='';
-      for (let index = 0; index < cmd.length; index++) {
-        cp= cp+cmd[index]+cmd[index];
-        
-      }
-      cp='EF'+cp;
-      //addLog(`号码: ${cp}`)
-			await rxTxSendCommand(hexToBytes(cp));
-      await delay(500);
-      
-			await rxTxSendCommand(hexToBytes('e2'))
-		}
-
-	async function triggerRxTxCmd_LED(cmd) {
-			let color = document.getElementById('led_color').value;
-      let D_S_hour=document.getElementById('D_S_hour').value;
-      let D_S_min=document.getElementById('D_S_min').value;
-
-       D_S_hour = D_S_hour > 9 ? D_S_hour: '0'+D_S_hour;
-       D_S_min = D_S_min > 9 ? D_S_min: '0'+D_S_min;
-
-      let note = color != '07' ? '01':'00';
-      cmd =cmd+note+color+D_S_hour+D_S_min;
-    addLog(`LED: ${cmd}`)
-			await rxTxSendCommand(hexToBytes(cmd));
-		}
-		function disconnect() {
-			resetVariables();
-			addLog('链接已断开.');
-			document.getElementById("connectbutton").innerHTML = '链接';
-		}
-
-		async function preConnect() {
-			if (gattServer != null && gattServer.connected) {
-				if (bleDevice != null && bleDevice.gatt.connected)
-					bleDevice.gatt.disconnect();
-			}
-			else {
-				reconnectTrys = 0;
-				bleDevice = await navigator.bluetooth.requestDevice({ filters: [
-                { namePrefix: 'NRF-' }
-            ],optionalServices: ['0000221f-0000-1000-8000-00805f9b34fb', '00001f10-0000-1000-8000-00805f9b34fb', '13187b10-eba9-a3ba-044e-83d3217d9a38'] });
-				await bleDevice.addEventListener('gattserverdisconnected', disconnect);
-				try {
-					await connect();
-				} catch (e) {
-					await handleError(e);
-				}
-			}
-		}
-
-		async function connectRXTX() {
-			rxtxService = await gattServer.getPrimaryService('00001f10-0000-1000-8000-00805f9b34fb');
-			addLog('> rxtxService 找到串口服务');
-
-			rxtxCharacteristic = await rxtxService.getCharacteristic('00001f1f-0000-1000-8000-00805f9b34fb');
-			addLog('> rxtxCharacteristic 串口服务已链接');
-		}
-
-		async function reConnect() {
-			connectTrys = 0;
-			if (bleDevice != null && bleDevice.gatt.connected)
-				bleDevice.gatt.disconnect();
-			resetVariables();
-			addLog("重新链接");
-			setTimeout(async function () { await connect(); }, 300);
-		}
-
-		async function connect() {
-			if (epdCharacteristic == null) {
-				addLog("正在链接: " + bleDevice.name);
-
-				gattServer = await bleDevice.gatt.connect();
-				addLog('> 找到GATT服务器');
-
-				epdService = await gattServer.getPrimaryService('13187b10-eba9-a3ba-044e-83d3217d9a38');
-				addLog('>  epdService 找到可用服务');
-
-				epdCharacteristic = await epdService.getCharacteristic('4b646063-6264-f3a7-8941-e65356ea82fe');
-				addLog('> epdCharacteristic 服务已连接');
-
-				await epdCharacteristic.startNotifications();
-
-				epdCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
-					console.log('epd ret', bytesToHex(event.target.value.buffer))
-					const count = parseInt('0x'+ bytesToHex(event.target.value.buffer));
-					
-					addLog(`> [来自屏幕]: 收到${count} byte数据`);
-					
-					
-				});
-
-				document.getElementById("connectbutton").innerHTML = '断开';
-				await connectRXTX();
-			}
-		}
-
-		function setStatus(statusText) {
-			document.getElementById("status").innerHTML = statusText;
-		}
-
-		function addLog(logTXT) {
-			const today = new Date();
-			const time = ("0" + today.getHours()).slice(-2) + ":" + ("0" + today.getMinutes()).slice(-2) + ":" + ("0" + today.getSeconds()).slice(-2) + " : ";
-
-			const dom = document.getElementById("log");
-
-			dom.innerHTML += time + logTXT + '<br>';
-			dom.scrollTop = dom.scrollHeight;
-		}
-
-		function getUnixTime() {
-			const hourOffset = document.getElementById('hour-offset').value;
-		  	const unixNow = Math.round(Date.now() / 1000)+(60*60*hourOffset)  - new Date().getTimezoneOffset() * 60;
-
-			const date = new Date((unixNow + new Date().getTimezoneOffset() * 60)*1000);
-		  	const localeTimeString = date.toLocaleTimeString();
-
-			return {unixNow, localeTimeString, year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), week: date.getDay() || 7}
-		}
-let currentRotation = 0;
-let currentImage = null;
-let degrees1=0;
-function rotateImage(degrees) {
-    currentRotation = (currentRotation + degrees) % 360;
-    degrees1=degrees;
-    if (currentImage) {
-        drawImageWithRotation(currentImage);
-        update_image();
-    }
-}
-let currentScaleX = 1.0;  // X轴缩放比例
-let currentScaleY = 1.0;  // Y轴缩放比例
-// 拉伸铺满画布（不保持宽高比）
-function stretchToCanvas() {
-    if (!currentImage) return;
-    
-    const canvas = document.getElementById("canvas");
-    
-    // 分别计算X轴和Y轴的缩放比例，使图片完全填满画布
-    if(degrees1==90 || degrees1==270 ){
-    currentScaleY = canvas.width / currentImage.width;
-    currentScaleX = canvas.height / currentImage.height;
-
-    }else{
-       currentScaleX = canvas.width / currentImage.width;
-    currentScaleY = canvas.height / currentImage.height;
-
-    }
-   
-    
-
-
-    updateScaleDisplay();
-    drawImageWithRotation(currentImage);
-        update_image();
-}
-
-// 通过滑块更新缩放
-function updateScale(value) {
-    currentScale = value / 100;
-    updateScaleDisplay();
-    if (currentImage) {
-        drawImageWithRotation(currentImage);
-        update_image();
-    }
-}
-
-let currentScale = 1.0;  // 缩放比例
-
-
-// 更新缩放显示
-function updateScaleDisplay() {
-    document.getElementById('scaleValue').textContent = `${Math.round(currentScale * 100)}%`;
-    document.getElementById('scaleSlider').value = currentScale * 100;
-}
-async function update_image() {
-    const image_file = document.getElementById('image_file');
-    if (image_file.files.length > 0) {
-        const file = image_file.files[0];
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-        
-        const image = new Image();
-        image.src = URL.createObjectURL(file);
-        image.onload = function(event) {
-            URL.revokeObjectURL(this.src);
-            currentImage = image;
-            drawImageWithRotation(image);
-            convert_dithering();
+    <script>
+        // 图像调整功能
+        function applyImageAdjustments(canvas) {
+            const brightness = parseInt(document.getElementById('brightness').value);
+            const contrast = parseInt(document.getElementById('contrast').value);
+            const saturation = parseInt(document.getElementById('saturation').value);
+            const diffusion = parseInt(document.getElementById('diffusion').value) / 100; // 转换为0-1范围
+            
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // 应用亮度调整 (-100 到 100)
+            if (brightness !== 0) {
+                const brightnessFactor = brightness / 100;
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = clamp(data[i] + 255 * brightnessFactor, 0, 255);
+                    data[i + 1] = clamp(data[i + 1] + 255 * brightnessFactor, 0, 255);
+                    data[i + 2] = clamp(data[i + 2] + 255 * brightnessFactor, 0, 255);
+                }
+            }
+            
+            // 应用对比度调整 (-100 到 100)
+            if (contrast !== 0) {
+                const contrastFactor = (contrast + 100) / 100;
+                const contrastAdjust = (1 - contrastFactor) * 128;
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = clamp(data[i] * contrastFactor + contrastAdjust, 0, 255);
+                    data[i + 1] = clamp(data[i + 1] * contrastFactor + contrastAdjust, 0, 255);
+                    data[i + 2] = clamp(data[i + 2] * contrastFactor + contrastAdjust, 0, 255);
+                }
+            }
+            
+            // 应用饱和度调整 (0 到 200)
+            if (saturation !== 100) {
+                const saturationFactor = saturation / 100;
+                for (let i = 0; i < data.length; i += 4) {
+                    const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                    data[i] = clamp(gray + (data[i] - gray) * saturationFactor, 0, 255);
+                    data[i + 1] = clamp(gray + (data[i + 1] - gray) * saturationFactor, 0, 255);
+                    data[i + 2] = clamp(gray + (data[i + 2] - gray) * saturationFactor, 0, 255);
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+            
+            return diffusion;
         }
-    }
-}
-function updateRotation(value) {
-    currentRotation = parseInt(value);
-    document.getElementById('rotationValue').textContent = value + '°';
-    if (currentImage) {
-        drawImageWithRotation(currentImage);
-         update_image();
-    }
-}
-function drawImageWithRotation(image) {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    
-    // 清空画布
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // 保存当前画布状态
-    ctx.save();
-    
-    // 移动到画布中心
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    
-    // 旋转画布
-    ctx.rotate(currentRotation * Math.PI / 180);
-     // 应用缩放
-    ctx.scale(currentScale, currentScale);
-// 应用缩放（分别应用X和Y轴的缩放）
-    ctx.scale(currentScaleX, currentScaleY);
-    
-    // 计算图像尺寸
-    const width = image.width;
-    const height = image.height;
-    
-    // 绘制图片
-    ctx.drawImage(
-        image, 
-        -width / 2, -height / 2, 
-        width, height
-    );
-    
-    // 恢复画布状态
-    ctx.restore();
-}
+        
+        function clamp(value, min, max) {
+            return Math.min(Math.max(value, min), max);
+        }
+        
+        // 抖动算法函数
+        function applyNoneDithering(ctx, width, height, threshold, isColor = false) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                const value = gray < threshold ? 0 : 255;
+                data[i] = data[i + 1] = data[i + 2] = value;
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyFloydSteinbergDithering(ctx, width, height, threshold, diffusion = 1.0, isColor = false) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const err = (gray - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Floyd-Steinberg扩散矩阵
+                    if (x + 1 < width) {
+                        addError(data, idx + 4, err, 7/16);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 1 >= 0) {
+                            addError(data, idx + width * 4 - 4, err, 3/16);
+                        }
+                        addError(data, idx + width * 4, err, 5/16);
+                        if (x + 1 < width) {
+                            addError(data, idx + width * 4 + 4, err, 1/16);
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyAtkinsonDithering(ctx, width, height, threshold, diffusion = 1.0, isColor = false) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const err = (gray - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Atkinson扩散矩阵
+                    if (x + 1 < width) {
+                        addError(data, idx + 4, err, 1/8);
+                    }
+                    if (x + 2 < width) {
+                        addError(data, idx + 8, err, 1/8);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 1 >= 0) {
+                            addError(data, idx + width * 4 - 4, err, 1/8);
+                        }
+                        addError(data, idx + width * 4, err, 1/8);
+                        if (x + 1 < width) {
+                            addError(data, idx + width * 4 + 4, err, 1/8);
+                        }
+                    }
+                    if (y + 2 < height) {
+                        addError(data, idx + width * 8, err, 1/8);
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyBayerDithering(ctx, width, height, threshold, diffusion = 1.0, isColor = false) {
+            const bayerThresholdMap = [
+                [15, 135, 45, 165],
+                [195, 75, 225, 105],
+                [60, 180, 30, 150],
+                [240, 120, 210, 90]
+            ];
+            
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                const x = (i / 4) % width;
+                const y = Math.floor((i / 4) / width);
+                const mapValue = bayerThresholdMap[x % 4][y % 4];
+                const adjustedThreshold = threshold * (1 + (mapValue - 128) / 128 * diffusion);
+                const finalThreshold = clamp(adjustedThreshold, 0, 255);
+                const newPixel = gray < finalThreshold ? 0 : 255;
+                data[i] = data[i + 1] = data[i + 2] = newPixel;
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyStuckiDithering(ctx, width, height, threshold, diffusion = 1.0, isColor = false) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const err = (gray - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Stucki扩散矩阵
+                    if (x + 1 < width) {
+                        addError(data, idx + 4, err, 8/42);
+                    }
+                    if (x + 2 < width) {
+                        addError(data, idx + 8, err, 4/42);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 2 >= 0) {
+                            addError(data, idx + width * 4 - 8, err, 2/42);
+                        }
+                        if (x - 1 >= 0) {
+                            addError(data, idx + width * 4 - 4, err, 4/42);
+                        }
+                        addError(data, idx + width * 4, err, 8/42);
+                        if (x + 1 < width) {
+                            addError(data, idx + width * 4 + 4, err, 4/42);
+                        }
+                        if (x + 2 < width) {
+                            addError(data, idx + width * 4 + 8, err, 2/42);
+                        }
+                    }
+                    if (y + 2 < height) {
+                        if (x - 2 >= 0) {
+                            addError(data, idx + width * 8 - 8, err, 1/42);
+                        }
+                        if (x - 1 >= 0) {
+                            addError(data, idx + width * 8 - 4, err, 2/42);
+                        }
+                        addError(data, idx + width * 8, err, 4/42);
+                        if (x + 1 < width) {
+                            addError(data, idx + width * 8 + 4, err, 2/42);
+                        }
+                        if (x + 2 < width) {
+                            addError(data, idx + width * 8 + 8, err, 1/42);
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyJarvisJudiceNinkeDithering(ctx, width, height, threshold, diffusion = 1.0, isColor = false) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const err = (gray - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Jarvis-Judice-Ninke扩散矩阵
+                    if (x + 1 < width) {
+                        addError(data, idx + 4, err, 7/48);
+                    }
+                    if (x + 2 < width) {
+                        addError(data, idx + 8, err, 5/48);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 2 >= 0) {
+                            addError(data, idx + width * 4 - 8, err, 3/48);
+                        }
+                        if (x - 1 >= 0) {
+                            addError(data, idx + width * 4 - 4, err, 5/48);
+                        }
+                        addError(data, idx + width * 4, err, 7/48);
+                        if (x + 1 < width) {
+                            addError(data, idx + width * 4 + 4, err, 5/48);
+                        }
+                        if (x + 2 < width) {
+                            addError(data, idx + width * 4 + 8, err, 3/48);
+                        }
+                    }
+                    if (y + 2 < height) {
+                        if (x - 2 >= 0) {
+                            addError(data, idx + width * 8 - 8, err, 1/48);
+                        }
+                        if (x - 1 >= 0) {
+                            addError(data, idx + width * 8 - 4, err, 3/48);
+                        }
+                        addError(data, idx + width * 8, err, 5/48);
+                        if (x + 1 < width) {
+                            addError(data, idx + width * 8 + 4, err, 3/48);
+                        }
+                        if (x + 2 < width) {
+                            addError(data, idx + width * 8 + 8, err, 1/48);
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function addError(data, idx, err, factor) {
+            data[idx] = clamp(data[idx] + err * factor, 0, 255);
+            data[idx + 1] = clamp(data[idx + 1] + err * factor, 0, 255);
+            data[idx + 2] = clamp(data[idx + 2] + err * factor, 0, 255);
+        }
 
-		function get_position(canvas, x, y){
-			let rect = canvas.getBoundingClientRect()
-			return {
-				x: x - rect.left * (canvas.width/rect.width),
-				y: y - rect.top * (canvas.height/rect.height)
-			}
-		}
+        // 黑白红三色抖动算法
+        function applyBWRNoneDithering(ctx, width, height, threshold, diffusion = 1.0) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                
+                // 判断是否为红色
+                if (r > g * 1.5 && r > b * 1.5 && r > threshold) {
+                    data[i] = 255;
+                    data[i + 1] = 0;
+                    data[i + 2] = 0;
+                } else {
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const value = gray < threshold ? 0 : 255;
+                    data[i] = data[i + 1] = data[i + 2] = value;
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyBWRFloydSteinbergDithering(ctx, width, height, threshold, diffusion = 1.0) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    // 判断是否为红色
+                    if (oldR > oldG * 1.5 && oldR > oldB * 1.5 && oldR > threshold) {
+                        data[idx] = 255;
+                        data[idx + 1] = 0;
+                        data[idx + 2] = 0;
+                        // 红色不进行误差扩散
+                        continue;
+                    }
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const errR = (oldR - newPixel) * diffusion;
+                    const errG = (oldG - newPixel) * diffusion;
+                    const errB = (oldB - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Floyd-Steinberg扩散矩阵
+                    if (x + 1 < width) {
+                        addColorError(data, idx + 4, errR, errG, errB, 7/16);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 1 >= 0) {
+                            addColorError(data, idx + width * 4 - 4, errR, errG, errB, 3/16);
+                        }
+                        addColorError(data, idx + width * 4, errR, errG, errB, 5/16);
+                        if (x + 1 < width) {
+                            addColorError(data, idx + width * 4 + 4, errR, errG, errB, 1/16);
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyBWRAtkinsonDithering(ctx, width, height, threshold, diffusion = 1.0) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    // 判断是否为红色
+                    if (oldR > oldG * 1.5 && oldR > oldB * 1.5 && oldR > threshold) {
+                        data[idx] = 255;
+                        data[idx + 1] = 0;
+                        data[idx + 2] = 0;
+                        // 红色不进行误差扩散
+                        continue;
+                    }
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const errR = (oldR - newPixel) * diffusion;
+                    const errG = (oldG - newPixel) * diffusion;
+                    const errB = (oldB - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Atkinson扩散矩阵
+                    if (x + 1 < width) {
+                        addColorError(data, idx + 4, errR, errG, errB, 1/8);
+                    }
+                    if (x + 2 < width) {
+                        addColorError(data, idx + 8, errR, errG, errB, 1/8);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 1 >= 0) {
+                            addColorError(data, idx + width * 4 - 4, errR, errG, errB, 1/8);
+                        }
+                        addColorError(data, idx + width * 4, errR, errG, errB, 1/8);
+                        if (x + 1 < width) {
+                            addColorError(data, idx + width * 4 + 4, errR, errG, errB, 1/8);
+                        }
+                    }
+                    if (y + 2 < height) {
+                        addColorError(data, idx + width * 8, errR, errG, errB, 1/8);
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyBWRBayerDithering(ctx, width, height, threshold, diffusion = 1.0) {
+            const bayerThresholdMap = [
+                [15, 135, 45, 165],
+                [195, 75, 225, 105],
+                [60, 180, 30, 150],
+                [240, 120, 210, 90]
+            ];
+            
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const x = (i / 4) % width;
+                const y = Math.floor((i / 4) / width);
+                const mapValue = bayerThresholdMap[x % 4][y % 4];
+                const adjustedThreshold = threshold * (1 + (mapValue - 128) / 128 * diffusion);
+                const finalThreshold = clamp(adjustedThreshold, 0, 255);
+                
+                // 判断是否为红色
+                if (r > g * 1.5 && r > b * 1.5 && r > finalThreshold) {
+                    data[i] = 255;
+                    data[i + 1] = 0;
+                    data[i + 2] = 0;
+                } else {
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const value = gray < finalThreshold ? 0 : 255;
+                    data[i] = data[i + 1] = data[i + 2] = value;
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyBWRStuckiDithering(ctx, width, height, threshold, diffusion = 1.0) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    // 判断是否为红色
+                    if (oldR > oldG * 1.5 && oldR > oldB * 1.5 && oldR > threshold) {
+                        data[idx] = 255;
+                        data[idx + 1] = 0;
+                        data[idx + 2] = 0;
+                        // 红色不进行误差扩散
+                        continue;
+                    }
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const errR = (oldR - newPixel) * diffusion;
+                    const errG = (oldG - newPixel) * diffusion;
+                    const errB = (oldB - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Stucki扩散矩阵
+                    if (x + 1 < width) {
+                        addColorError(data, idx + 4, errR, errG, errB, 8/42);
+                    }
+                    if (x + 2 < width) {
+                        addColorError(data, idx + 8, errR, errG, errB, 4/42);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 2 >= 0) {
+                            addColorError(data, idx + width * 4 - 8, errR, errG, errB, 2/42);
+                        }
+                        if (x - 1 >= 0) {
+                            addColorError(data, idx + width * 4 - 4, errR, errG, errB, 4/42);
+                        }
+                        addColorError(data, idx + width * 4, errR, errG, errB, 8/42);
+                        if (x + 1 < width) {
+                            addColorError(data, idx + width * 4 + 4, errR, errG, errB, 4/42);
+                        }
+                        if (x + 2 < width) {
+                            addColorError(data, idx + width * 4 + 8, errR, errG, errB, 2/42);
+                        }
+                    }
+                    if (y + 2 < height) {
+                        if (x - 2 >= 0) {
+                            addColorError(data, idx + width * 8 - 8, errR, errG, errB, 1/42);
+                        }
+                        if (x - 1 >= 0) {
+                            addColorError(data, idx + width * 8 - 4, errR, errG, errB, 2/42);
+                        }
+                        addColorError(data, idx + width * 8, errR, errG, errB, 4/42);
+                        if (x + 1 < width) {
+                            addColorError(data, idx + width * 8 + 4, errR, errG, errB, 2/42);
+                        }
+                        if (x + 2 < width) {
+                            addColorError(data, idx + width * 8 + 8, errR, errG, errB, 1/42);
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function applyBWRJarvisJudiceNinkeDithering(ctx, width, height, threshold, diffusion = 1.0) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const oldR = data[idx];
+                    const oldG = data[idx + 1];
+                    const oldB = data[idx + 2];
+                    
+                    // 判断是否为红色
+                    if (oldR > oldG * 1.5 && oldR > oldB * 1.5 && oldR > threshold) {
+                        data[idx] = 255;
+                        data[idx + 1] = 0;
+                        data[idx + 2] = 0;
+                        // 红色不进行误差扩散
+                        continue;
+                    }
+                    
+                    const gray = 0.299 * oldR + 0.587 * oldG + 0.114 * oldB;
+                    const newPixel = gray < threshold ? 0 : 255;
+                    const errR = (oldR - newPixel) * diffusion;
+                    const errG = (oldG - newPixel) * diffusion;
+                    const errB = (oldB - newPixel) * diffusion;
+                    
+                    data[idx] = data[idx + 1] = data[idx + 2] = newPixel;
+                    
+                    // Jarvis-Judice-Ninke扩散矩阵
+                    if (x + 1 < width) {
+                        addColorError(data, idx + 4, errR, errG, errB, 7/48);
+                    }
+                    if (x + 2 < width) {
+                        addColorError(data, idx + 8, errR, errG, errB, 5/48);
+                    }
+                    if (y + 1 < height) {
+                        if (x - 2 >= 0) {
+                            addColorError(data, idx + width * 4 - 8, errR, errG, errB, 3/48);
+                        }
+                        if (x - 1 >= 0) {
+                            addColorError(data, idx + width * 4 - 4, errR, errG, errB, 5/48);
+                        }
+                        addColorError(data, idx + width * 4, errR, errG, errB, 7/48);
+                        if (x + 1 < width) {
+                            addColorError(data, idx + width * 4 + 4, errR, errG, errB, 5/48);
+                        }
+                        if (x + 2 < width) {
+                            addColorError(data, idx + width * 4 + 8, errR, errG, errB, 3/48);
+                        }
+                    }
+                    if (y + 2 < height) {
+                        if (x - 2 >= 0) {
+                            addColorError(data, idx + width * 8 - 8, errR, errG, errB, 1/48);
+                        }
+                        if (x - 1 >= 0) {
+                            addColorError(data, idx + width * 8 - 4, errR, errG, errB, 3/48);
+                        }
+                        addColorError(data, idx + width * 8, errR, errG, errB, 5/48);
+                        if (x + 1 < width) {
+                            addColorError(data, idx + width * 8 + 4, errR, errG, errB, 3/48);
+                        }
+                        if (x + 2 < width) {
+                            addColorError(data, idx + width * 8 + 8, errR, errG, errB, 1/48);
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        function addColorError(data, idx, errR, errG, errB, factor) {
+            data[idx] = clamp(data[idx] + errR * factor, 0, 255);
+            data[idx + 1] = clamp(data[idx + 1] + errG * factor, 0, 255);
+            data[idx + 2] = clamp(data[idx + 2] + errB * factor, 0, 255);
+        }
 
-		function clear_canvas() {
-			if(confirm('确认清除屏幕?')) {
-				const canvas = document.getElementById('canvas');
-				const ctx = canvas.getContext("2d");
-				ctx.fillStyle = 'white';
-				ctx.fillRect(0, 0, canvas.width, canvas.height);
-			}
-		}
+        const bwrPalette = [
+            [0, 0, 0, 255],
+            [255, 255, 255, 255],
+            [255, 0, 0, 255]
+        ]
 
-		function convert_dithering() {
-			const canvas = document.getElementById('canvas');
-			const ctx = canvas.getContext("2d");
-			const mode = document.getElementById('dithering').value;
-			if (mode.startsWith('bwr')) {
-				ditheringCanvasByPalette(canvas, bwrPalette, mode);
-			} else {
-				dithering(ctx, canvas.width, canvas.height, parseInt(document.getElementById('threshold').value), mode);
-			}
-		}
+        const bwPalette = [
+            [0, 0, 0, 255],
+            [255, 255, 255, 255],
+        ]
 
-		document.body.onload = () => {
-			setInterval(() => {
-				const { localeTimeString, year, month, day, week } = getUnixTime();
-				document.getElementById('time-setter').innerText = `设置时间为：${year}-${month}-${day} ${localeTimeString} 星期${week}`;
-			}, 1000);
+        function dithering(ctx, width, height, threshold, type) {
+            const diffusion = parseInt(document.getElementById('diffusion').value) / 100;
+            
+            if (type.startsWith('bwr_')) {
+                // 黑白红三色抖动算法
+                const bwrType = type.replace('bwr_', '');
+                switch(bwrType) {
+                    case 'none':
+                        applyBWRNoneDithering(ctx, width, height, threshold, diffusion);
+                        break;
+                    case 'floydsteinberg':
+                        applyBWRFloydSteinbergDithering(ctx, width, height, threshold, diffusion);
+                        break;
+                    case 'atkinson':
+                        applyBWRAtkinsonDithering(ctx, width, height, threshold, diffusion);
+                        break;
+                    case 'bayer':
+                        applyBWRBayerDithering(ctx, width, height, threshold, diffusion);
+                        break;
+                    case 'stucki':
+                        applyBWRStuckiDithering(ctx, width, height, threshold, diffusion);
+                        break;
+                    case 'jarvis':
+                        applyBWRJarvisJudiceNinkeDithering(ctx, width, height, threshold, diffusion);
+                        break;
+                    default:
+                        applyBWRNoneDithering(ctx, width, height, threshold, diffusion);
+                }
+            } else {
+                // 黑白抖动算法
+                switch(type) {
+                    case 'none':
+                        applyNoneDithering(ctx, width, height, threshold, false);
+                        break;
+                    case 'floydsteinberg':
+                        applyFloydSteinbergDithering(ctx, width, height, threshold, diffusion, false);
+                        break;
+                    case 'atkinson':
+                        applyAtkinsonDithering(ctx, width, height, threshold, diffusion, false);
+                        break;
+                    case 'bayer':
+                        applyBayerDithering(ctx, width, height, threshold, diffusion, false);
+                        break;
+                    case 'stucki':
+                        applyStuckiDithering(ctx, width, height, threshold, diffusion, false);
+                        break;
+                    case 'jarvis':
+                        applyJarvisJudiceNinkeDithering(ctx, width, height, threshold, diffusion, false);
+                        break;
+                    default:
+                        applyNoneDithering(ctx, width, height, threshold, false);
+                }
+            }
+        }
 
-			const canvas = document.getElementById('canvas');
-			const ctx = canvas.getContext("2d");
-      // 初始化画布尺寸为300x400
-			updateCanvasSize();
-			ctx.fillStyle = 'white';
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
+        function canvas2bytes(canvas, type = 'bw') {
+            const ctx = canvas.getContext("2d");
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-			let is_allow_drawing = false;
-			let is_allow_move_editor = false;
-			const image_mode = document.getElementById('canvas-mode');
-			const paint_size = document.getElementById('paint-size');
-			const paint_color = document.getElementById('paint-color');
-			const editor = document.getElementById('edit-font');
-			const font = document.getElementById('font');
-			document.getElementById('dithering').value = 'bwr_Atkinson';
-			image_mode.value = 'paint';
-			paint_color.value = 'black';
-			font.value = '黑体';
+            const arr = [];
+            let buffer = [];
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
 
-			editor.onmousemove = function (e) {
-				editor.style.fontSize = `${paint_size.value * 10}px`;
-				editor.style.color = paint_color.value;
-				editor.style.fontFamily = font.value;
-				editor.style.fontWeight = 'bold';
+                    const index = (canvas.width * 4 * y) + x * 4;
+                    if (type !== 'bwr') {
+                        buffer.push(imageData.data[index] > 0 && imageData.data[index + 1] > 0 && imageData.data[index + 2] > 0 ? 1 : 0);
+                    } else {
+                        buffer.push(imageData.data[index] > 0 && imageData.data[index + 1] === 0 && imageData.data[index + 2] === 0 ? 1 : 0);
+                    }
 
-				if (is_allow_move_editor) {
-					const {x, y} = get_position(canvas, e.clientX, e.clientY);
-					if (x < 0 || y < 0 || x > canvas.width || y > canvas.height) {
-						return;
-					}
+                    if (buffer.length === 8) {
+                        arr.push(parseInt(buffer.join(''), 2));
+                        buffer = [];
+                    }
+                }
+            }
+            return arr;
+        }
 
-					editor.style.left = `${e.clientX-20}px`;
-					editor.style.top = `${e.clientY-20}px`;
+        function getColorDistance(rgba1, rgba2) {
+            const [r1, b1, g1] = rgba1;
+            const [r2, b2, g2] = rgba2;
 
-				}
-			}
+            const rm = (r1 + r2) / 2;
 
-			editor.onmousedown = function (e) {
-				is_allow_move_editor = true;
-			}
+            const r = r1 - r2;
+            const g = g1 - g2;
+            const b = b1 - b2;
 
-			editor.onmouseup = function (e) {
-				is_allow_move_editor = false;
-			}
+            return Math.sqrt((2 + rm / 256) * r * r + 4 * g * g + (2 + (255 - rm) / 256) * b * b);
+        }
 
-			document.getElementById('update-text').onclick = function () {
-				if (!editor.value.length) {
-					alert('请先输入文字');
-					return;
-				}
-				editor.style.display = 'none';
-				ctx.beginPath();
-				ctx.font = `bold ${paint_size.value * 10}px ${font.value}`;
-				ctx.fillStyle = paint_color.value;
-				const {x, y} = get_position(canvas, parseInt(editor.style.left), parseInt(editor.style.top) + paint_size.value * 10);
+        function getNearColor(pixel, palette) {
+            let minDistance = 255 * 255 * 3 + 1;
+            let paletteIndex = 0;
 
-				ctx.fillText(editor.value, x, y);
-			}
+            for (let i = 0; i < palette.length; i++) {
+                const targetColor = palette[i];
+                const distance = getColorDistance(pixel, targetColor);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    paletteIndex = i;
+                }
+            }
 
-			image_mode.onchange = function (e) {
-				if (image_mode.value === 'font') {
-					document.getElementById('update-text').style.display = 'inline-block';
-					document.getElementById('font').style.display = 'inline-block';
+            return palette[paletteIndex];
+        }
 
-					editor.style.display='block';
-					editor.style.left = `${e.clientX}px`;
-					editor.style.top = `${e.clientY}px`;
-					return;
-				}
-				document.getElementById('update-text').style.display = 'none';
-				document.getElementById('font').style.display = 'none';
-				editor.style.display='none';
-			}
 
-			paint_size.onchange = function () {
-				if (image_mode.value === 'font') {
-					editor.style.fontSize =  `${paint_size.value * 10}px`;
-				}
-			}
+        function getNearColorV2(color, palette) {
+            let minDistanceSquared = 255 * 255 + 255 * 255 + 255 * 255 + 1;
 
-			paint_color.onchange = function () {
-				if (image_mode.value === 'font') {
-					editor.style.color = paint_color.value;
-				}
-			}
+            let bestIndex = 0;
+            for (let i = 0; i < palette.length; i++) {
+                let rdiff = (color[0] & 0xff) - (palette[i][0] & 0xff);
+                let gdiff = (color[1] & 0xff) - (palette[i][1] & 0xff);
+                let bdiff = (color[2] & 0xff) - (palette[i][2] & 0xff);
+                let distanceSquared = rdiff * rdiff + gdiff * gdiff + bdiff * bdiff;
+                if (distanceSquared < minDistanceSquared) {
+                    minDistanceSquared = distanceSquared;
+                    bestIndex = i;
+                }
+            }
+            return palette[bestIndex];
 
-			font.onchange = function () {
-				if (image_mode.value === 'font') {
-					editor.style.fontFamily = font.value;
-				}
-			}
+        }
 
-			canvas.onmousedown = function(e) {
-				let ele = get_position(canvas, e.clientX, e.clientY)
-				let { x, y } = ele
 
-				switch (image_mode.value) {
-					case 'paint':
-						is_allow_drawing = true;
-						ctx.beginPath();
-						ctx.moveTo(x, y);
-						break;
-					case 'font':
-						editor.style.display='block';
-						editor.style.left = `${e.clientX}px`;
-						editor.style.top = `${e.clientY}px`;
-						editor.style.fontSize = `${paint_size.value * 10}px`;
-						editor.style.color = paint_color.value;
-						editor.style.fontFamily = font.value;
-						editor.style.fontWeight = 'bold';
+        function updatePixel(imageData, index, color) {
+            imageData[index] = color[0];
+            imageData[index + 1] = color[1];
+            imageData[index + 2] = color[2];
+            imageData[index + 3] = color[3];
+        }
 
-						break
-					default:
-						break;
-				}
-			};
+        function getColorErr(color1, color2, rate) {
+            const res = [];
+            for (let i = 0; i < 3; i++) {
+                res.push(Math.floor((color1[i] - color2[i]) / rate));
+            }
+            return res;
+        }
 
-			canvas.onmousemove = (e) => {
-				let ele = get_position(canvas, e.clientX, e.clientY)
-				let { x, y } = ele;
-				switch (image_mode.value) {
-					case 'paint':
-						if (is_allow_drawing) {
-							ctx.lineWidth = paint_size.value;
-							ctx.strokeStyle=paint_color.value;
-							ctx.lineTo(x, y);
-							ctx.stroke();
-						}
-						break;
-					case 'font':
-						break;
+        function updatePixelErr(imageData, index, err, rate) {
+            imageData[index] += err[0] * rate;
+            imageData[index + 1] += err[1] * rate;
+            imageData[index + 2] += err[2] * rate;
+        }
 
-					default:
-						break;
-				}
-			}
+        function ditheringCanvasByPalette(canvas, palette, type) {
+            palette = palette || bwrPalette;
 
-			canvas.onmouseup = function() {
-				switch (image_mode.value) {
-					case 'paint':
-						is_allow_drawing = false;
-						break;
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const w = imageData.width;
 
-					case 'font':
-						editor.focus();
-						is_allow_move_editor = false;
-						break;
+            for (let currentPixel = 0; currentPixel <= imageData.data.length; currentPixel += 4) {
+                const newColor = getNearColorV2(imageData.data.slice(currentPixel, currentPixel + 4), palette);
 
-					default:
-						break;
-				}
-			}
+                if (type === "bwr_floydsteinberg") {
+                    const err = getColorErr(imageData.data.slice(currentPixel, currentPixel + 4), newColor, 16);
 
-			canvas.onmouseleave = function () {
-				if (image_mode.value === 'paint') {
-					is_allow_drawing = false;
-				}
-			}
-		}
-	</script>
- <script>
-        document.addEventListener('DOMContentLoaded', function() {
+                    updatePixel(imageData.data, currentPixel, newColor);
+                    updatePixelErr(imageData.data, currentPixel + 4, err, 7);
+                    updatePixelErr(imageData.data, currentPixel + 4 * w - 4, err, 3);
+                    updatePixelErr(imageData.data, currentPixel + 4 * w, err, 5);
+                    updatePixelErr(imageData.data, currentPixel + 4 * w + 4, err, 1);
+                } else {
+                    const err = getColorErr(imageData.data.slice(currentPixel, currentPixel + 4), newColor, 8);
+
+                    updatePixel(imageData.data, currentPixel, newColor);
+                    updatePixelErr(imageData.data, currentPixel + 4, err, 1);
+                    updatePixelErr(imageData.data, currentPixel + 8, err, 1);
+                    updatePixelErr(imageData.data, currentPixel + 4 * w - 4, err, 1);
+                    updatePixelErr(imageData.data, currentPixel + 4 * w, err, 1);
+                    updatePixelErr(imageData.data, currentPixel + 4 * w + 4, err, 1);
+                    updatePixelErr(imageData.data, currentPixel + 8 * w, err, 1);
+                }
+            }
+            ctx.putImageData(imageData, 0, 0);
+        }
+    </script>
+
+    <script>
+        function hexToBytes(hex) {
+            for (var bytes = [], c = 0; c < hex.length; c += 2)
+                bytes.push(parseInt(hex.substr(c, 2), 16));
+            return new Uint8Array(bytes);
+        }
+
+        function bytesToHex(data) {
+            return new Uint8Array(data).reduce(
+                function (memo, i) {
+                    return memo + ("0" + i.toString(16)).slice(-2);
+                }, "");
+        }
+
+        function intToHex(intIn, bytes = 4) {
+            return intIn.toString(16).padStart(bytes * 2, '0');
+        }
+
+    </script>
+    <script>
+        let bleDevice;
+        let gattServer;
+        let epdService;
+        let rxtxService;
+        let epdCharacteristic;
+        let rxtxCharacteristic;
+        let reconnectTrys = 0;
+        const my_step = 900;
+
+        function delay(delayInMs) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(2);
+                }, delayInMs);
+            });
+        }
+
+        function resetVariables() {
+            gattServer = null;
+            epdService = null;
+            epdCharacteristic = null;
+            rxtxCharacteristic = null;
+            rxtxService = null;
+            document.getElementById("log").value = '';
+        }
+
+        async function handleError(error) {
+            console.log(error);
+            resetVariables();
+            if (bleDevice == null)
+                return;
+            if (reconnectTrys <= 5) {
+                reconnectTrys++;
+                await connect();
+            } else {
+                addLog("Was not able to connect, aborting");
+                reconnectTrys = 0;
+            }
+        }
+
+        async function sendCommand(cmd) {
+            if (epdCharacteristic) {
+                await epdCharacteristic.writeValueWithResponse(cmd)
+            } else {
+                addLog('服务不可用。蓝牙链接上了吗？')
+            }
+        }
+
+        async function clearScreen(cmd) {
+            addLog('刷屏')
+            await triggerEpdCmd(`00${cmd}`);
+            await triggerEpdCmd('01')
+        }
+
+        async function rxTxSendCommand(cmd) {
+            if (rxtxCharacteristic) {
+                await rxtxCharacteristic.writeValueWithResponse(cmd);
+            } else {
+                addLog('服务不可用。蓝牙链接上了吗？')
+            }
+        }
+
+        async function SendCommand(cmd) {
+            let code;
+            for (let i; i < cmd.length; i += 2) {
+                code = '' + cmd[i] + cmd[i + 1];
+                triggerRxTxCmd(code);
+                await delay(1000);
+            }
+
+        }
+
+        async function rxTxSendCommand2(cmd) {
+            if (rxtxCharacteristic) {
+                await rxtxCharacteristic.writeValueWith(cmd);
+            } else {
+                addLog('服务不可用。蓝牙链接上了吗？')
+            }
+        }
+
+        async function sendBufferData(value, type) {
+            addLog(`开始发送图片模式:${type}, 大小 ${value.length}byte`);
+            let code = 'ff';
+            if (type === 'bwr') {
+                code = '00';
+            }
+
+            let cod = '03';
+            if (value.length == 7000 || value.length == 18000) { cod = '04'; }
+            const step = my_step;
+            let partIndex = 0;
+            for (let i = 0; i < value.length; i += step) {
+                addLog(`正在发送第${partIndex + 1}块. 块大小: ${step / 2 + 4}byte. 起始位置: ${i / 2}`);
+                await sendCommand(hexToBytes(cod + code + intToHex(i / 2, 2) + value.substring(i, i + step)));
+                partIndex += 1;
+            }
+        }
+        function updateCanvasSize() {
+            const sizeSelect = document.getElementById('screen-size');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext("2d");
+
+            let width, height;
+
+
+            // <option value="7.5传图">2.9传图</option> -->
+            // <option value="2.9传图">2.9传图</option> -->
+            //   <option value="2.13传图">2.9传图</
+            if (sizeSelect.value == "4.2传图") {
+                width = 400;
+                height = 300;
+            } else if (sizeSelect.value === "2.9传图") {
+                width = 296;
+                height = 128;
+            } else if (sizeSelect.value === "日历小图") {
+
+                width = 280;
+                height = 100;
+            } else if (sizeSelect.value === "7.5传图") {
+
+                width = 800;
+                height = 480;
+            } else if (sizeSelect.value === "7.5日历小图") {
+                width = 400;
+                height = 180;
+            } else if (sizeSelect.value === "2.13传图") {
+
+                width = 212;
+                height = 104;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            // 清空并重置背景为白色
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, width, height);
+            update_image();
+            addLog(`画布尺寸已更新为: ${width}x${height}`);
+        }
+        async function upload_image() {
+            const canvas = document.getElementById('canvas');
+
+
+            const startTime = new Date().getTime();
+
+
+            // await sendCommand(hexToBytes("0000"));
+
+            // await sendCommand(hexToBytes("020000"));
+
+            await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
+            await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
+
+            await delay(300);
+
+            if (canvas.width == 280 || canvas.height == 180) { await sendCommand(hexToBytes("AA")) }
+            else { await sendCommand(hexToBytes("01")) }
+
+
+            addLog(`上传完成，耗时${(new Date().getTime() - startTime) / 1000}s`);
+        }
+
+
+
+        async function setTime() {
+            const { unixNow, localeTimeString, year, month, day, week } = getUnixTime();
+
+            addLog("时间设置为: " + localeTimeString + " : dd" + intToHex(unixNow, 4));
+            await rxTxSendCommand(hexToBytes('dd' +
+                [intToHex(unixNow, 4), intToHex(year, 2), intToHex(month, 1), intToHex(day, 1), intToHex(week, 1)].join('')));
+
+            await rxTxSendCommand(hexToBytes('e2'))
+        }
+
+        async function setri(cmd) {
+            addLog(`指令: ${cmd}`)
+            await rxTxSendCommand(hexToBytes(cmd));
+            await delay(300);
+            addLog(`指令: e2`)
+            await rxTxSendCommand(hexToBytes('e2'))
+        }
+
+        async function triggerRxTxCmd(cmd) {
+            addLog(`发送指令: ${cmd}`)
+            await rxTxSendCommand(hexToBytes(cmd));
+        }
+        async function triggerRxTxCmd2(cmd) {
+            addLog(`发送指令: ${cmd}`)
+            await rxTxSendCommand2(hexToBytes(cmd));
+        }
+        async function triggerEpdCmd(cmd) {
+            addLog(`发送指令: ${cmd}`)
+            await sendCommand(hexToBytes(cmd));
+        }
+        async function triggerEpdRed_lut(cmd) {
+            addLog(`开始红色校准: ${cmd}`)
+            cmd = 'E6' + cmd;
+            await rxTxSendCommand(hexToBytes(cmd));
+
+        }
+        async function triggerEpdJH(cmd) {
+            addLog(`激活指令: ${cmd}`)
+            cmd = 'EF' + cmd;
+            await rxTxSendCommand(hexToBytes(cmd));
+            await delay(500);
+
+
+            await rxTxSendCommand(hexToBytes('e2'))
+        }
+
+        async function triggerEpdCHEPAI(cmd) {
+            addLog(`号码: ${cmd}`)
+            let cp = '';
+            for (let index = 0; index < cmd.length; index++) {
+                cp = cp + cmd[index] + cmd[index];
+
+            }
+            cp = 'EF' + cp;
+            //addLog(`号码: ${cp}`)
+            await rxTxSendCommand(hexToBytes(cp));
+            await delay(500);
+
+
+            await rxTxSendCommand(hexToBytes('e2'))
+        }
+
+        async function triggerRxTxCmd_LED(cmd) {
+            let color = document.getElementById('led_color').value;
+            let D_S_hour = document.getElementById('D_S_hour').value;
+            let D_S_min = document.getElementById('D_S_min').value;
+
+            D_S_hour = D_S_hour > 9 ? D_S_hour : '0' + D_S_hour;
+            D_S_min = D_S_min > 9 ? D_S_min : '0' + D_S_min;
+
+            let note = color != '07' ? '01' : '00';
+            cmd = cmd + note + color + D_S_hour + D_S_min;
+            addLog(`LED: ${cmd}`)
+            await rxTxSendCommand(hexToBytes(cmd));
+        }
+        function disconnect() {
+            resetVariables();
+            addLog('链接已断开.');
+            document.getElementById("connectbutton").innerHTML = '链接';
+        }
+
+        async function preConnect() {
+            if (gattServer != null && gattServer.connected) {
+                if (bleDevice != null && bleDevice.gatt.connected)
+                    bleDevice.gatt.disconnect();
+            } else {
+                reconnectTrys = 0;
+                bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [
+                        { namePrefix: 'NRF-' }
+                    ], optionalServices: ['0000221f-0000-1000-8000-00805f9b34fb', '00001f10-0000-1000-8000-00805f9b34fb', '13187b10-eba9-a3ba-044e-83d3217d9a38']
+                });
+                await bleDevice.addEventListener('gattserverdisconnected', disconnect);
+                try {
+                    await connect();
+                } catch (e) {
+                    await handleError(e);
+                }
+            }
+        }
+
+        async function connectRXTX() {
+            rxtxService = await gattServer.getPrimaryService('00001f10-0000-1000-8000-00805f9b34fb');
+            addLog('> rxtxService 找到串口服务');
+
+            rxtxCharacteristic = await rxtxService.getCharacteristic('00001f1f-0000-1000-8000-00805f9b34fb');
+            addLog('> rxtxCharacteristic 串口服务已链接');
+        }
+
+        async function reConnect() {
+            connectTrys = 0;
+            if (bleDevice != null && bleDevice.gatt.connected)
+                bleDevice.gatt.disconnect();
+            resetVariables();
+            addLog("重新链接");
+            setTimeout(async function () { await connect(); }, 300);
+        }
+
+        async function connect() {
+            if (epdCharacteristic == null) {
+                addLog("正在链接: " + bleDevice.name);
+
+                gattServer = await bleDevice.gatt.connect();
+                addLog('> 找到GATT服务器');
+
+                epdService = await gattServer.getPrimaryService('13187b10-eba9-a3ba-044e-83d3217d9a38');
+                addLog('>  epdService 找到可用服务');
+
+                epdCharacteristic = await epdService.getCharacteristic('4b646063-6264-f3a7-8941-e65356ea82fe');
+                addLog('> epdCharacteristic 服务已连接');
+
+                await epdCharacteristic.startNotifications();
+
+                epdCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+                    console.log('epd ret', bytesToHex(event.target.value.buffer))
+                    const count = parseInt('0x' + bytesToHex(event.target.value.buffer));
+
+                    addLog(`> [来自屏幕]: 收到${count} byte数据`);
+
+
+                });
+
+                document.getElementById("connectbutton").innerHTML = '断开';
+                await connectRXTX();
+            }
+        }
+
+        function setStatus(statusText) {
+            document.getElementById("status").innerHTML = statusText;
+        }
+
+        function addLog(logTXT) {
+            const today = new Date();
+            const time = ("0" + today.getHours()).slice(-2) + ":" + ("0" + today.getMinutes()).slice(-2) + ":" + ("0" + today.getSeconds()).slice(-2) + " : ";
+
+            const dom = document.getElementById("log");
+
+            dom.innerHTML += time + logTXT + '<br>';
+            dom.scrollTop = dom.scrollHeight;
+        }
+
+        function getUnixTime() {
+            const hourOffset = document.getElementById('hour-offset').value;
+            const unixNow = Math.round(Date.now() / 1000) + (60 * 60 * hourOffset) - new Date().getTimezoneOffset() * 60;
+
+            const date = new Date((unixNow + new Date().getTimezoneOffset() * 60) * 1000);
+            const localeTimeString = date.toLocaleTimeString();
+
+            return { unixNow, localeTimeString, year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), week: date.getDay() || 7 }
+        }
+        let currentRotation = 0;
+        let currentImage = null;
+        let degrees1 = 0;
+        function rotateImage(degrees) {
+          if(degrees){
+            currentRotation = (currentRotation + degrees) % 360;}
+            else {currentRotation =0;}
+            degrees1 = degrees;
+            if (currentImage) {
+                drawImageWithRotation(currentImage);
+                update_image();
+            }
+        }
+        let currentScaleX = 1.0;  // X轴缩放比例
+        let currentScaleY = 1.0;  // Y轴缩放比例
+        // 拉伸铺满画布（不保持宽高比）
+        function stretchToCanvas() {
+            if (!currentImage) return;
+
+            const canvas = document.getElementById("canvas");
+
+            // 分别计算X轴和Y轴的缩放比例，使图片完全填满画布
+            if (degrees1 == 90 || degrees1 == 270) {
+                currentScaleY = canvas.width / currentImage.width;
+                currentScaleX = canvas.height / currentImage.height;
+
+            } else {
+                currentScaleX = canvas.width / currentImage.width;
+                currentScaleY = canvas.height / currentImage.height;
+
+            }
+
+
+
+            updateScaleDisplay();
+            drawImageWithRotation(currentImage);
+            update_image();
+        }
+
+        // 通过滑块更新缩放
+        function updateScale(value) {
+            currentScale = value / 100;
+            updateScaleDisplay();
+            if (currentImage) {
+                drawImageWithRotation(currentImage);
+                update_image();
+            }
+        }
+
+        let currentScale = 1.0;  // 缩放比例
+
+
+        // 更新缩放显示
+        function updateScaleDisplay() {
+            document.getElementById('scaleValue').textContent = `${Math.round(currentScale * 100)}%`;
+            document.getElementById('scaleSlider').value = currentScale * 100;
+        }
+        async function update_image() {
+            const image_file = document.getElementById('image_file');
+            if (image_file.files.length > 0) {
+                const file = image_file.files[0];
+                const canvas = document.getElementById("canvas");
+                const ctx = canvas.getContext("2d");
+
+                const image = new Image();
+                image.src = URL.createObjectURL(file);
+                image.onload = function (event) {
+                    URL.revokeObjectURL(this.src);
+                    currentImage = image;
+                    
+                    // 先绘制图像
+                    drawImageWithRotation(image);
+                    
+                    // 应用图像调整
+                    applyImageAdjustments(canvas);
+                    
+                    // 应用抖动算法
+                    convert_dithering();
+                }
+            }
+        }
+        function updateRotation(value) {
+            currentRotation = parseInt(value);
+            document.getElementById('rotationValue').textContent = value + '°';
+            if (currentImage) {
+                drawImageWithRotation(currentImage);
+                update_image();
+            }
+        }
+        function drawImageWithRotation(image) {
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 保存当前画布状态
+            ctx.save();
+
+            // 移动到画布中心
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+
+            // 旋转画布
+            ctx.rotate(currentRotation * Math.PI / 180);
+            // 应用缩放
+            ctx.scale(currentScale, currentScale);
+            // 应用缩放（分别应用X和Y轴的缩放）
+            ctx.scale(currentScaleX, currentScaleY);
+
+            // 计算图像尺寸
+            const width = image.width;
+            const height = image.height;
+
+            // 绘制图片
+            ctx.drawImage(
+                image,
+                -width / 2, -height / 2,
+                width, height
+            );
+
+            // 恢复画布状态
+            ctx.restore();
+        }
+
+        function get_position(canvas, x, y) {
+            let rect = canvas.getBoundingClientRect()
+            return {
+                x: x - rect.left * (canvas.width / rect.width),
+                y: y - rect.top * (canvas.height / rect.height)
+            }
+        }
+
+        function clear_canvas() {
+            if (confirm('确认清除屏幕?')) {
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext("2d");
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function convert_dithering() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext("2d");
+            const mode = document.getElementById('dithering').value;
+            const threshold = parseInt(document.getElementById('threshold').value);
+            
+            // 应用抖动算法
+            dithering(ctx, canvas.width, canvas.height, threshold, mode);
+        }
+
+        document.body.onload = () => {
+            setInterval(() => {
+                const { localeTimeString, year, month, day, week } = getUnixTime();
+                document.getElementById('time-setter').innerText = `设置时间为：${year}-${month}-${day} ${localeTimeString} 星期${week}`;
+            }, 1000);
+
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext("2d");
+            // 初始化画布尺寸为300x400
+            updateCanvasSize();
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            let is_allow_drawing = false;
+            let is_allow_move_editor = false;
+            const image_mode = document.getElementById('canvas-mode');
+            const paint_size = document.getElementById('paint-size');
+            const paint_color = document.getElementById('paint-color');
+            const editor = document.getElementById('edit-font');
+            const font = document.getElementById('font');
+            document.getElementById('dithering').value = 'bwr_floydsteinberg';
+            image_mode.value = 'paint';
+            paint_color.value = 'black';
+            font.value = '黑体';
+
+            editor.onmousemove = function (e) {
+                editor.style.fontSize = `${paint_size.value * 10}px`;
+                editor.style.color = paint_color.value;
+                editor.style.fontFamily = font.value;
+                editor.style.fontWeight = 'bold';
+
+                if (is_allow_move_editor) {
+                    const { x, y } = get_position(canvas, e.clientX, e.clientY);
+                    if (x < 0 || y < 0 || x > canvas.width || y > canvas.height) {
+                        return;
+                    }
+
+                    editor.style.left = `${e.clientX - 20}px`;
+                    editor.style.top = `${e.clientY - 20}px`;
+
+                }
+            }
+
+            editor.onmousedown = function (e) {
+                is_allow_move_editor = true;
+            }
+
+            editor.onmouseup = function (e) {
+                is_allow_move_editor = false;
+            }
+
+            document.getElementById('update-text').onclick = function () {
+                if (!editor.value.length) {
+                    alert('请先输入文字');
+                    return;
+                }
+                editor.style.display = 'none';
+                ctx.beginPath();
+                ctx.font = `bold ${paint_size.value * 10}px ${font.value}`;
+                ctx.fillStyle = paint_color.value;
+                const { x, y } = get_position(canvas, parseInt(editor.style.left), parseInt(editor.style.top) + paint_size.value * 10);
+
+                ctx.fillText(editor.value, x, y);
+            }
+
+            image_mode.onchange = function (e) {
+                if (image_mode.value === 'font') {
+                    document.getElementById('update-text').style.display = 'inline-block';
+                    document.getElementById('font').style.display = 'inline-block';
+
+                    editor.style.display = 'block';
+                    editor.style.left = `${e.clientX}px`;
+                    editor.style.top = `${e.clientY}px`;
+                    return;
+                }
+                document.getElementById('update-text').style.display = 'none';
+                document.getElementById('font').style.display = 'none';
+                editor.style.display = 'none';
+            }
+
+            paint_size.onchange = function () {
+                if (image_mode.value === 'font') {
+                    editor.style.fontSize = `${paint_size.value * 10}px`;
+                }
+            }
+
+            paint_color.onchange = function () {
+                if (image_mode.value === 'font') {
+                    editor.style.color = paint_color.value;
+                }
+            }
+
+            font.onchange = function () {
+                if (image_mode.value === 'font') {
+                    editor.style.fontFamily = font.value;
+                }
+            }
+
+            canvas.onmousedown = function (e) {
+                let ele = get_position(canvas, e.clientX, e.clientY)
+                let { x, y } = ele
+
+                switch (image_mode.value) {
+                    case 'paint':
+                        is_allow_drawing = true;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        break;
+                    case 'font':
+                        editor.style.display = 'block';
+                        editor.style.left = `${e.clientX}px`;
+                        editor.style.top = `${e.clientY}px`;
+                        editor.style.fontSize = `${paint_size.value * 10}px`;
+                        editor.style.color = paint_color.value;
+                        editor.style.fontFamily = font.value;
+                        editor.style.fontWeight = 'bold';
+
+                        break
+                    default:
+                        break;
+                }
+            };
+
+            canvas.onmousemove = (e) => {
+                let ele = get_position(canvas, e.clientX, e.clientY)
+                let { x, y } = ele;
+                switch (image_mode.value) {
+                    case 'paint':
+                        if (is_allow_drawing) {
+                            ctx.lineWidth = paint_size.value;
+                            ctx.strokeStyle = paint_color.value;
+                            ctx.lineTo(x, y);
+                            ctx.stroke();
+                        }
+                        break;
+                    case 'font':
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            canvas.onmouseup = function () {
+                switch (image_mode.value) {
+                    case 'paint':
+                        is_allow_drawing = false;
+                        break;
+
+                    case 'font':
+                        editor.focus();
+                        is_allow_move_editor = false;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            canvas.onmouseleave = function () {
+                if (image_mode.value === 'paint') {
+                    is_allow_drawing = false;
+                }
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
             const textInput = document.getElementById('textInput');
             const fontFamily = document.getElementById('fontFamily');
             const invertColors = document.getElementById('invertColors');
@@ -1184,42 +1803,42 @@ function drawImageWithRotation(image) {
             const fontSizeSlider = document.getElementById('fontSizeSlider');
             const fontSizeValue = document.getElementById('fontSizeValue');
 
-           // const datePicker = document.getElementById('datePicker');
+            // const datePicker = document.getElementById('datePicker');
 
-          const gridSizeSelect = document.getElementById('gridSizeSelect');
+            const gridSizeSelect = document.getElementById('gridSizeSelect');
             const currentGridSize = document.getElementById('currentGridSize');
             const sizeHint = document.getElementById('sizeHint');
 
             const ctx = previewCanvas.getContext('2d');
-           // const gridSize = 16; // 单个字符的点阵尺寸（16×16）
+            // const gridSize = 16; // 单个字符的点阵尺寸（16×16）
             const previewScale = 8; // 预览缩放比例（1点阵=10像素）
             let fontSizeRatio = 0.85; // 字体大小比例，默认85%
-            
+
             // 初始化预览
             updateGridSize();
             drawPreview();
-             
+
             // 生成字模
-            generateBtn.addEventListener('click', function() {
+            generateBtn.addEventListener('click', function () {
                 drawPreview();
                 generateCode();
             });
-            
+
             // 复制代码
-            copyBtn.addEventListener('click', function() {
+            copyBtn.addEventListener('click', function () {
                 sendcode();
             });
-            
+
             // 字体大小调节
-            fontSizeSlider.addEventListener('input', function() {
+            fontSizeSlider.addEventListener('input', function () {
                 const value = this.value;
                 fontSizeValue.textContent = `${value}%`;
                 fontSizeRatio = value / 100;
                 drawPreview();
             });
-            
+
             // 点阵尺寸切换
-            gridSizeSelect.addEventListener('change', function() {
+            gridSizeSelect.addEventListener('change', function () {
                 updateGridSize();
                 drawPreview();
             });
@@ -1227,17 +1846,17 @@ function drawImageWithRotation(image) {
             function getCurrentGridSize() {
                 return parseInt(gridSizeSelect.value);
             }
-            
+
             // 更新点阵尺寸相关显示
             function updateGridSize() {
                 const gridSize = getCurrentGridSize();
-              
+
                 currentGridSize.textContent = ``;
-               //sizeHint.textContent = `调节字体在${gridSize}×${gridSize}点阵内的显示比例，过大可能导致字符截断`;
+                //sizeHint.textContent = `调节字体在${gridSize}×${gridSize}点阵内的显示比例，过大可能导致字符截断`;
             }
-            
-            
-             // 格式化日期显示
+
+
+            // 格式化日期显示
             function formatDate(date) {
                 const year = date.getFullYear();
                 const month = date.getMonth() + 1;
@@ -1252,36 +1871,36 @@ function drawImageWithRotation(image) {
                 const invert = invertColors.checked;
                 const grid = showGrid.checked;
                 const gridSize = getCurrentGridSize();
-                
+
                 // 动态设置画布尺寸
                 previewCanvas.width = charCount * gridSize * previewScale;
                 previewCanvas.height = gridSize * previewScale;
                 //gridInfoText.textContent = `${charCount}字符 × ${gridSize}×${gridSize} 点阵（总尺寸：${previewCanvas.width}×${previewCanvas.height}像素）`;
-               
+
                 // 清空画布
                 ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
-                
+
                 // 绘制背景
                 ctx.fillStyle = invert ? '#000000' : '#ffffff';
                 ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
-                
+
                 // 逐个字符绘制
                 const charWidth = gridSize * previewScale;
                 ctx.font = `bold ${gridSize * fontSizeRatio * previewScale}px ${font}`;
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = invert ? '#ffffff' : '#000000';
-                
+
                 for (let i = 0; i < charCount; i++) {
                     const currentChar = text[i];
                     const charX = i * charWidth + charWidth / 2;
                     ctx.textAlign = 'center';
                     ctx.fillText(currentChar, charX, previewCanvas.height / 2);
                 }
-                
+
                 // 绘制自适应网格
                 if (grid) {
                     ctx.strokeStyle = invert ? '#333333' : '#dddddd';
-                    
+
                     // 绘制垂直线
                     for (let x = 0; x <= charCount * gridSize; x++) {
                         const lineX = x * previewScale;
@@ -1291,7 +1910,7 @@ function drawImageWithRotation(image) {
                         ctx.lineWidth = x % gridSize === 0 ? 2 : 1;
                         ctx.stroke();
                     }
-                    
+
                     // 绘制水平线
                     for (let y = 0; y <= gridSize; y++) {
                         const lineY = y * previewScale;
@@ -1303,31 +1922,31 @@ function drawImageWithRotation(image) {
                     }
                 }
             }
-           // 生成代码（按画布取模：提取整个预览画布的点阵数据）
-// const charCount;
-async  function sendcode(){
+            // 生成代码（按画布取模：提取整个预览画布的点阵数据）
+            // const charCount;
+            async function sendcode() {
 
-triggerRxTxCmd('FA');
-	await delay(1000);
-triggerRxTxCmd('E2');
-}
-async  function generateCode() {
-            const text = textInput.value || 'ABCDEFGH';
+                triggerRxTxCmd('FA');
+                await delay(1000);
+                triggerRxTxCmd('E2');
+            }
+            async function generateCode() {
+                const text = textInput.value || 'ABCDEFGH';
                 const charCount = text.length;
                 const font = fontFamily.value;
                 const invert = invertColors.checked;
                 const gridSize = getCurrentGridSize();
-                
+
                 // 总点阵尺寸：宽度=字符数×gridSize，高度=gridSize
                 const totalGridWidth = charCount * gridSize;
                 const totalGridHeight = gridSize;
-                
+
                 // 创建与总点阵尺寸一致的临时画布
                 const tempCanvas = document.createElement('canvas');
                 tempCanvas.width = totalGridWidth;
                 tempCanvas.height = totalGridHeight;
                 const tempCtx = tempCanvas.getContext('2d');
-                
+
                 // 绘制完整画布内容
                 tempCtx.fillStyle = invert ? '#000000' : '#ffffff';
                 tempCtx.fillRect(0, 0, totalGridWidth, totalGridHeight);
@@ -1336,131 +1955,130 @@ async  function generateCode() {
                 tempCtx.textBaseline = 'middle';
                 tempCtx.fillStyle = invert ? '#ffffff' : '#000000';
                 tempCtx.fillText(text, totalGridWidth / 2, totalGridHeight / 2);
-                
+
                 // 解析整个画布的像素数据
                 const imageData = tempCtx.getImageData(0, 0, totalGridWidth, totalGridHeight);
                 const data = imageData.data;
                 const allBytes = [];
-                
+
                 // 按行解析像素（根据点阵尺寸自动计算每行字节数）
                 for (let y = 0; y < totalGridHeight; y++) {
                     const bytesPerLine = totalGridWidth / 8; // 每行字节数=总宽度/8
                     const lineBytes = new Array(bytesPerLine).fill(0);
-                    
+
                     for (let x = 0; x < totalGridWidth; x++) {
                         const pixelIndex = (y * totalGridWidth + x) * 4;
                         const brightness = (data[pixelIndex] + data[pixelIndex + 1] + data[pixelIndex + 2]) / 3;
                         const bitValue = invert ? (brightness > 128 ? 0 : 1) : (brightness > 128 ? 1 : 0);
-                        
+
                         const byteIndex = Math.floor(x / 8); // 计算当前点属于第几个字节
                         const bitPosition = 7 - (x % 8); // 计算字节内的位位置
                         lineBytes[byteIndex] |= (bitValue << bitPosition);
                     }
                     allBytes.push(...lineBytes);
                 }
-                
-
-		
-                if(gridSize==16){
-
-                if(charCount>4){
 
 
-                  let code='0'+4;
-                  // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
-                  for (let i = 0; i < allBytes.length-1-(charCount-4)*32; i++) {
-                      // 补零为2位十六进制（如1→01，15→0f）
-                      code += `${allBytes[i].toString(16).padStart(2, '0')}`;
 
-                  }
-                
-                triggerRxTxCmd(code);
-                await delay(1000);
+                if (gridSize == 16) {
 
-                  
+                    if (charCount > 4) {
 
-                let code1='0'+charCount;
-                  
-                    for (let i = 128; i < allBytes.length-1; i++) {
-                    // 补零为2位十六进制（如1→01，15→0f）
-                    code1 += `${allBytes[i].toString(16).padStart(2, '0')}`;
-                    
+
+                        let code = '0' + 4;
+                        // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
+                        for (let i = 0; i < allBytes.length - 1 - (charCount - 4) * 32; i++) {
+                            // 补零为2位十六进制（如1→01，15→0f）
+                            code += `${allBytes[i].toString(16).padStart(2, '0')}`;
+
+                        }
+
+                        triggerRxTxCmd(code);
+                        await delay(1000);
+
+
+
+                        let code1 = '0' + charCount;
+
+                        for (let i = 128; i < allBytes.length - 1; i++) {
+                            // 补零为2位十六进制（如1→01，15→0f）
+                            code1 += `${allBytes[i].toString(16).padStart(2, '0')}`;
+
+                        }
+                        triggerRxTxCmd(code1);
+                    } else {
+
+                        let code = '0' + (charCount);
+                        // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
+                        for (let i = 0; i < allBytes.length - 1; i++) {
+                            // 补零为2位十六进制（如1→01，15→0f）
+                            code += `${allBytes[i].toString(16).padStart(2, '0')}`;
+
+                        }
+                        triggerRxTxCmd(code);
+
                     }
-                  triggerRxTxCmd(code1);
-                }else{
+                } else if (gridSize == 24) {
 
-                      let code='0'+(charCount);
-                  // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
-                  for (let i = 0; i < allBytes.length-1; i++) {
-                      // 补零为2位十六进制（如1→01，15→0f）
-                      code += `${allBytes[i].toString(16).padStart(2, '0')}`;
-                      
-                  }
-                triggerRxTxCmd(code);
-                
+                    if (charCount > 4) return;
+
+                    for (let j = 0; j < charCount; j++) {
+                        let code = '990' + j;
+
+                        // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
+                        for (let i = 0; i < 72; i++) {
+                            // 补零为2位十六进制（如1→01，15→0f）
+                            code += `${allBytes[i + j * 72].toString(16).padStart(2, '0')}`;
+
+                        }
+
+                        triggerRxTxCmd(code);
+
+                        await delay(1000);
+
+
+                    }
+
+
+
                 }
-      }else if(gridSize==24) 
-      {
 
-        if(charCount>4) return;
+                // 监听日期选择变化
 
-          for(let j=0;j<charCount;j++){
-            let code='990'+j;
-
-            // 格式化字节显示（每2个字节一组，每4组换行，与原代码格式一致）
-                  for (let i = 0; i <72; i++) {
-                      // 补零为2位十六进制（如1→01，15→0f）
-                      code += `${allBytes[i+j*72].toString(16).padStart(2, '0')}`;
-
-                  }
-                
-                triggerRxTxCmd(code);
-              
+                // 设置日期选择器默认值为今天
+                // const today = new Date();
+                // datePicker.valueAsDate = today;
+                // selectedDateDisplay.textContent = formatDate(today);
+                const selectedDate = new Date(datePicker.value);
+                //selectedDateDisplay.textContent = formatDate(selectedDate);
+                let year = selectedDate.getFullYear();
+                let month = selectedDate.getMonth() + 1;
+                let day = selectedDate.getDate();
                 await delay(1000);
 
 
-          }
-          
-                
-                
+                if (month < 10) month = '0' + month;
+                if (day < 10) day = '0' + day;
+                if (gridSize == 24) {
+                    let code2 = 'ffff' + year + month + day;
+                    if (year > 2000) {
+                        triggerRxTxCmd(code2);
+                    };
+                } else {
+                    let code2 = 'ff00' + year + month + day;
+                    if (year > 2000) {
+                        triggerRxTxCmd(code2);
+                    };
                 }
+                //  let code2='ffff'+year+month+day;
+                //           if(year>2000) {
+                //             triggerRxTxCmd(code2);}
 
-			// 监听日期选择变化
-          
-                // 设置日期选择器默认值为今天
-            // const today = new Date();
-            // datePicker.valueAsDate = today;
-            // selectedDateDisplay.textContent = formatDate(today);
-       		 	const selectedDate = new Date(datePicker.value);
-                //selectedDateDisplay.textContent = formatDate(selectedDate);
-				        let year = selectedDate.getFullYear();
-                let month = selectedDate.getMonth() + 1;
-                let day =selectedDate.getDate();
-				await delay(1000);
-				
-		
-					if(month<10) month='0'+month;
-					if(day<10) day='0'+day;
-           if(gridSize==24) {
-            let code2='ffff'+year+month+day;
-                if(year>2000) {
-                  triggerRxTxCmd(code2);};
 
-           }else{
-            let code2='ff00'+year+month+day;
-            	if(year>2000) {
-					triggerRxTxCmd(code2);};
+                await delay(1000);
+                triggerRxTxCmd('E2');
+            }
 
-          }
-			//  let code2='ffff'+year+month+day;
-      //           if(year>2000) {
-      //             triggerRxTxCmd(code2);}
-			
-
-			await delay(1000);
-				triggerRxTxCmd('E2');
-}
-            
             // 监听输入变化，实时更新预览
             textInput.addEventListener('input', drawPreview);
             fontFamily.addEventListener('change', drawPreview);
@@ -1469,203 +2087,209 @@ async  function generateCode() {
         });
     </script>
 
-	 <h2>墨水屏价签蓝牙控制器
-	 <!-- <a href="ATC_TLSR_Paper BLE control.html">蓝牙OTA升级</a> -->
-	</h2>
-<!-- 在连接按钮部分 -->
-<div class="button-group">
-  <button id="connectbutton" type="button" onclick="preConnect();">链接</button>
-  <button type="button" onclick="reConnect();">重新链接</button>
-  <button type="button" onclick="document.getElementById('log').innerHTML = '';">清空日志</button>
-</div>
+    <h2>墨水屏价签蓝牙控制器
+        <!-- <a href="ATC_TLSR_Paper BLE control.html">蓝牙OTA升级</a> -->
+    </h2>
+    <!-- 在连接按钮部分 -->
+    <div class="button-group">
+        <button id="connectbutton" type="button" onclick="preConnect();">链接</button>
+        <button type="button" onclick="reConnect();">重新链接</button>
+        <button type="button" onclick="document.getElementById('log').innerHTML = '';">清空日志</button>
+    </div>
 
-<!-- 在指令控制部分 -->
-<div class="button-group">
- <button id="time-setter" onclick="setTime()">设置时间为: </button>	<br>
-	<input type="number" max="24" min="0" id="hour-offset" value="0" style="width: 40px;" >
-  <!-- <h3>指令控制设置时间</h3>
+    <!-- 在指令控制部分 -->
+    <div class="button-group">
+        <button id="time-setter" onclick="setTime()">设置时间为: </button> <br>
+        <input type="number" max="24" min="0" id="hour-offset" value="0" style="width: 40px;">
+        <!-- <h3>指令控制设置时间</h3>
 	<button id="time-setter" onclick="setTime()">设置时间为: </button>	<br>
 	偏移+<input type="number" max="24" min="0" id="hour-offset" value="0" style="width: 40px;">小时 -->
-  <!-- <input type="text" id="cmdTXT" placeholder="输入命令" value="0155">
+        <!-- <input type="text" id="cmdTXT" placeholder="输入命令" value="0155">
 	<button onclick="triggerEpdCmd(document.getElementById('cmdTXT').value)">发送命令</button> -->
- 
-</div>
 
-<div class="button-group">
-  <button type="button" onclick="triggerRxTxCmd('e100')" title="点击该按钮，然后上传图片。图片将永久显示到屏幕上">设置为图片模式</button>
-  <button type="button" onclick="setri('e101')" title="点击该按钮, 切换为时钟模式">切换日历模式</button>
-  <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">切换时钟模式</button>
-   <button type="button" onclick="setri('e4')" title="点击该按钮, 切换为时钟模式">切换时钟颜色</button>
-  
-</div>
-	
-<div class="button-group">
-  <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">切换反色模式</button>
-  <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">切换为翻转模式</button>
-  <input type="text" id="cmdlut_red" placeholder="16进制输入00到0f。默认为0a，老化屏建议0c" value="">
-	<button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
-  <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
-</div>
+    </div>
+
     <div class="button-group">
-设置LED颜色<select id="led_color" title="设置LED颜色" >
-				<option value='01'>红色</option>
-				<option value='02'>蓝色</option>
-				<option value='03'>绿色</option>
-				<option value='04'>紫色</option>
-				<option value='05'>黄色</option>
-				<option value='06'>粉色</option>
-        <option value='07'>循环</option>
-			</select>
- 
-      	<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >小时:</label>
-					<input type="number" id="D_S_hour" value="0" min="0" max="23"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >
-					<label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >分钟:</label>
-					<input type="number" id="D_S_min" value="0" min="0" max="59"class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto " >
-         <button type="button" onclick="triggerRxTxCmd_LED('e701')" title="点击该按钮，打开闹钟">打开闹钟</button>
-      <button type="button" onclick="triggerRxTxCmd_LED('e700')" title="点击该按钮，关闭闹钟">关闭闹钟</button>
-      </div>
+        <button type="button" onclick="triggerRxTxCmd('e100')" title="点击该按钮，然后上传图片。图片将永久显示到屏幕上">设置为图片模式</button>
+        <button type="button" onclick="setri('e101')" title="点击该按钮, 切换为时钟模式">切换日历模式</button>
+        <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">切换时钟模式</button>
+        <button type="button" onclick="setri('e4')" title="点击该按钮, 切换为时钟模式">切换时钟颜色</button>
 
-<div class="button-group">输入号码:<input type="text" id="CP" placeholder="号码：" value=""> 
-			<button onclick="triggerEpdCHEPAI(document.getElementById('CP').value)">设置号码显示</button></div>
-	<br><br>
-	 <section class="date-picker-section">
-            <h2>倒计时日期选择器，选择才生效</h2>
-            <div class="date-picker-container">
-                <label for="datePicker">选择一个日期:</label>
-                <input type="date" id="datePicker">
-                
-            </div>
-        </section>
+    </div>
 
-<div class="main-content">
-            <div class="input-section">
-                <div class="section-title">
-                    <i>📝</i> 输入设置
-                </div>
-                
-                <div class="input-group">
-                    <label for="textInput">输入文字 (时钟计时8个字符以内，日历计时4个字符以内)</label>
-                    <input type="text" id="textInput" maxlength="8" value="距离成为首富还有" placeholder="请输入1-8个字符">
-                </div>
-                <div class="input-group">
-                    <label for="gridSizeSelect">倒计时界面选择</label>
-                    <select id="gridSizeSelect">
-                      
-                        <option value="24">日历计时界面</option>
-                        <option value="16">时钟计时界面</option>
-                    </select>
-                     <div><span id="currentGridSize"></span></div>
-                </div>
-                <div class="input-group" >
-                    <label for="fontFamily">字体选择（电脑端生效）</label>
-                    <select id="fontFamily">
-                        <option value="Arial">Arial</option>
-                        <option value="SimSun" selected="">宋体</option>
-                        <option value="Microsoft YaHei">微软雅黑</option>
-                        <option value="SimHei">黑体</option>
-                        <option value="KaiTi">楷体</option>
-                    </select>
-                </div>
-                
-                <div class="input-group" >
-                    <label for="fontSizeSlider">字体大小 (50%-150%)</label>
-                    <div class="slider-container">
-                        <input type="range" id="fontSizeSlider" min="50" max="150" value="100">
-                        <span class="slider-value" id="fontSizeValue">100%</span>
-                    </div>
-                    <small style="color: #7f8c8d;">调节字体的显示比例，过大可能导致字符截断</small>
-                </div>
-                
-                <div class="options"  style="display:none">
-                    <div class="option-item">
-                        <input type="checkbox" id="invertColors" checked="">
-                        <label for="invertColors">反色显示</label>
-                    </div>
-                    <div class="option-item" style="display:none">
-                        <input type="checkbox" id="showGrid" checked="">
-                        <label for="showGrid">显示网格</label>
-                    </div>
-                </div>
-                
-               
+    <div class="button-group">
+        <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">切换反色模式</button>
+        <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">切换为翻转模式</button>
+        <input type="text" id="cmdlut_red" placeholder="16进制输入00到0f。默认为0a，老化屏建议0c" value="">
+        <button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
+        <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
+    </div>
+    <div class="button-group">
+        设置LED颜色<select id="led_color" title="设置LED颜色">
+            <option value='01'>红色</option>
+            <option value='02'>蓝色</option>
+            <option value='03'>绿色</option>
+            <option value='04'>紫色</option>
+            <option value='05'>黄色</option>
+            <option value='06'>粉色</option>
+            <option value='07'>循环</option>
+        </select>
+
+        <label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">小时:</label>
+        <input type="number" id="D_S_hour" value="0" min="0" max="23" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">
+        <label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">分钟:</label>
+        <input type="number" id="D_S_min" value="0" min="0" max="59" class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">
+        <button type="button" onclick="triggerRxTxCmd_LED('e701')" title="点击该按钮，打开闹钟">打开闹钟</button>
+        <button type="button" onclick="triggerRxTxCmd_LED('e700')" title="点击该按钮，关闭闹钟">关闭闹钟</button>
+    </div>
+
+    <div class="button-group">输入号码:<input type="text" id="CP" placeholder="号码：" value="">
+        <button onclick="triggerEpdCHEPAI(document.getElementById('CP').value)">设置号码显示</button></div>
+    <br><br>
+    <section class="date-picker-section">
+        <h2>倒计时日期选择器，选择才生效</h2>
+        <div class="date-picker-container">
+            <label for="datePicker">选择一个日期:</label>
+            <input type="date" id="datePicker">
+
+        </div>
+    </section>
+
+    <div class="main-content">
+        <div class="input-section">
+            <div class="section-title">
+                <i>📝</i> 输入设置
             </div>
-            
-            <div class="preview-section"  >
-                <div class="section-title">
-                    <i>👁️</i> 
+
+            <div class="input-group">
+                <label for="textInput">输入文字 (时钟计时8个字符以内，日历计时4个字符以内)</label>
+                <input type="text" id="textInput" maxlength="8" value="距离成为首富还有" placeholder="请输入1-8个字符">
+            </div>
+            <div class="input-group">
+                <label for="gridSizeSelect">倒计时界面选择</label>
+                <select id="gridSizeSelect">
+
+                    <option value="24">日历计时界面</option>
+                    <option value="16">时钟计时界面</option>
+                </select>
+                <div><span id="currentGridSize"></span></div>
+            </div>
+            <div class="input-group">
+                <label for="fontFamily">字体选择（电脑端生效）</label>
+                <select id="fontFamily">
+                    <option value="Arial">Arial</option>
+                    <option value="SimSun" selected="">宋体</option>
+                    <option value="Microsoft YaHei">微软雅黑</option>
+                    <option value="SimHei">黑体</option>
+                    <option value="KaiTi">楷体</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="fontSizeSlider">字体大小 (50%-150%)</label>
+                <div class="slider-container">
+                    <input type="range" id="fontSizeSlider" min="50" max="150" value="100">
+                    <span class="slider-value" id="fontSizeValue">100%</span>
                 </div>
-                
-                <div class="preview-container">
-                    <canvas id="previewCanvas" width="30" height="30" ></canvas>
-                	 <div class="grid-info" id="gridInfoText" ></div>
+                <small style="color: #7f8c8d;">调节字体的显示比例，过大可能导致字符截断</small>
+            </div>
+
+            <div class="options" style="display:none">
+                <div class="option-item">
+                    <input type="checkbox" id="invertColors" checked="">
+                    <label for="invertColors">反色显示</label>
                 </div>
-                
-                <!-- <div class="section-title" style="margin-top: 20px;"width="10px" >
+                <div class="option-item" style="display:none">
+                    <input type="checkbox" id="showGrid" checked="">
+                    <label for="showGrid">显示网格</label>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="preview-section">
+            <div class="section-title">
+                <i>👁️</i>
+            </div>
+
+            <div class="preview-container">
+                <canvas id="previewCanvas" width="30" height="30"></canvas>
+                <div class="grid-info" id="gridInfoText"></div>
+            </div>
+
+            <!-- <div class="section-title" style="margin-top: 20px;"width="10px" >
                     <i>💻</i> 多字符组合字模代码
                 </div>
                 
                 <div class="code-container" id="codeOutput" >// 字符组合: ABCD (SimSun) - 顺序：A → B → C → D</div> -->
-                
-                
-            </div>
-            
-             <button id="generateBtn">启动倒计时日期</button>
-             
-				<button class="copy-btn" id="copyBtn">关闭倒计时日期</button>
+
+
         </div>
+
+        <button id="generateBtn">启动倒计时日期</button>
+
+        <button class="copy-btn" id="copyBtn">关闭倒计时日期</button>
+    </div>
     </div>
 
 
-</div>
-	
+    </div>
 
-	
-	<br><br>
 
-<h3>上传图片到屏幕</h3>
-   屏幕尺寸：
-	<select id="screen-size" onchange="updateCanvasSize()">
-		<option value="4.2传图">4.2传图</option>
-    
-		<option value="日历小图">4.2日历小图</option>
-    <option value="7.5传图">7.5传图</option> -->
-    <option value="7.5日历小图">7.5日历小图</option>
-    <option value="2.9传图">2.9传图</option> -->
-      <option value="2.13传图">2.13传图</option>
-	</select>
-	<input type="file" id="image_file" onchange="update_image()" accept=".png,.jpg,.bmp,.webp,.jpeg">
-	抖动算法：
-	<select id="dithering" title="抖动算法">
-	
-		<optgroup label="黑白红多色">
-      <option value="bwr_Atkinson">黑白红Atkinson</option>
-			<option value="bwr_floydsteinberg">黑白红floydsteinberg</option>
-			
-		</optgroup>
-    <optgroup label="黑白">
-			<option value="none">二值化</option>
-			<option value="bayer">bayer</option>
-			<option value="floydsteinberg">floydsteinberg</option>
-			<option value="Atkinson">Atkinson</option>
-		</optgroup>
-	</select>
-	
-	阈值(黑白模式生效):<div  class="button-group"><input type="range" max="255" min="10" value="125" id="threshold">
-	
-旋转角度:<span id="rotationValue">0°</span><input type="range" id="rotationSlider" min="0" max="360" value="0" oninput="updateRotation(this.value)">
- <label>缩放比例: <span id="scaleValue">100%</span></label>
-    <input type="range" id="scaleSlider" min="10" max="500" value="100" oninput="updateScale(this.value)">
-<div class="button-group">
-  <button onclick="update_image()">重新加载</button>
-  <button onclick="stretchToCanvas()">适应尺寸</button>
-  <button onclick="updateScale('100')">缩放到100%</button>
-<button onclick="rotateImage(90)">顺时针旋转90°</button>
-<button onclick="rotateImage(-90)">逆时针旋转90°</button>
-<button onclick="rotateImage(0)">旋转到0°</button>
-</div>
-	<br>
+    <br><br>
 
-	<!-- <div id="canvas-box">
+   
+
+    <h3>上传图片到屏幕</h3>
+    屏幕尺寸：
+    <select id="screen-size" onchange="updateCanvasSize()">
+        <option value="4.2传图">4.2传图</option>
+
+        <option value="日历小图">4.2日历小图</option>
+        <option value="7.5传图">7.5传图</option> -->
+        <option value="7.5日历小图">7.5日历小图</option>
+        <option value="2.9传图">2.9传图</option> -->
+        <option value="2.13传图">2.13传图</option>
+    </select>
+    <input type="file" id="image_file" onchange="update_image()" accept=".png,.jpg,.bmp,.webp,.jpeg">
+    抖动算法：
+    <select id="dithering" title="抖动算法">
+
+        <optgroup label="黑白红三色">
+            <option value="bwr_none">黑白红不采用算法</option>
+            <option value="bwr_floydsteinberg">黑白红Floyd-Steinberg</option>
+            <option value="bwr_atkinson">黑白红Atkinson</option>
+            <option value="bwr_bayer">黑白红Bayer</option>
+            <option value="bwr_stucki">黑白红Stucki</option>
+            <option value="bwr_jarvis">黑白红Jarvis-Judice-Ninke</option>
+        </optgroup>
+        <optgroup label="黑白">
+            <option value="none">不采用算法</option>
+            <option value="floydsteinberg">Floyd-Steinberg</option>
+            <option value="atkinson">Atkinson</option>
+            <option value="bayer">Bayer</option>
+            <option value="stucki">Stucki</option>
+            <option value="jarvis">Jarvis-Judice-Ninke</option>
+        </optgroup>
+    </select>
+
+    阈值(黑白模式生效):<div class="button-group"><input type="range" max="255" min="10" value="125" id="threshold">
+
+        旋转角度:<span id="rotationValue">0°</span><input type="range" id="rotationSlider" min="0" max="360" value="0" oninput="updateRotation(this.value)">
+        <label>缩放比例: <span id="scaleValue">100%</span></label>
+        <input type="range" id="scaleSlider" min="10" max="500" value="100" oninput="updateScale(this.value)">
+        <div class="button-group">
+            <button onclick="update_image()">重新加载</button>
+            <button onclick="stretchToCanvas()">适应尺寸</button>
+            <button onclick="updateScale('100')">缩放到100%</button>
+            <button onclick="rotateImage(90)">顺时针旋转90°</button>
+            <button onclick="rotateImage(-90)">逆时针旋转90°</button>
+            <button onclick="rotateImage(0)">旋转到0°</button>
+        </div>
+        <br>
+
+        <!-- <div id="canvas-box">
 		<div id="tool-box">
 			模式：
 			<select id="canvas-mode">
@@ -1692,28 +2316,73 @@ async  function generateCode() {
 			<button id="update-text" style="display: none">保存文本框</button>
 			<button onclick="clear_canvas()">清屏</button>
 		</div> -->
-		<input id="edit-font" style="max-width: 300px; position: absolute; border: black solid 1px;background-color: rgba(0,0,0,0);display: none;overflow: auto" />
-	<!-- <canvas id="canvas" width="300" height="400" style="border: black solid 1px;"></canvas> -->
- 
-  <canvas id="canvas" style="border: black solid 1px;"></canvas>
-		<br>
-		<div  class="button-group"><button onclick="upload_image()" style="font-weight: bold">立即上传到屏幕</button></div>
-		<br>
-	</div>
+        <input id="edit-font" style="max-width: 300px; position: absolute; border: black solid 1px;background-color: rgba(0,0,0,0);display: none;overflow: auto" />
+        <!-- <canvas id="canvas" width="300" height="400" style="border: black solid 1px;"></canvas> -->
+
+        <canvas id="canvas" style="border: black solid 1px;"></canvas>
+         <!-- 图像调整控制区域 -->
+    <div class="image-adjustments">
+        <h3>图像调整</h3>
+        <div class="adjustment-row">
+            <label for="brightness">亮度:</label>
+            <input type="range" id="brightness" min="-100" max="100" value="0">
+            <span class="adjustment-value" id="brightnessValue">0</span>
+        </div>
+        <div class="adjustment-row">
+            <label for="contrast">对比度:</label>
+            <input type="range" id="contrast" min="-100" max="100" value="0">
+            <span class="adjustment-value" id="contrastValue">0</span>
+        </div>
+        <div class="adjustment-row">
+            <label for="saturation">饱和度:</label>
+            <input type="range" id="saturation" min="0" max="200" value="100">
+            <span class="adjustment-value" id="saturationValue">100</span>
+        </div>
+        <div class="adjustment-row">
+            <label for="diffusion">扩散强度:</label>
+            <input type="range" id="diffusion" min="0" max="100" value="50">
+            <span class="adjustment-value" id="diffusionValue">50</span>
+        </div>
+        
+    </div>
+        <br>
+       <div class="button-group"> <button onclick="update_image()">应用图像调整</button></div>
+        <div class="button-group"><button onclick="upload_image()" style="font-weight: bold">立即上传到屏幕</button></div>
+        <br>
+    </div>
 
 
-  
 
-	<div id="log-box" >
-		日志：
-		<br>
-		<div id="log" >
- 
-		</div>
-	</div>
 
-  <div class="button-group">激活<input type="text" id="cmdJH" placeholder="输入激活码" value="">
-			<button onclick="triggerEpdJH(document.getElementById('cmdJH').value)">开始激活</button></div>
+    <div id="log-box">
+        日志：
+        <br>
+        <div id="log">
+
+        </div>
+    </div>
+
+    <div class="button-group">激活<input type="text" id="cmdJH" placeholder="输入激活码" value="">
+        <button onclick="triggerEpdJH(document.getElementById('cmdJH').value)">开始激活</button></div>
+
+    <script>
+        // 初始化图像调整控件的显示值
+        document.getElementById('brightness').addEventListener('input', function() {
+            document.getElementById('brightnessValue').textContent = this.value;
+        });
+        
+        document.getElementById('contrast').addEventListener('input', function() {
+            document.getElementById('contrastValue').textContent = this.value;
+        });
+        
+        document.getElementById('saturation').addEventListener('input', function() {
+            document.getElementById('saturationValue').textContent = this.value;
+        });
+        
+        document.getElementById('diffusion').addEventListener('input', function() {
+            document.getElementById('diffusionValue').textContent = this.value;
+        });
+    </script>
 </body>
 
 </html>
