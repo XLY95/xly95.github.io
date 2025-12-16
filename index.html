@@ -1479,7 +1479,7 @@
           if(degrees){
             currentRotation = (currentRotation + degrees) % 360;}
             else {currentRotation =0;}
-            degrees1 = degrees;
+            degrees1 = currentRotation;
             if (currentImage) {
                 drawImageWithRotation(currentImage);
                 update_image();
@@ -1494,13 +1494,13 @@
             const canvas = document.getElementById("canvas");
 
             // 分别计算X轴和Y轴的缩放比例，使图片完全填满画布
-            if (degrees1 == 90 || degrees1 == 270) {
-                currentScaleY = canvas.width / currentImage.width;
-                currentScaleX = canvas.height / currentImage.height;
+            if (degrees1 == 0 || degrees1 == 180) {
+                currentScaleX = canvas.width / currentImage.width;
+                currentScaleY= canvas.height / currentImage.height;
 
             } else {
-                currentScaleX = canvas.width / currentImage.width;
-                currentScaleY = canvas.height / currentImage.height;
+                currentScaleX =  canvas.height/ currentImage.width;
+                currentScaleY = canvas.width / currentImage.height;
 
             }
 
@@ -2345,10 +2345,10 @@
         </div>
         
     </div>
-        <br>
+       
        <div class="button-group"> <button onclick="update_image()">应用图像调整</button></div>
         <div class="button-group"><button onclick="upload_image()" style="font-weight: bold">立即上传到屏幕</button></div>
-        <br>
+        
     </div>
 
 
