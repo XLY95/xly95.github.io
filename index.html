@@ -870,8 +870,8 @@
             </div>
             <div class="adjustment-row">
                 <label for="contrast">对比度:</label>
-                 <span class="adjustment-value" id="contrastValue">0</span>
-                <input type="range" id="contrast" min="-100" max="100" value="0">
+                 <span class="adjustment-value" id="contrastValue">100</span>
+                <input type="range" id="contrast" min="0" max="200" value="100">
                
             </div>
             <div class="adjustment-row">
@@ -1848,6 +1848,32 @@
             }
             return arr;
         }
+
+    function canvas2bytes_bw(canvas, type='bw') {
+  const ctx = canvas.getContext("2d");
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+ 
+  const arr = [];
+  let buffer = [];
+
+   
+  for (let x =canvas.width-1; x >= 0; x--) {
+    for (let y = 0; y < canvas.height; y++) {
+      const index = (canvas.width * 4 * y) + x * 4;
+      if (type !== 'bwr') {
+        buffer.push(imageData.data[index] > 0 && imageData.data[index+1] > 0 && imageData.data[index+2] > 0 ? 1 : 0);
+      } else {
+        buffer.push(imageData.data[index] > 0 && imageData.data[index+1] === 0 && imageData.data[index+2] === 0 ? 1 : 0);
+      }
+
+      if (buffer.length === 8) {
+        arr.push(parseInt(buffer.join(''), 2));
+        buffer = [];
+      }
+    }
+  }
+  return arr;
+}
          function canvas2bytes_to(canvas, type = 'bw') {
             const ctx = canvas.getContext("2d");
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -2039,6 +2065,7 @@
                 addLog('服务不可用。蓝牙链接上了吗？')
             }
         }
+       
         async function sendBufferData(value, type) {
             addLog(`开始发送图片模式:${type}, 大小 ${value.length}byte`);
             let code = 'ff';
@@ -2077,10 +2104,10 @@
                 height = 180;
             } else if (sizeSelect.value === "2.13传图") {
                 width = 212;
-                height = 104;
+                height =128;
             }else if (sizeSelect.value === "2.13高分传图") {
-                width = 250;
-                height = 122;
+               width = 250;
+                height =128;
             }
             canvas.width = width;
             canvas.height = height;
@@ -2092,9 +2119,12 @@
         async function upload_image() {
             const canvas = document.getElementById('canvas');
             const startTime = new Date().getTime();
-            if(canvas.width==296||canvas.width==212||canvas.width==250){
-                 await sendBufferData(bytesToHex(canvas2bytes_to(canvas)), 'bw')
-                 await sendBufferData(bytesToHex(canvas2bytes_to(canvas, 'bwr')), 'bwr')
+            if(canvas.width==296){
+                
+                 await sendBufferData(bytesToHex(canvas2bytes_bw(canvas)), 'bw')
+                 await sendBufferData(bytesToHex(canvas2bytes_bw(canvas, 'bwr')), 'bwr')
+            }else if(canvas.width==250 ||canvas.width==212){
+                 await sendBufferData(bytesToHex(canvas2bytes_bw(canvas)), 'bw')
             }else{
                 await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
                 await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
@@ -4155,13 +4185,15 @@ function saveCanvasYSAndUpdateImage() {
         const ctxYS = canvasYS.getContext('2d');
         const imageData = ctxYS.getImageData(0, 0, canvasYS.width, canvasYS.height);
         const data = imageData.data;
-        console.log('正在将 canvas_YS 保存为图片...');
+      
         const imageDataURL = canvasYS.toDataURL('image/png');
-        console.log('图片保存成功，Data URL 长度:', imageDataURL.length);
+        
         const img = new Image();
                 update_image(imageDataURL);
-                addLog(`从 canvas_YS 导入图片，尺寸: ${img.width}x${img.height}`);
+                addLog(`从模板导入图片！`);
        const switched = switchToTab('tab-image');
+       delay(100);
+       stretchToCanvas();
 }
         initCanvas();
         preloadBuiltInBackgrounds();
