@@ -170,8 +170,9 @@
         }
 
         #canvas {
-            width: 90%;
+            width: auto;
             max-width: 800px;
+             min-width: 600px;
             height: auto;
             border: 2px solid #ddd;
             border-radius: 8px;
@@ -234,6 +235,7 @@
   .canvas-container {
             background: white;
             width:  auto;
+            border: 2px solid #494747;
             min-width:  auto;
             max-width:  auto;
             min-height: auto;
@@ -807,6 +809,7 @@
                 <option value="7.5日历小图">7.5日历小图</option>
                 <option value="2.9传图">2.9传图</option>
                 <option value="2.13传图">2.13传图</option>
+                <option value="2.13高分传图">2.13高分传图</option>
             </select>
         </div>
 
@@ -895,7 +898,7 @@
        <div class="editor-container">
         <!-- 控制面板 -->
           <div class="canvas-container">
-            <canvas id="canvas_YS" width="400" height="300"></canvas>
+            <canvas id="canvas_YS" width="600" height="400"></canvas>
         </div>
 
 
@@ -1843,6 +1846,27 @@
             }
             return arr;
         }
+         function canvas2bytes_to(canvas, type = 'bw') {
+            const ctx = canvas.getContext("2d");
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const arr = [];
+            let buffer = [];
+            for (let y = 0; y < canvas.width; y++) {
+                for (let x = 0; x < canvas.height; x++) {
+                    const index = (canvas.width * 4 * x) + y * 4;
+                    if (type !== 'bwr') {
+                        buffer.push(imageData.data[index] > 0 && imageData.data[index + 1] > 0 && imageData.data[index + 2] > 0 ? 1 : 0);
+                    } else {
+                        buffer.push(imageData.data[index] > 0 && imageData.data[index + 1] === 0 && imageData.data[index + 2] === 0 ? 1 : 0);
+                    }
+                    if (buffer.length === 8) {
+                        arr.push(parseInt(buffer.join(''), 2));
+                        buffer = [];
+                    }
+                }
+            }
+            return arr;
+        }
         function getColorDistance(rgba1, rgba2) {
             const [r1, b1, g1] = rgba1;
             const [r2, b2, g2] = rgba2;
@@ -2039,7 +2063,7 @@
                 height = 300;
             } else if (sizeSelect.value === "2.9传图") {
                 width = 296;
-                height = 128;
+                height =128;
             } else if (sizeSelect.value === "日历小图") {
                 width = 280;
                 height = 100;
@@ -2052,6 +2076,9 @@
             } else if (sizeSelect.value === "2.13传图") {
                 width = 212;
                 height = 104;
+            }else if (sizeSelect.value === "2.13高分传图") {
+                width = 250;
+                height = 122;
             }
             canvas.width = width;
             canvas.height = height;
@@ -2063,8 +2090,14 @@
         async function upload_image() {
             const canvas = document.getElementById('canvas');
             const startTime = new Date().getTime();
-            await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
-            await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
+            if(canvas.width==296||canvas.width==212||canvas.width==250){
+                 await sendBufferData(bytesToHex(canvas2bytes_to(canvas)), 'bw')
+                 await sendBufferData(bytesToHex(canvas2bytes_to(canvas, 'bwr')), 'bwr')
+            }else{
+                await sendBufferData(bytesToHex(canvas2bytes(canvas)), 'bw')
+                await sendBufferData(bytesToHex(canvas2bytes(canvas, 'bwr')), 'bwr')
+            }
+            
             await delay(300);
             if (canvas.width == 280 || canvas.height == 180) { await sendCommand(hexToBytes("AA")) }
             else { await sendCommand(hexToBytes("01")) }
