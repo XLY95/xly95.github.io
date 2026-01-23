@@ -799,7 +799,9 @@
     <!-- 标签页3: 传图模块 -->
     <div id="tab-image" class="tab-content">
         <h3>上传图片到屏幕</h3>
-        
+        <div class="button-group">
+            <input type="file" id="image_file" onchange="update_image1()" accept=".png,.jpg,.bmp,.webp,.jpeg">
+        </div>
         <div class="button-group">
             屏幕尺寸：
             <select id="screen-size" onchange="updateCanvasSize()">
@@ -838,10 +840,10 @@
         <div class="button-group">
             阈值(黑白模式生效):<input type="range" max="255" min="10" value="125" id="threshold">
         </div>
-
-        <div class="button-group">
-            <input type="file" id="image_file" onchange="update_image1()" accept=".png,.jpg,.bmp,.webp,.jpeg">
-        </div>
+           旋转角度:<span id="rotationValue">0°</span><input type="range" id="rotationSlider" min="0" max="360" value="0" oninput="updateRotation(this.value)">
+        <label>缩放比例: <span id="scaleValue">100%</span></label>
+        <input type="range" id="scaleSlider" min="10" max="500" value="100" oninput="updateScale(this.value)">
+        
 
         <div class="button-group">
             <button onclick="update_image()">重新加载</button>
@@ -2263,6 +2265,7 @@
                 currentScaleY = canvas.width / currentImage.height;
             }
           
+            updateScaleDisplay();
             drawImageWithRotation(currentImage);
             update_image();
         }
