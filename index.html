@@ -640,7 +640,7 @@
 </head>
 
 <body>
-    <!-- 标签页导航 -->
+   
     <div class="tabs-container">
         <div class="tab-buttons">
             <button class="tab-button active" data-tab="tab-settings">墨水屏设置</button>
@@ -650,18 +650,18 @@
         </div>
     </div>
 
-    <!-- 标签页1: 墨水屏设置 -->
+   
     <div id="tab-settings" class="tab-content active">
         <h2>墨水屏价签蓝牙控制器</h2>
         
-        <!-- 在连接按钮部分 -->
+       
         <div class="button-group">
             <button id="connectbutton" type="button" onclick="preConnect();">链接</button>
             <button type="button" onclick="reConnect();">重新链接</button>
             <button type="button" onclick="document.getElementById('log').innerHTML = '';">清空日志</button>
         </div>
 
-        <!-- 在指令控制部分 -->
+        
         <div class="button-group">
             <button id="time-setter" onclick="setTime()">设置时间为: </button> <br>
             <input type="number" max="24" min="0" id="hour-offset" value="0" style="width: 40px;">
@@ -713,7 +713,7 @@
         </div>
     </div>
 
-    <!-- 标签页2: 倒计时模块 -->
+   
     <div id="tab-countdown" class="tab-content">
          <section class="date-picker-section">
         <h2>倒计时日期选择器，选择才生效</h2>
@@ -796,7 +796,7 @@
 
     </div>
 
-    <!-- 标签页3: 传图模块 -->
+   
     <div id="tab-image" class="tab-content">
         <h3>上传图片到屏幕</h3>
         <div class="button-group">
@@ -854,12 +854,12 @@
             <button onclick="rotateImage(0)">旋转到0°</button>
         </div>
 
-        <!-- 画布区域 -->
+      
         <div id="canvas-box">
             <canvas id="canvas" style="border: black solid 1px;"></canvas>
         </div>
 
-        <!-- 图像调整控制区域 -->
+       
         <div class="image-adjustments">
             <h3>图像调整</h3>
             <div class="adjustment-row">
@@ -894,18 +894,18 @@
         
     </div>
 
-    <!-- 标签页4: 元素设计模块 -->
+   
     <div id="tab-editor" class="tab-content">
        
        <div class="editor-container">
-        <!-- 控制面板 -->
+        
           <div class="canvas-container">
             <canvas id="canvas_YS" width="600" height="450"></canvas>
         </div>
 
 
         <div class="control-panel">
-            <!-- 元素尺寸调整控件 -->
+            
             <div class="control-group size-controls1" id="size-controls">
                 <h3>设置元素长和宽</h3>
                 <div class="size-inputs">
@@ -915,7 +915,7 @@
                 <button id="apply-size">应用尺寸</button>
             </div>
       <br>
-         <!-- 元素旋转控制 -->
+         
             <div class="control-group" id="rotate-controls1" >
                 <h3>旋转元素</h3>
                 <div class="rotate-controls">
@@ -955,7 +955,7 @@
                     
                 </select>
                 
-                <!-- 形状参数控制 -->
+                
                 <div class="shape-params" id="shape-params">
                     <input type="number" id="param1" placeholder="参数1" min="3" max="20" value="5">
                     <input type="number" id="param2" placeholder="参数2" min="0.1" max="5" step="0.1" value="0.5">
@@ -1061,7 +1061,7 @@
                     <button id="move-right">→ 右移</button>
                 </div>
 
-                 <!-- 二维码生成控件 -->
+                
                 <div class="qrcode-controls">
                    
                     <textarea id="qrcode-content" placeholder="请输入要生成二维码的文字/网址/联系方式等">https://xly95.github.io/</textarea>
@@ -1076,7 +1076,7 @@
 
             <div class="control-group">
              
-                <!-- 背景颜色选择 -->
+              
                 <div class="bg-color-selector">
                     <div class="bg-color-picker" id="bg-color-picker" style="background-color:#ffffff"></div>
                     <input type="color" id="bg-color-input" value="#ffffff" style="display: none">
@@ -1140,7 +1140,7 @@
                 
                 <div class="icon-materials-container">
                     <div class="template-preview" id="image-templates">
-                        <!-- 透明背景的SVG图标（emoji模拟） -->
+                        
                         <div class="template-item selected" data-type="icon1">
                             <div style="width:100%;height:100%;background:transparent;display:flex;align-items:center;justify-content:center;font-size:18px;">😊</div>
                         </div>
@@ -1245,7 +1245,7 @@
             <br>
             <div id="log"></div>
         </div>
-    <!-- 原有的JavaScript代码保持不变 -->
+   
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab-button');
@@ -2745,9 +2745,9 @@
             document.getElementById('diffusionValue').textContent = this.value;
         });
     </script>
-    <!-- 引入二维码库 -->
+    
     <script src="https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js"></script>
-    <!-- 元素设计模块的JavaScript代码 -->
+  
     <script>
         const canvas = document.getElementById('canvas_YS');
         const ctx = canvas.getContext('2d');
@@ -4193,7 +4193,7 @@ function saveCanvasYSAndUpdateImage() {
                 addLog(`从模板导入图片！`);
        const switched = switchToTab('tab-image');
        delay(100);
-       stretchToCanvas();
+      // stretchToCanvas();
 }
         initCanvas();
         preloadBuiltInBackgrounds();
