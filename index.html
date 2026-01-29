@@ -682,7 +682,15 @@
             <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
         </div>
         
-        <div class="button-group">
+         <div class="button-group">
+           <label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">开始小时:</label>
+            <input type="number" id="D_S_hour" value="0" min="0" max="23">
+            <label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">结束小时:</label>
+            <input type="number" id="D_S_min" value="0" min="0" max="59">
+            <button type="button" onclick="triggerRxTxCmd_XM('FB01')" title="点击该按钮,开启启动时间段不刷新">打开休眠</button>
+            <button type="button" onclick="triggerRxTxCmd_XM('FB00')" title="点击该按钮,关闭启动时间段不刷新">关闭休眠(这个功能就是设置一段时间屏幕白屏小时刷新一次省电加修复)</button>
+        </div> 
+        <!-- <div class="button-group">
             设置LED颜色<select id="led_color" title="设置LED颜色">
                 <option value='01'>红色</option>
                 <option value='02'>蓝色</option>
@@ -698,7 +706,7 @@
             <input type="number" id="D_S_min" value="0" min="0" max="59">
             <button type="button" onclick="triggerRxTxCmd_LED('e701')" title="点击该按钮，打开闹钟">打开闹钟</button>
             <button type="button" onclick="triggerRxTxCmd_LED('e700')" title="点击该按钮，关闭闹钟">关闭闹钟</button>
-        </div>
+        </div> -->
 
         <div class="button-group">
             输入号码:<input type="text" id="CP" placeholder="号码：" value="">
@@ -2193,6 +2201,17 @@
             let note = color != '07' ? '01' : '00';
             cmd = cmd + note + color + D_S_hour + D_S_min;
             addLog(`LED: ${cmd}`)
+            await rxTxSendCommand(hexToBytes(cmd));
+        }
+        async function triggerRxTxCmd_XM(cmd) {
+          
+            let D_S_hour = document.getElementById('D_S_hour').value;
+            let D_S_min = document.getElementById('D_S_min').value;
+            D_S_hour = D_S_hour > 9 ? D_S_hour : '0' + D_S_hour;
+            D_S_min = D_S_min > 9 ? D_S_min : '0' + D_S_min;
+           
+            cmd = cmd  + D_S_hour + D_S_min;
+            addLog(`设置不刷新时间段: ${cmd}`)
             await rxTxSendCommand(hexToBytes(cmd));
         }
         function disconnect() {
