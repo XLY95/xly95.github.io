@@ -652,11 +652,11 @@
 
    
     <div id="tab-settings" class="tab-content active">
-        <h2>墨水屏价签蓝牙控制器</h2>
+        <h2>墨水屏价签蓝牙控制器，先链接上设备才可以设置时钟</h2>
         
        
         <div class="button-group">
-            <button id="connectbutton" type="button" onclick="preConnect();">链接</button>
+            <button id="connectbutton" type="button" onclick="preConnect();">搜索设备</button>
             <button type="button" onclick="reConnect();">重新链接</button>
             <button type="button" onclick="document.getElementById('log').innerHTML = '';">清空日志</button>
         </div>
@@ -668,17 +668,18 @@
         </div>
 
         <div class="button-group">
-            <button type="button" onclick="triggerRxTxCmd('e100')" title="点击该按钮，读取上次传的图片。图片将永久显示到屏幕上">设置为图片模式</button>
+                        <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">切换时钟模式</button>
             <button type="button" onclick="setri('e101')" title="点击该按钮, 切换为日历模式">切换日历模式</button>
-            <button type="button" onclick="setri('e102')" title="点击该按钮, 切换为时钟模式">切换时钟模式</button>
+
             <button type="button" onclick="setri('e4')" title="点击该按钮, 切换时钟颜色">切换时钟颜色</button>
+            <button type="button" onclick="triggerRxTxCmd('e100')" title="点击该按钮，读取上次传的图片。图片将永久显示到屏幕上">设置为图片模式</button>
         </div>
 
         <div class="button-group">
-            <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">切换反色模式</button>
-            <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">切换为翻转模式</button>
-            <input type="text" id="cmdlut_red" placeholder="16进制输入01到0f。默认为0a，老化屏建议0c。 输入00是关闭红局刷" value="">
-            <button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">校准红色局刷</button>
+            <button type="button" onclick="triggerRxTxCmd('e3')" title="点击该按钮，设置为反色模式">切换黑白颜色转换模式</button>
+            <button type="button" onclick="triggerRxTxCmd('e5')" title="点击该按钮，设置为翻转模式">切换为屏幕旋转180度模式</button>
+            <input type="text" id="cmdlut_red" placeholder="校准红色局刷，以16进制输入01到0f。关闭红色局刷并且校准黑色局刷， 输入10到f0。越大颜色越深" value="">
+            <button onclick="triggerEpdRed_lut(document.getElementById('cmdlut_red').value)">设置校准局刷参数（也为命令输入）</button>
             <button type="button" onclick="triggerRxTxCmd('E2')" title="(没反应就点下)刷新">(没反应就点下)刷新</button>
         </div>
         
@@ -687,7 +688,7 @@
             <input type="number" id="D_S_hour" value="0" min="0" max="23">
             <label class="btn-action bg-emerald-600 text-white flex-1 sm:flex-auto ">结束小时:</label>
             <input type="number" id="D_S_min" value="0" min="0" max="59">
-            <button type="button" onclick="triggerRxTxCmd_XM('FB01')" title="点击该按钮,开启启动时间段不刷新">打开休眠</button>
+            <button type="button" onclick="triggerRxTxCmd_XM('FB01')" title="点击该按钮,开启启动时间段不刷新">打开休眠（设置时间间隔类白屏不刷新）</button>
             <button type="button" onclick="triggerRxTxCmd_XM('FB00')" title="点击该按钮,关闭启动时间段不刷新">关闭休眠(这个功能就是设置一段时间屏幕白屏小时刷新一次省电加修复)</button>
         </div> 
         <!-- <div class="button-group">
@@ -709,14 +710,14 @@
         </div> -->
 
         <div class="button-group">
-            输入号码:<input type="text" id="CP" placeholder="号码：" value="">
+            213低分时钟可用的停车牌设置输入号码：<input type="text" id="CP" placeholder="号码：" value="">
             <button onclick="triggerEpdCHEPAI(document.getElementById('CP').value)">设置号码显示</button>
         </div>
 
         
 
         <div class="button-group">
-            激活<input type="text" id="cmdJH" placeholder="输入激活码" value="">
+            激活（已正常显示无需使用此激活功能）：<input type="text" id="cmdJH" placeholder="输入激活码：" value="">
             <button onclick="triggerEpdJH(document.getElementById('cmdJH').value)">开始激活</button>
         </div>
     </div>
@@ -743,11 +744,22 @@
                 <input type="text" id="textInput" maxlength="8" value="距离成为首富还有" placeholder="请输入1-8个字符">
             </div>
             <div class="input-group">
+    <label>⏰📅倒计时界面选择</label>
+    
+    <div style="background: #e0e0e0; padding: 0.3rem; border-radius: 50px; display: flex; margin: 0.8rem 0; position: relative; cursor: pointer;" onclick="toggleSwitch(event)">
+        <div id="switchBg" style="position: absolute; width: 50%; height: 100%; background: white; border-radius: 50px; top: 0; left: 0; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"></div>
+
+        <div style="flex: 1; text-align: center; padding: 0.8rem; position: relative; z-index: 1;" id="opt16">⏰ 时钟倒计时界面</div>
+        <div style="flex: 1; text-align: center; padding: 0.8rem; position: relative; z-index: 1;" id="opt24">📅 日历倒计时界面</div>
+    </div>
+   
+</div>
+            <div class="input-group" style="display:none">
                 <label for="gridSizeSelect">倒计时界面选择</label>
                 <select id="gridSizeSelect">
-
-                    <option value="24">日历计时界面</option>
                     <option value="16">时钟计时界面</option>
+                    <option value="24">日历计时界面</option>
+                   
                 </select>
                 <div><span id="currentGridSize"></span></div>
             </div>
@@ -2577,6 +2589,8 @@
             const ctx = previewCanvas.getContext('2d');
             const previewScale = 8; 
             let fontSizeRatio = 0.85; 
+
+            const  grid_Size=16;
             updateGridSize();
             drawPreview();
             generateBtn.addEventListener('click', function () {
@@ -4219,5 +4233,25 @@ function saveCanvasYSAndUpdateImage() {
         param1Input.value = state.shapeParams.sides;
         param2Input.value = state.shapeParams.ratio;
     </script>
+    <script>
+function toggleSwitch(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+  
+    
+    if (clickX < rect.width / 2) {
+        // 选中时钟
+        switchBg.style.left = '0';
+       gridSizeSelect.value=16;
+    } else {
+        // 选中日历
+        
+        switchBg.style.left = '50%';
+        gridSizeSelect.value=24;
+    }
+}
+
+
+</script>
 </body>
 </html>
